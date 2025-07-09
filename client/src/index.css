@@ -1,0 +1,43 @@
+@import "@fontsource/oswald";
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  --color-canary: #FDEEB5;
+  --color-blossom: #F6CBD2;
+  --color-serene: #B4DDE3;
+  --color-pistachio: #BBDCCB;
+  --color-latte: #D9CBC2;
+  --color-charcoal: #333333; /* for text */
+  --color-white: #FFFAFA; 
+
+  --color-support: var(--color-blossom);     /* Community Support */
+  --color-resources: var(--color-pistachio); /* Caregiving Resources */
+  --color-training: var(--color-serene);     /* Specialised Training */
+
+  --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  --font-heading: Oswald, sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  --radius-xl: 1.5rem;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #FFFAFA;
+  font-size: 18px;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+

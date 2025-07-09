@@ -1,0 +1,69 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Mic, Search } from "lucide-react";
+import CategoryCard from "../components/CategoryCard";
+
+import elderlyImg from "/Community.png";     
+import computerImg from "/Resources.png";
+import breathingImg from "/Training.png";
+
+export default function Home() {
+  const navigate = useNavigate();
+
+  return (
+    <main className="w-full max-w-6xl mx-auto px-10 py-10">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-12">
+        <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-20 w-20" />
+        <button
+          onClick={() => navigate("/login")}
+          className="bg-latte text-charcoal font-heading text-lg px-5 py-2 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
+        >
+          Login
+        </button>
+      </header>
+
+      {/* Mic */}
+      <section className="flex flex-col items-center gap-8 mb-16">
+        <div className="w-32 h-32 rounded-full bg-latte shadow-md flex items-center justify-center">
+          <Mic className="w-15 h-15 text-charcoal" />
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex items-center w-full max-w-xl border-3 border-canary rounded-2xl px-4 py-2 bg-white shadow-md">
+          <input
+            type="text"
+            placeholder="How can we help you today?"
+            className="w-full bg-transparent outline-none placeholder-charcoal text-charcoal"
+          />
+          <Search className="w-5 h-5 text-charcoal" />
+        </div>
+      </section>
+
+      {/* Category Cards */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        <CategoryCard
+          title="Community Support"
+          icon={<img src={elderlyImg} alt="Community Support Image" className="w-full h-full object-cover" />}
+          bg="bg-blossom"
+          path="/support"
+          navigate={navigate}
+        />
+        <CategoryCard
+          title="Caregiving Resources"
+          icon={<img src={computerImg} alt="Caregiving Resources Image" className="w-full h-full object-cover" />}
+          bg="bg-pistachio"
+          path="/resources"
+          navigate={navigate}
+        />
+        <CategoryCard
+          title="Specialised Training"
+          icon={<img src={breathingImg} alt="Training Image" className="w-full h-full object-cover" />}
+          bg="bg-serene"
+          path="/training"
+          navigate={navigate}
+        />
+      </section>
+    </main>
+  );
+}
