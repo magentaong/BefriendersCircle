@@ -1,0 +1,9 @@
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({
+  userId: { type: String, required: true, unique: true }, // or phoneNumber if using phone
+  threadId: { type: String },
+  lastInteraction: { type: Date },
+});
+
+module.exports = mongoose.model("User", userSchema);
