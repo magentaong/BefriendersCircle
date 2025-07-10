@@ -6,10 +6,9 @@ interface CategoryCardProps {
   icon: string;
   bg: string;
   path: string;
-  navigate: (path: string) => void;
 }
 
-const CategoryCard: React.FC<CategoryCardProps> = ({ title, icon, bg, path, navigate }) => {
+const CategoryCard: React.FC<CategoryCardProps> = ({ title, icon, bg, path }) => {
   const navigate = useNavigate();
 
   return (
