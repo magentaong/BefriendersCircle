@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout.tsx";
-import Catergory from "../components/Support/Category.tsx";
+import Category from "../components/Support/Category.tsx";
 import Navigation from "../components/Navigation.tsx"
 
 const topicsItems = ["Fatigue", "Exercise", "Family", "Connection"]
@@ -12,8 +12,8 @@ function Forum() {
   return (
     <>
     <Layout header="Community Forum">
-      <Catergory category="Topics" header="Topics"></Catergory>
-      <Catergory category="Events" header="Events"></Catergory>
+      <Category category="Topics" header="Topics"></Category>
+      <Category category="Events" header="Events"></Category>
     </Layout>
     </>
   )
