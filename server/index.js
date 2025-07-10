@@ -1,16 +1,27 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+const connectDB = require("./db");
+const openaiRoutes = require("./routes/openai");
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("BefriendersCircle API is running!");
+  res.json({ status: "Server is running!" }); //check if server is running
 });
 
-const PORT = process.env.PORT || 5000;
+app.use(cors({
+  origin: "http://localhost:5173", //so it can connect and won't be blocked 
+  credentials: true,
+}));
+
+app.use(express.json());
+
+connectDB();
+
+app.use("/api/openai", openaiRoutes);
+
+const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
