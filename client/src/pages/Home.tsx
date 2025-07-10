@@ -11,7 +11,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <main className="w-full max-w-6xl mx-auto px-10 py-10">
+    <main className="w-full max-w-6xl mx-auto px-5 py-5">
       {/* Header */}
       <header className="flex justify-between items-center mb-12">
         <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-20 w-20" />
