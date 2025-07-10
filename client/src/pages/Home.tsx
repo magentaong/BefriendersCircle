@@ -44,24 +44,21 @@ export default function Home() {
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-8">
         <CategoryCard
           title="Community Support"
-          icon={<img src={elderlyImg} alt="Community Support Image" className="w-full h-full object-cover" />}
+          icon={elderlyImg}
           bg="bg-blossom"
           path="/support"
-          navigate={navigate}
         />
         <CategoryCard
           title="Caregiving Resources"
-          icon={<img src={computerImg} alt="Caregiving Resources Image" className="w-full h-full object-cover" />}
+          icon={computerImg}
           bg="bg-pistachio"
           path="/resources"
-          navigate={navigate}
         />
         <CategoryCard
           title="Specialised Training"
-          icon={<img src={breathingImg} alt="Training Image" className="w-full h-full object-cover" />}
+          icon={breathingImg}
           bg="bg-serene"
           path="/training"
-          navigate={navigate}
         />
       </section>
     </main>

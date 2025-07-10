@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowLeft, ArrowRight, Mic, Search, Volume2, ThumbsUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import Navigation from "../components/Navigation"
 
 export default function ResourceLibrary() {
   const [query, setQuery] = useState("What subsidies does the government give for 60 years old");
@@ -44,13 +45,7 @@ export default function ResourceLibrary() {
 
   return (
     <main className="bg-white text-gray-800 p-4 flex flex-col items-center gap-4 w-full max-w-6xl md:max-w-xl md:p-10"> 
-      {/* Header */}
-      <div className="w-full flex justify-between items-center">
-        <Link to="/">
-          <img src="/ESC.svg" alt="Logo" className="w-12 h-12" />
-        </Link>
-        <img src="/avatar.png" alt="User" className="w-10 h-10 rounded-full" />
-      </div>
+      <Navigation></Navigation>
 
       {/* Tabs */}
         <div className="flex items-center justify-between w-full mt-2">
