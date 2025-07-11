@@ -50,7 +50,7 @@ export default function ResourceLibrary() {
       {/* Tabs */}
         <div className="flex items-center justify-between w-full mt-2">
         {/* Left Arrow */}
-        <Link to="/support">
+        <Link to="/forum">
             <button className="w-12 h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center">
             ←
             </button>

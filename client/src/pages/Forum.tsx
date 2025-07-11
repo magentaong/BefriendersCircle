@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout.tsx";
-import Category from "../components/Support/Category.tsx";
-import Navigation from "../components/Navigation.tsx"
+import Category from "../components/Forum/Category.tsx";
 
-const topicsItems = ["Fatigue", "Exercise", "Family", "Connection"]
-const eventItems = ["Charity Run 2025", "Marina Barrage Outing", "Christmas 2025", "Chinese New Year 2025"]
 
 function Forum() {
   const [eventExpand, setEventExpand] = useState(null)

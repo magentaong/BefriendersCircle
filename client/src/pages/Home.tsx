@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Mic, Search } from "lucide-react";
-import CategoryCard from "../components/CategoryCard";
+import CardBase from "../components/CardBase";
 
 import elderlyImg from "/Community.png";     
 import computerImg from "/Resources.png";
@@ -42,19 +42,19 @@ export default function Home() {
 
       {/* Category Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-        <CategoryCard
+        <CardBase
           title="Community Support"
           icon={elderlyImg}
           bg="bg-blossom"
-          path="/support"
+          path="/forum"
         />
-        <CategoryCard
+        <CardBase
           title="Caregiving Resources"
           icon={computerImg}
           bg="bg-pistachio"
           path="/resources"
         />
-        <CategoryCard
+        <CardBase
           title="Specialised Training"
           icon={breathingImg}
           bg="bg-serene"
