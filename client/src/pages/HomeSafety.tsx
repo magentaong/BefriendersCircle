@@ -37,7 +37,6 @@ export default function HomeSafetyLesson() {
           <p className="text-base md:text-lg font-bold text-blue-900 text-center mb-2">
             Simulation Here
           </p>
-          {/* Replace this div with your Three.js canvas when ready */}
           {/* <div id="threejs-canvas" className="w-full h-full" /> */}
         </div>
       </div>
