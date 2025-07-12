@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Mic, Search } from "lucide-react";
 import CardBase from "../components/CardBase";

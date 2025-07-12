@@ -1,4 +1,4 @@
-import CategoryCard from "../CardBase";
+import CardBase from "../CardBase";
 
 interface Data {
   url: string;
@@ -13,7 +13,7 @@ interface ForumCardProps {
 
 export default function SupportCard({ data, category }:ForumCardProps) {
   return (
-    <CategoryCard
+    <CardBase
           title={data.name}
           icon={data.image}
           bg="bg-white"

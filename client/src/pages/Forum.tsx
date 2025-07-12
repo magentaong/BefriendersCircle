@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Layout from "../components/Layout.tsx";
 import Category from "../components/Forum/Category.tsx";
 
