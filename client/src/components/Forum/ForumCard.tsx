@@ -1,4 +1,4 @@
-import CardBase from "../CardBase";
+import CardBase from "../common/CardBase";
 
 interface Data {
   url: string;

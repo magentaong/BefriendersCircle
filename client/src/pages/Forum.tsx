@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Layout from "../components/Layout.tsx";
-import Category from "../components/Forum/Category.tsx";
+import Category from "../components/forum/Category.tsx";
 
 
 function Forum() {
