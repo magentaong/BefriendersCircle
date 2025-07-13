@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../components/Layout.tsx";
 import { useParams } from "react-router-dom";
-import TopicCard from '../components/Forum/TopicCard.tsx';
+//import TopicCard from '../components/Forum/temp.tsx';
 import topicResources from "../content/Topic.json" // for testing, remove when connect to backend
 
 // for testing, remove when connect to backend
@@ -32,7 +32,7 @@ function Forum() {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {currentTopics.map(topic => (
                         <div className="col-span-2 lg:col-span-1" key={currentCategory}>
-                            <TopicCard data={topic} />
+                            {/*<TopicCard data={topic} />*/}
                         </div>))}
                 </div>
             </div>
