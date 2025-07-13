@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Category from "./Forum/Category";
+import Category from "./forum/Category";
 
 interface NavigationProps {
   header?: string;

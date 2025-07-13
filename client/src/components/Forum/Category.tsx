@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import supportResources from "../../content/resources.json"
 import CategoryCard from "../CardBase.tsx"
 
