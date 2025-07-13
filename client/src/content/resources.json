@@ -3,22 +3,22 @@
         {
             "name": "Fatigue",
             "image": "/Support/Fatigue.png",
-            "url": "Fatigue"
+            "url": "/forum/Fatigue"
         },
         {
             "name": "Exercise",
             "image": "/Support/Exercise.png",
-            "url": "Fatigue"
+            "url": "/forum/Exercise"
         },
         {
             "name": "Family",
             "image": "/Support/Family.png",
-            "url": "Fatigue"
+            "url": "/forum/Family"
         },
         {
             "name": "Connection",
             "image": "/Support/Connection.png",
-            "url": "Fatigue"
+            "url": "/forum/Connection"
         }
     ],
 
@@ -26,23 +26,22 @@
         {
             "name": "Charity Run 2025",
             "image": "/Support/CR2025.png",
-            "url": "Fatigue"
+            "url": "/forum/CharityRun2025"
         },
         {
             "name": "Marina Barrage Outing",
             "image": "/Support/MBO.png",
-            "url": "Fatigue"
+            "url": "/forum/MarinaBarrageOuting"
         },
         {
             "name": "Christmas 2025",
             "image": "/Support/Christmas2025.png",
-            "url": "Fatigue"
+            "url": "/forum/Christmas2025"
         },
         {
             "name": "Chinese New Year 2025",
             "image": "/Support/CNY2025.png",
-            "url": "Fatigue"
+            "url": "/forum/ChineseNewYear2025"
         }
-    ]
-    
+    ] 
 }

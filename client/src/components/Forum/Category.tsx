@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import supportResources from "../../content/resources.json"
-import ForumCard from "./ForumCard.tsx"
+import CategoryCard from "../CardBase.tsx"
 
 interface Resources {
   name: string;
@@ -39,7 +39,7 @@ export default function Category({category, header}: CategroryProps) {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {filteredResources.map(resource => (
                         <div className="col-span-2 lg:col-span-1" key={resource.name}>
-                            <ForumCard data={resource} category={category} />
+                            <CategoryCard title={resource.name} icon={resource.image} bg="bg-white"path={resource.url}/>
                         </div>
                     ))}
                 </div>

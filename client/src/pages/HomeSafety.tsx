@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import HomeSafetyScene from "../scenes/HomeSafetyScene";
 
 export default function HomeSafetyLesson() {
   return (
@@ -18,26 +19,10 @@ export default function HomeSafetyLesson() {
 
       {/* Simulation Placeholder */}
       <div className="flex-1 flex flex-col justify-center items-center w-full px-2 pb-4">
-        <div className="
-          w-full
-          bg-serene
-          rounded-xl
-          shadow-lg
-          flex
-          flex-col
-          items-center
-          justify-center
-          min-h-[50vh]
-          md:min-h-[400px]
-          max-h-[70vh]
-          my-4
-          p-4
-          md:p-8
-        ">
-          <p className="text-base md:text-lg font-bold text-blue-900 text-center mb-2">
-            Simulation Here
-          </p>
-          {/* <div id="threejs-canvas" className="w-full h-full" /> */}
+        <div className="w-full bg-serene rounded-xl overflow-hidden shadow-lg flex flex-col items-center justify-center min-h-[50vh] md:min-h-[400px] max-h-[70vh] my-4 p-4 md:p-8">
+          <div className="w-full h-full grow">
+            <HomeSafetyScene />
+          </div>
         </div>
       </div>
 
