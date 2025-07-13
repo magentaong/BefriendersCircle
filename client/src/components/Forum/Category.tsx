@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import supportResources from "../../content/resources.json"
-import CategoryCard from "../CardBase.tsx"
+import CategoryCard from "../common/CardBase"
 
 interface Resources {
   name: string;
