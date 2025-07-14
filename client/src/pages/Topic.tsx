@@ -6,14 +6,13 @@ import topicResources from "../content/Topic.json" // for testing, remove when c
 
 // for testing, remove when connect to backend
 interface Topic {
-  url: string;
+  id: number;
   time: string;
   content: string;
   comments: number;
   like: number;
 }
 
-// for testing, remove when connect to backend
 const topics: Record<string, Topic[]> = topicResources;
 
 function Forum() {
@@ -32,7 +31,7 @@ function Forum() {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {currentTopics.map(topic => (
                         <div className="col-span-2 lg:col-span-1" key={currentCategory}>
-                            <TopicCard data={topic} />
+                            <TopicCard data={topic} url={`./${topic.id}`}/>
                         </div>))}
                 </div>
             </div>

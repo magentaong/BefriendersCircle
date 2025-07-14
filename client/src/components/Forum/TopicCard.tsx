@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 
 interface Data {
-  url: string;
   time: string;
   content: string;
   comments: number;
@@ -12,14 +11,15 @@ interface Data {
 
 interface TopicProps {
   data: Data;
+  url: string,
 }
 
-const TopicCard: React.FC<TopicProps> = ({ data }) => {
+const TopicCard: React.FC<TopicProps> = ({ data, url}) => {
   const navigate = useNavigate();
 
   return (
     <button
-      onClick={() => navigate(data.url)}
+      onClick={() => navigate(url)}
       className={`p-6 bg-white max-w-[350px] h-[250px] w-full mx-auto rounded-2xl shadow-md text-center flex flex-col items-center justify-center hover:brightness-90 transition`}
     >
       <div className="h-[190px] w-full overflow-hidden">

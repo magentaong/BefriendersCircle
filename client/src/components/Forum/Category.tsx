@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import supportResources from "../../content/resources.json"
 import CategoryCard from "../common/CardBase"
+import { useParams } from "react-router-dom";
 
 interface Resources {
   name: string;
@@ -24,6 +25,7 @@ export default function Category({category, header}: CategroryProps) {
     resource.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const { nextUrl } = useParams<{ nextUrl: string }>();
     return (
         <>
         <section>
@@ -39,7 +41,7 @@ export default function Category({category, header}: CategroryProps) {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {filteredResources.map(resource => (
                         <div className="col-span-2 lg:col-span-1" key={resource.name}>
-                            <CategoryCard title={resource.name} icon={resource.image} bg="bg-white"path={resource.url}/>
+                            <CategoryCard title={resource.name} icon={resource.image} bg="bg-white"path={`./${resource.name}`}/>
                         </div>
                     ))}
                 </div>
