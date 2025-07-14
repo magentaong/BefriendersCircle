@@ -1,17 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
+// Type for individual topic data, defiend in Topic.jsx
 interface Data {
   time: string;
   content: string;
   comments: number;
-  like: number;
+  like: number; 
 }
-
+//Props passed to the Category component
 interface TopicProps {
-  data: Data;
-  url: string,
+  data: Data; // URL to navigate to when the card is clicked
+  url: string, // Get Topic data defined in Topic.jsx
 }
 
 const TopicCard: React.FC<TopicProps> = ({ data, url}) => {
