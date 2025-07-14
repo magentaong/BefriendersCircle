@@ -3,7 +3,7 @@
         {
             "time": "10/30/56",
             "content": "Fatigue ............",
-            "url": "Fatigue",
+            "id": 1,
             "comments": 23,
             "like": 12
         },
@@ -11,7 +11,7 @@
         {
             "time": "1/23/12",
             "content": "I am tired, help me!!",
-            "url": "Fatigue",
+            "id": 2,
             "comments": 30,
             "like": 40
         }

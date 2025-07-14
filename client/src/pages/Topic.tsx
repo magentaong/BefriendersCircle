@@ -4,24 +4,25 @@ import { useParams } from "react-router-dom";
 import TopicCard from '../components/Forum/TopicCard.tsx';
 import topicResources from "../content/Topic.json" // for testing, remove when connect to backend
 
-// for testing, remove when connect to backend
+// Type definition for a topic card
 interface Topic {
-  url: string;
-  time: string;
-  content: string;
-  comments: number;
-  like: number;
+  id: number; // unqiure 
+  time: string; // date and time of user created post
+  content: string; // Content of the post (e.g. "I need help...")
+  comments: number; // Number of people commented on post
+  like: number; // Number of people like the post
 }
 
-// for testing, remove when connect to backend
+// Simulated backend data, may remove when add backend
 const topics: Record<string, Topic[]> = topicResources;
 
 function Forum() {
 
+    // Get the current category from the URL params
     const { currentCategory } = useParams<{ currentCategory: string }>();
-    console.log(currentCategory);
 
-    // Get data of certain topic
+    // Get data of define topic
+    // Else fallback to 'default' or empty array if category not found
     const currentTopics = topics[currentCategory || "default"];
   return (
     <Layout header={currentCategory}>  
@@ -32,7 +33,7 @@ function Forum() {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {currentTopics.map(topic => (
                         <div className="col-span-2 lg:col-span-1" key={currentCategory}>
-                            <TopicCard data={topic} />
+                            <TopicCard data={topic} url={`./${topic.id}`}/>
                         </div>))}
                 </div>
             </div>
