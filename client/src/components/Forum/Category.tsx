@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import supportResources from "../../content/resources.json"
 import CategoryCard from "../common/CardBase"
-
+import SearchBar from '../common/SearchBar'; 
 //Defines a single resource object with a name and image URL from database
 interface Resources {
   name: string; // Name of the catergory (Family)
@@ -36,13 +36,7 @@ export default function Category({category, header}: CategroryProps) {
                 <h1 className="text-center text-4xl font-bold">{header}</h1>
                  
                  {/* Search input field */}
-                 <input
-                    type="text"
-                    placeholder="Search..."
-                    className="border p-2 mt-4"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)} // Update the search term
-                />
+                <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder="Search resources..."/>
 
                 {/* Grid of all/filtered resource cards */}
                 <div className="mt-6 grid grid-cols-2 gap-16">
