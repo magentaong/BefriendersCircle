@@ -56,7 +56,7 @@ const resources = [
     isVerified: true
   },
   {
-    title: "Living with Dementia - Resource Kit",
+    title: "Living with Dementia - Resource Kit for Caregivers",
     category: "Resources",
     url: "https://www.dementiahub.sg/living-with-dementia-a-resource-kit-for-caregivers/",
     tags: ["dementia", "caregiver", "resource kit"],
@@ -98,7 +98,7 @@ const resources = [
     isVerified: true
   },
   {
-    title: "Facilitate Meaningful Interaction",
+    title: "Facilitate Meaningful Interaction (Dementia)",
     category: "Courses",
     url: "https://dementia.org.sg/academy/interaction/",
     tags: ["dementia", "interaction"],
@@ -122,7 +122,7 @@ const resources = [
     isVerified: true
   },
   {
-    title: "FDW Core Module – Essentials of Dementia Care",
+    title: "Foreign Domestic Workers(FWD) Core Module - Essentials of Dementia Care",
     category: "Courses",
     url: "https://dementia.org.sg/academy/fdw/#core",
     tags: ["FDW", "training", "dementia"],
@@ -130,7 +130,7 @@ const resources = [
     isVerified: true
   },
   {
-    title: "FDW Elective Module – Meaningful Activities",
+    title: "FDW Elective Module - Meaningful Activities",
     category: "Courses",
     url: "https://dementia.org.sg/academy/fdw/#elective",
     tags: ["FDW", "activities"],
@@ -140,7 +140,7 @@ const resources = [
 
   // === FINANCIAL ASSISTANCE ===
   {
-    title: "MOH – Keeping Healthcare Affordable",
+    title: "MOH - Keeping Healthcare Affordable",
     category: "Finance",
     url: "https://www.moh.gov.sg/managing-expenses/keeping-healthcare-affordable",
     tags: ["healthcare", "moh", "expenses"],
@@ -148,7 +148,7 @@ const resources = [
     isVerified: true
   },
   {
-    title: "Senior’s Mobility and Enabling Fund",
+    title: "Senior's Mobility and Enabling Fund(SMF)",
     category: "Finance",
     url: "https://www.moh.gov.sg/managing-expenses/keeping-healthcare-affordable/help-for-caregiver#7fa1c3a8a3b228f24c9304db7d9bbdfe",
     tags: ["mobility", "finance", "SMF"],
@@ -172,7 +172,7 @@ const resources = [
     isVerified: true
   },
   {
-    title: "MDW Levy Concession for Seniors & PWDs",
+    title: "Migrant Domestic Worker(MDW) Levy Concession for Seniors & PWDs",
     category: "Finance",
     url: "https://www.moh.gov.sg/managing-expenses/keeping-healthcare-affordable",
     tags: ["MDW", "levy", "concession"],
@@ -221,20 +221,22 @@ const resources = [
     source: "Enabling Guide",
     isVerified: true
   },
+  
+  //start of template
   {
-    title: "Caregiver Facebook Group",
+    title: "这这这",
     category: "Support Groups",
-    url: "https://www.facebook.com/groups/CaregiversSupportGroupSG/",
+    url: "www.HURH HURH",
     tags: ["facebook", "community"],
     source: "Facebook",
     isVerified: true
-  },
+  },//end of template
   {
-    title: "Enabling Guide Informal Support Groups",
+    title: "吧啦吧啦",
     category: "Support Groups",
-    url: "https://www.enablingguide.sg/caring-for-caregivers/informal-support-groups",
+    url: "^__^",
     tags: ["support", "informal"],
-    source: "Enabling Guide",
+    source: "相应填写",
     isVerified: true
   }
 ];
