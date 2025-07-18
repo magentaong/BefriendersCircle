@@ -21,4 +21,4 @@ const ResourceSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-export default mongoose.model("Resource", ResourceSchema); //Idk if we use 
+module.exports = mongoose.model("Resource", ResourceSchema);
