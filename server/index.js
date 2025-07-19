@@ -9,6 +9,8 @@ const boardRoutes = require("./routes/board");
 const trainingRoutes = require("./routes/training")
 const postRoutes = require("./routes/post")
 const commentRoutes = require("./routes/comment")
+const authRoutes = require("./routes/auth");
+const auth = require("./middleware/auth")
 
 const app = express();
 connectDB();
@@ -26,12 +28,12 @@ app.use(express.json());
 
 // Routes
 app.use("/api/openai", openaiRoutes);
-app.use("/api/resources", resourceRoutes);//I still hope I'm right here, For resource database
-app.use("/api/boards", boardRoutes);
-app.use("/api/training", trainingRoutes);
-app.use("/api/post", postRoutes);
-app.use("/api/comment", commentRoutes);
-
+app.use("/api/resources", auth, resourceRoutes);//I still hope I'm right here, For resource database
+app.use("/api/boards", auth, boardRoutes);
+app.use("/api/training", auth, trainingRoutes);
+app.use("/api/post", auth, postRoutes);
+app.use("/api/comment", auth, commentRoutes);
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
