@@ -7,6 +7,7 @@ const openaiRoutes = require("./routes/openai");
 const resourceRoutes = require("./routes/resource");//for database of resources
 const boardRoutes = require("./routes/board");
 const trainingRoutes = require("./routes/training")
+const postRoutes = require("./routes/post")
 
 const app = express();
 connectDB();
@@ -27,6 +28,7 @@ app.use("/api/openai", openaiRoutes);
 app.use("/api/resources", resourceRoutes);//I still hope I'm right here, For resource database
 app.use("/api/boards", boardRoutes);
 app.use("/api/training", trainingRoutes);
+app.use("/api/post", postRoutes);
 
 
 
