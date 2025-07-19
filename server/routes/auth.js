@@ -69,7 +69,6 @@ router.get("/me", authMiddleware, async (req, res) => {
 });
 
 // PATCH /api/auth/me so that we can update profile :O 
-// PATCH /api/auth/me
 router.patch("/me", authMiddleware, async (req, res) => {
   try {
     const { language, name, profileImg } = req.body;
@@ -92,3 +91,6 @@ router.patch("/me", authMiddleware, async (req, res) => {
 
 
 module.exports = router;
+
+
+//TOOD: include .delete 

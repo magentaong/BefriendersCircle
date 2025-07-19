@@ -98,4 +98,4 @@ export default function Profile() {
   );
 }
 
-//TODO: Edit modal for profile :(
+//TODO: Edit modal for profile :(, handle deleting account

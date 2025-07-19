@@ -19,7 +19,7 @@ export default function AppRoutes() {
       {/* public route */}
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
-      {/* all others require auth */}
+      {/* all others require auth, cause we're very safe yesyes */}
       <Route
         path="/*"
         element={

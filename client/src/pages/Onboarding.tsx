@@ -62,3 +62,4 @@ export default function Onboarding() {
     </main>
   );
 }
+//TODO: I'm p sure galaxy fold 5 messes up the responsiveness here.. SCREW THAT PHONE MODEL HMPH

@@ -6,7 +6,7 @@ function authMiddleware(req, res, next) {
 
   try {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified; // Now req.user contains cID and whatever else was in the token
+    req.user = verified; 
     next();
   } catch (err) {
     res.status(401).json({ message: "Invalid token" });
