@@ -222,21 +222,174 @@ const resources = [
     isVerified: true
   },
   
-  //start of template
   {
-    title: "这这这",
+    title: "Caregivers Connect",
     category: "Support Groups",
-    url: "www.HURH HURH",
-    tags: ["facebook", "community"],
+    url: "https://www.facebook.com/thecaregiversconnect/",
+    tags: ["community", "caregivers", "support"],
     source: "Facebook",
     isVerified: true
-  },//end of template
+  },
+
   {
-    title: "吧啦吧啦",
+    title: "Caregivers Support Group",
     category: "Support Groups",
-    url: "^__^",
-    tags: ["support", "informal"],
-    source: "相应填写",
+    url: "https://www.facebook.com/thecaregiversconnect/",
+    tags: ["caregivers", "support"],
+    source: "Facebook Group",
+    isVerified: true
+  },
+  
+    {
+    title: "SG Caregivers",
+    category: "Support Groups",
+    url: "https://t.me/SGCaregivers",
+    tags: ["caregivers", "community"],
+    source: "Telegram Channel",
+    isVerified: true
+  },
+
+    {
+    title: "SG Caregivers Community",
+    category: "Support Groups",
+    url: "t.me/SGCaregiversCommunity",
+    tags: ["caregivers", "support", "resources"],
+    source: "Telegram Channel",
+    isVerified: true
+  },
+
+    {
+    title: "Caregiver and the Elderly",
+    category: "Support Groups",
+    url: "https://www.facebook.com/thecaregiversconnect/",
+    tags: ["elderly", "support", "resources"],
+    source: "Facebook Group",
+    isVerified: true
+  },
+
+    {
+    title: "Chronic Obstructive Pulmonary Disease Association (Singapore)",
+    category: "Medical Condition Support",
+    url: "https://www.facebook.com/COPDAS/",
+    tags: ["COPD", "lung health", "resources"],
+    source: "Facebook",
+    isVerified: true
+  },
+
+    {
+    title: "Diabetes Singapore",
+    category: "Medical Condition Support",
+    url: "https://www.facebook.com/thediabetessingapore#",
+    tags: ["diabetes", "resources"],
+    source: "Facebook",
+    isVerified: true
+  },
+
+    {
+    title: "Life after Stroke in Singapore",
+    category: "Medical Condition Support",
+    url: "https://www.facebook.com/groups/50074405975",
+    tags: ["support", "stroke", "survivor support"],
+    source: "Facebook Group",
+    isVerified: true
+  },
+
+    {
+    title: "PH Singapore (Pulmonary Hypertension)",
+    category: "Medical Condition Support",
+    url: "https://www.facebook.com/PAHsg/",
+    tags: ["PAH", "community"],
+    source: "Facebook",
+    isVerified: true
+  },
+
+    {
+    title: "Singapore Liver Cancer Support Group",
+    category: "Medical Condition Support",
+    url: "https://www.facebook.com/SingaporeLiverCancer/",
+    tags: ["liver cancer", "support"],
+    source: "Facebook",
+    isVerified: true
+  },
+
+    {
+    title: "CWA Caregivers Support Group",
+    category: "Community Support",
+    url: "https://www.cwa.org.sg/caregiver-support-group/",
+    tags: ["caregivers", "community", "support"],
+    source: "Caregiving Welfare Association",
+    isVerified: true
+  },
+  
+    {
+    title: "CAL Caregiver Support",
+    category: "Community Support",
+    url: "https://www.cal.org.sg/caregiver-support",
+    tags: ["training", "mental health", "support"],
+    source: "Caregivers Alliance Limited",
+    isVerified: true
+  },
+
+    {
+    title: "Caregiver Support Network Community Outreach Team (CREST-CSN)",
+    category: "Community Support",
+    url: "https://www.clubheal.sg/crest-caregivers",
+    tags: ["caregivers", "support", "mental health"],
+    source: "Club HEAL",
+    isVerified: true
+  },
+
+    {
+    title: "Caregiver Support Groups (Dementia)",
+    category: "Community Support",
+    url: "https://dementia.org.sg/csg/",
+    tags: ["dementia", "support", "caregivers"],
+    source: "Dementia Singapore",
+    isVerified: true
+  },
+
+    {
+    title: "Cancer Support Groups",
+    category: "Community Support",
+    url: "https://www.singaporecancersociety.org.sg/get-help/cancer-survivor/join-a-support-group.html",
+    tags: ["cancer", "survivor support", "community"],
+    source: "Singapore Cancer Society",
+    isVerified: true
+  },
+
+    {
+    title: "Healthy Heart Support Group",
+    category: "Community Support",
+    url: "https://www.myheart.org.sg/healthy-heart-support-group/",
+    tags: ["heart attack", "resources", "survivor support"],
+    source: "Singapore Heart Foundation",
+    isVerified: true
+  },
+
+    {
+    title: "Stroke Support Station (S3)",
+    category: "Community Support",
+    url: "https://s3.org.sg/our-services/care-and-support/",
+    tags: ["caregivers", "stroke", "survivor support"],
+    source: "Stroke Support Station",
+    isVerified: true
+  },
+
+    {
+    title: "Singapore National Stroke Association (SNSA)",
+    category: "Community Support",
+    url: "https://www.snsa.org.sg/getsupport/",
+    tags: ["caregivers", "stroke", "survivor support"],
+    source: "Facebook",
+    isVerified: true
+  },
+
+  {
+    title: "Homage Support Groups",
+    category: "Community Support",
+    url: "https://www.homage.sg/resources/support-groups-singapore/",
+    tags: ["support", "resources"],
+    source: "Homeage",
     isVerified: true
   }
 ];
