@@ -1,6 +1,8 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Resource = require("../models/Resource");
+const { nanoid } = require("nanoid");
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
@@ -241,10 +243,21 @@ const resources = [
   }
 ];
 
+
+resources.forEach((resource) => {
+  if (!resource.rID) {
+    resource.rID = `res_${nanoid(8)}`;
+  }
+});
+
 async function seedData() {
   try {
     await Resource.deleteMany({});
-    await Resource.insertMany(resources);
+    for (const res of resources) {
+      const resource = new Resource(res);
+      await resource.save();
+    } // changed this so that it'll run pre("save") hook so that rID would be generated if missing
+
     console.log("Resources inserted successfully.");
     mongoose.disconnect();
   } catch (err) {
