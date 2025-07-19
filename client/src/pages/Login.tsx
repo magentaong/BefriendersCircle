@@ -47,7 +47,6 @@ export default function LoginPage() {
         className="w-full max-w-md bg-white space-y-6 py-5 "
       >
 
-        {/* Title */}
         <h2 className="text-xl font-semibold text-gray-800 mb-2 py-2">
           {isSignup
             ? "Register with us to join the community!"
@@ -67,7 +66,7 @@ export default function LoginPage() {
 
         {/* Email */}
         <input
-          className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400 mt-4"
+          className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
