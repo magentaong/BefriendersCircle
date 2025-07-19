@@ -1,14 +1,15 @@
 require("dotenv").config();
+// console.log("MONGO_URI from .env is:", process.env.MONGO_URI); debug to check smth
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db");
 const openaiRoutes = require("./routes/openai");
 const resourceRoutes = require("./routes/resource");//for database of resources
-import resourceRoutes from "./routes/resource.js";// I hope this is right
-
+const boardRoutes = require("./routes/board");
 
 
 const app = express();
+connectDB();
 
 app.get("/", (req, res) => {
   res.json({ status: "Server is running!" }); //check if server is running
@@ -21,10 +22,11 @@ app.use(cors({
 
 app.use(express.json());
 
-connectDB();
-
+// Routes
 app.use("/api/openai", openaiRoutes);
 app.use("/api/resources", resourceRoutes);//I still hope I'm right here, For resource database
+app.use("/api/boards", boardRoutes);
+
 
 
 const PORT = process.env.PORT || 5050;

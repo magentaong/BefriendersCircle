@@ -1,6 +1,6 @@
 // Import required modules
-import express from "express";
-import Resource from "../models/Resource.js";
+const express = require("express");
+const Resource = require("../models/Resource.js");
 
 const router = express.Router();
 
@@ -28,4 +28,4 @@ router.post("/", async (req, res) => {
 });
 
 // Export router for use in server.js
-export default router;
+module.exports = router;

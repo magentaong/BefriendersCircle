@@ -17,6 +17,7 @@
     "express": "^4.21.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.2",
+    "nanoid": "^5.1.5",
     "openai": "^5.8.3"
   },
   "devDependencies": {
