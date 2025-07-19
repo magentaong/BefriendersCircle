@@ -8,6 +8,7 @@ const resourceRoutes = require("./routes/resource");//for database of resources
 const boardRoutes = require("./routes/board");
 const trainingRoutes = require("./routes/training")
 const postRoutes = require("./routes/post")
+const commentRoutes = require("./routes/comment")
 
 const app = express();
 connectDB();
@@ -29,7 +30,7 @@ app.use("/api/resources", resourceRoutes);//I still hope I'm right here, For res
 app.use("/api/boards", boardRoutes);
 app.use("/api/training", trainingRoutes);
 app.use("/api/post", postRoutes);
-
+app.use("/api/comment", commentRoutes);
 
 
 const PORT = process.env.PORT || 5050;
