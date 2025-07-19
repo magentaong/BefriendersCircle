@@ -6,13 +6,13 @@ export default function HomeSafetyLesson() {
   return (
     <main className="bg-white min-h-screen flex flex-col w-full max-w-3xl mx-auto">
       {/* Sticky Header with Back Arrow */}
-      <div className="flex items-center w-full sticky top-0 bg-white z-10 py-4 px-2 md:px-4 shadow-sm mb-2">
+      <div className="flex items-center w-full sticky top-0 bg-white z-10 py-4 px-2 md:px-4 mb-2">
         <Link to="/training">
-          <button className="w-10 h-10 rounded-full bg-serene shadow flex items-center justify-center mr-4">
+          <button className="w-10 h-10 rounded-full bg-serene flex items-center justify-center mr-4">
             <ArrowLeft className="w-6 h-6" />
           </button>
         </Link>
-        <h1 className="text-base md:text-lg font-bold bg-serene px-4 py-2 rounded-xl shadow text-center flex-grow">
+        <h1 className="text-base md:text-lg font-bold bg-serene px-4 py-2 rounded-xl text-center flex-grow">
           Home Safety Simulation
         </h1>
       </div>
