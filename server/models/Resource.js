@@ -25,7 +25,7 @@ const ResourceSchema = new mongoose.Schema({
 // Auto-generate rID if missing
 ResourceSchema.pre("save", function (next) {
   if (!this.rID) {
-    this.rID = `res_${nanoid(8)}`;  // e.g., res_8f2kdj4a
+    this.rID = `res_${nanoid(8)}`; 
   }
   next();
 });

@@ -4,10 +4,10 @@ const { nanoid } = require("nanoid");
 const boardSchema = new mongoose.Schema({
   bID: { type: String, required: true, unique: true },
   cID: { type: String, required: true }, // caregiver/user who created
+  category: {type: String, required: true},
   name: { type: String, required: true },
   coverImg: { type: String }
 }, { timestamps: true });
-
 
 
 // Auto-generate bID if not provided
