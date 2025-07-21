@@ -23,4 +23,18 @@ router.post("/", async (req, res) => {
   }
 });
 
+// GET /api/boards/:catergory
+router.get('/:category', async (req, res) => {
+  const { category } = req.params;
+  console.log(`Fetching data for category: ${category}`);
+  try {
+    const board = await Board.find({ category: category });
+    console.log(board);
+    res.json(board); // Send the board data as a JSON response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch board" });
+  }
+});
+
 module.exports = router; 

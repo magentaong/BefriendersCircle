@@ -1,5 +1,5 @@
 const express = require("express");
-const Forum = require("forum");
+const board = require("../models/Board");
 require("dotenv").config();
 
 const router = express.Router();
