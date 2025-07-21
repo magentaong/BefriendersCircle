@@ -46,13 +46,7 @@ export default function Category({category, header}: CategroryProps) {
                 <h1 className="text-center text-4xl font-bold">{header}</h1>
                  
                  {/* Search input field */}
-                 <input
-                    type="text"
-                    placeholder="Search..."
-                    className="border p-2 mt-4"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)} // Update the search term
-                />
+                <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder="Search resources..."/>
 
                 {/* Grid of all/filtered resource cards */}
                 <div className="mt-6 grid grid-cols-2 gap-16">
