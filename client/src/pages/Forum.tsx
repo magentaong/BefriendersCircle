@@ -1,5 +1,5 @@
 import Layout from "../components/Layout.tsx";
-import Category from "../components/forum/Category.tsx";
+import Category from "../components/Forum/Category.tsx";
 
 // Main forum page that displays different categories (Topics & Events)
 function Forum() {
