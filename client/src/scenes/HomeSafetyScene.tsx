@@ -1,29 +1,28 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
 
 const HomeSafetyScene: React.FC = () => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const mixerRef = useRef<THREE.AnimationMixer | null>(null);
+    const actionsRef = useRef<Record<string, THREE.AnimationAction>>({});
 
     useEffect(() => {
-        // Guard Clause: ensure this executes only in a valid client-side environment / when DOM element is available
-        if (typeof window === 'undefined' || !containerRef.current) {
-            return;
-        }
+        if (typeof window === 'undefined' || !containerRef.current) return;
+        if (containerRef.current.querySelector('canvas')) return;
 
-        // Guard Clause: Check if a canvas element already exists in the container
-        if (containerRef.current.querySelector('canvas')) {
-            console.log("Canvas already exists, skipping initialization in StrictMode.");
-            return;
-        }
-
-        // Setup main components of the scene
-        // width / height allows the scene to follow its parent container's sizing
         const width = containerRef.current.clientWidth;
         const height = containerRef.current.clientHeight;
+
+        // Scene Camera -- use later to move along track
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        camera.position.set(1, 1.5, 6);
+        camera.lookAt(1, 1, 0);
 
+        // Container Sizing
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         renderer.domElement.style.width = '100%';
         renderer.domElement.style.height = '100%';
@@ -32,25 +31,72 @@ const HomeSafetyScene: React.FC = () => {
 
         containerRef.current.appendChild(renderer.domElement);
 
-        // TODO: Setupcamera so you can look around (limited), and can change its camera track
-        camera.position.z = 5;
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
 
-        // Spawn a cube in the scene
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
+        // Load model
+        const loader = new GLTFLoader();
+        loader.load(
+            '/models/testScene.gltf',
+            (gltf) => {
+                const model = gltf.scene;
+                model.position.set(0, 0, 0);
+                model.scale.set(0.5, 0.5, 0.5);
+                scene.add(model);
 
-        // Animate cube to spin
+                const mixer = new THREE.AnimationMixer(model);
+                mixerRef.current = mixer;
+
+                // constant fan animation
+                const LRclip = THREE.AnimationClip.findByName(gltf.animations, 'LivingRoomFan');
+                if (LRclip) {
+                    const LRAction = mixer.clipAction(LRclip);
+                    LRAction.setLoop(THREE.LoopRepeat, Infinity);
+                    LRAction.clampWhenFinished = false;
+                    LRAction.enabled = true;
+                    LRAction.play();
+                } else {
+                    console.warn('Animation "Live_Rotate" not found!');
+                }
+                const BRclip = THREE.AnimationClip.findByName(gltf.animations, 'BedroomFan');
+                if (BRclip) {
+                    const BRAction = mixer.clipAction(BRclip);
+                    BRAction.setLoop(THREE.LoopRepeat, Infinity);
+                    BRAction.clampWhenFinished = false;
+                    BRAction.enabled = true;
+                    BRAction.play();
+                } else {
+                    console.warn('Animation "Live_Rotate" not found!');
+                }
+
+                gltf.animations.forEach((clip) => {
+                    const action = mixer.clipAction(clip);
+                    actionsRef.current[clip.name] = action;
+                });
+            },
+            (xhr) => {
+                console.log(`Model ${Math.round((xhr.loaded / xhr.total) * 100)}% loaded`);
+            },
+            (error) => {
+                console.error('An error happened while loading the GLTF model', error);
+            }
+        );
+
+        // Animation render loop
+        const clock = new THREE.Clock();
         const animate = () => {
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-            renderer.render(scene, camera);
             requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+            if (mixerRef.current) {
+                mixerRef.current.update(delta);
+            }
+
+            renderer.render(scene, camera);
         };
         animate();
 
-        // window resizing -- specifically to handle website tbh
         const handleResize = () => {
             if (!containerRef.current) return;
             const width = containerRef.current.clientWidth;
@@ -58,7 +104,6 @@ const HomeSafetyScene: React.FC = () => {
 
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
-
             renderer.setSize(width, height);
         };
 
