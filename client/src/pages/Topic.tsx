@@ -23,7 +23,7 @@ function Forum() {
 
     // Get data of define topic
     // Else fallback to 'default' or empty array if category not found
-    const currentTopics = topics[currentCategory || "default"];
+    const currentTopics = topics[currentCategory || "Fatigue"];
   return (
     <Layout header={currentCategory}>  
         <section >
