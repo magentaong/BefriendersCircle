@@ -5,18 +5,22 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "embed": "node scripts/embedResources.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@langchain/core": "^0.3.66",
+    "@langchain/mongodb": "^0.1.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "langchain": "^0.3.30",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.2",
     "nanoid": "^5.1.5",

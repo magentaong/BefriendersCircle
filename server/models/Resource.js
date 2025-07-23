@@ -19,7 +19,11 @@ const ResourceSchema = new mongoose.Schema({
   url: { type: String, required: true },
   source: String, //not necesary
   isVerified: { type: Boolean, default: true },
-  likes: { type: Number, default: 0 }
+  likes: { type: Number, default: 0 },
+
+  // Fields for LangChain
+  combinedText: { type: String },       
+  embedding: { type: [Number] },        
 }, { timestamps: true });
 
 // Auto-generate rID if missing
