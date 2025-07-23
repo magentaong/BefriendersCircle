@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import CategoryCard from "../common/CardBase"
 import SearchBar from '../common/SearchBar'; 
 import { initTopics } from "../../api/forum";
+import Add from '../Forum/Add.tsx'
 
 //Defines a single resource object with a name and image URL from database
 interface Resources {
@@ -38,6 +39,27 @@ export default function Category({category, header}: CategroryProps) {
     resource.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Local state to track user create new post
+  const [create, setCreate] = useState(false);
+
+  //Function for create new catergory
+   const submitCatergory = async (catergory: string) => {
+      try {
+        // Replace with actual createCategory function when available
+        console.log("Submitting new category...");
+      } catch (error) {
+        console.error("Failed to create category:", error);
+      }
+          /*try {
+            const data = await createCatorgy( nameTxt, category);
+          } catch (error) {
+            console.error("Failed to fetch resources:", error);
+          }*/
+         finally{
+          setCreate(false);
+         }
+        };
+
     return (
         <>
         <section>
@@ -45,8 +67,14 @@ export default function Category({category, header}: CategroryProps) {
               {/* DIfferent type of Catergory heading */}
                 <h1 className="text-center text-4xl font-bold">{header}</h1>
                  
-                 {/* Search input field */}
-                <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder="Search resources..."/>
+                <div className='flex flex-row content-center gap-7'>
+                  <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
+                  {/* Search input field */}
+                  <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder="Search resources..."/>
+                </div>
+
+                {/* Popup to create new*/}
+                {create && (<Add clickFunction={submitCatergory} category={category}/>)}
 
                 {/* Grid of all/filtered resource cards */}
                 <div className="mt-6 grid grid-cols-2 gap-16">
