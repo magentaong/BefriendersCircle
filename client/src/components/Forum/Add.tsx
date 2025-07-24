@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { div } from "three/tsl";
+import { uploadImage } from "../../api/forum";
 
 //Props passed to the Category component
 interface AddProps {
-  clickFunction: (name: string) => void; // The key used to filter resources by category database
+  clickFunction: (atergory: string, txt: string, image: string) => void; // The key used to filter resources by category database
   category: string;
 }
 
@@ -11,18 +12,27 @@ const Add = ({clickFunction, category} : AddProps ) => {
 
     const [txt, setTxt] = useState("");
     const [file, setFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [previewUrl, setPreviewUrl] = useState("");
 
      async function onSubmitClick() {
-        clickFunction(txt);
+        clickFunction(category, txt, previewUrl);
+    }
+
+    const upload = async (image:File) => {
+      try {
+        const data = await uploadImage(image);
+        setPreviewUrl(data);  // Set the resolved data here
+        console.log(data)
+      } catch (error) {
+        console.error("Failed to fetch resources:", error);
+      }
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile);
-      setPreviewUrl(URL.createObjectURL(selectedFile));
-      console.log(previewUrl)
+      console.log("uploading");
+      upload(selectedFile);
     }
   };
       
