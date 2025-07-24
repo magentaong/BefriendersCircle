@@ -8,7 +8,7 @@ interface CardBaseProps {
   path: string;
 }
 
-const CardBase: React.FC<CardBaseProps> = ({ title, icon, bg, path }) => {
+const CardBase: React.FC<CardBaseProps> = ({ title, icon, bg, path}) => {
   const navigate = useNavigate();
 
   return (

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "http://localhost:5050/api/boards";
+const POST_API_URL = "http://localhost:5050/api/post";
 
 export async function initTopics(category: string) {
     const token = localStorage.getItem("token");
@@ -37,5 +38,15 @@ export async function postTopic(cID: string, category: string, name: string, cov
         const response = await axios.post(`${API_URL}/`, { cID,category, name, coverImg}, {
     headers: { Authorization: `Bearer ${token}` }
   });
+       return response.data;
+    }
+
+export async function initPost(name: string) {
+    console.log("get Post");
+    const token = localStorage.getItem("token");
+    const response = await axios.get(`${POST_API_URL}/${name}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+    console.log("Done!");
        return response.data;
     }

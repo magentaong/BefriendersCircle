@@ -39,16 +39,12 @@ const upload = multer({ storage: storage });
 
 // POST /api/upload - Upload image and return URL
 router.post('/upload', upload.single('image'), (req, res) => {
-  console.error('Uploading......');
 
   // Check if the file was uploaded
   if (!req.file) {
     console.error('No file uploaded');
     return res.status(400).json({ message: 'No file uploaded' });
   }
-
-  // Log the uploaded file details
-  console.log('Uploaded file details:', req.file);
 
   // Generate URL to access the uploaded image
   const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
@@ -70,16 +66,11 @@ router.get("/", async (req, res) => {
 // POST /api/boards
 router.post("/", async (req, res) => {
   try {
-    console.log("✅ [1] Received POST /api/boards with body:", req.body);
     const newBoard = new Board(req.body);
-    console.log("✅ [2] Constructed new Board object:", newBoard);
     // Log the board data before saving to check the bID (auto-generated)
     await newBoard.save();
-
-     console.log("✅ [3] Board saved:", newBoard);
     res.status(201).json(newBoard);
  } catch (error) {
-  console.error("❌ [Board Save Error]:", error);
   res.status(400).json({
     message: "Failed to create board.",
     error: error.message,
@@ -90,7 +81,6 @@ router.post("/", async (req, res) => {
 // GET /api/boards/:catergory
 router.get('/:category', async (req, res) => {
   const { category } = req.params;
-  console.log(`Fetching data for category: ${category}`);
   try {
     const board = await Board.find({ category: category });
     console.log(board);
