@@ -11,6 +11,7 @@ const postRoutes = require("./routes/post")
 const commentRoutes = require("./routes/comment")
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
+const path = require("path");
 
 const app = express();
 connectDB();
@@ -34,7 +35,7 @@ app.use("/api/training", auth, trainingRoutes);
 app.use("/api/post", auth, postRoutes);
 app.use("/api/comment", auth, commentRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
