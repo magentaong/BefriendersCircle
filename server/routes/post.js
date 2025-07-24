@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
+const Board = require("../models/Board");
 
 // GET /api/post
 router.get("/", async (req, res) => {
@@ -21,6 +22,20 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error("Error creating post:", error); //debugging why my curl not working T^T
     res.status(400).json({ message: "Failed to create Post." });
+  }
+});
+
+// GET /api/post/:catergory
+router.get('/:name', async (req, res) => {
+  const { name } = req.params;
+  try {
+    const board = await Board.findOne({ name: name });
+    console.log(board.bID);
+    const post = await Post.find({ bID: board.bID });
+    res.json(post); // Send the board data as a JSON response
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch board" });
   }
 });
 

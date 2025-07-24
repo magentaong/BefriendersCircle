@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { div } from "three/tsl";
 import { uploadImage } from "../../api/forum";
 
 //Props passed to the Category component
@@ -11,7 +10,6 @@ interface AddProps {
 const Add = ({clickFunction, category} : AddProps ) => {
 
     const [txt, setTxt] = useState("");
-    const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState("");
 
      async function onSubmitClick() {
