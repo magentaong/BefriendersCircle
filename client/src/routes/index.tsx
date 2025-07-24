@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Resources from "../pages/Resources";
 import Forum from "../pages/Forum";
 import Topic from "../pages/Topic";
+import PostDetail from "../pages/PostDetail"
 import Training from "../pages/Training";
 import Profile from "../pages/Profile";
 import HomeSafety from "../pages/HomeSafety";
@@ -28,6 +29,7 @@ export default function AppRoutes() {
               <Route path="/resources" element={<Resources />} />
               <Route path="/forum" element={<Forum />} />
               <Route path="/forum/:currentCategory" element={<Topic />} />
+              <Route path="/forum/:currentCategory/:postId" element={<PostDetail />} />
               <Route path="/training" element={<Training />} />
               <Route path="/training/home-safety" element={<HomeSafety />} />
               <Route path="/profile" element={<Profile />} />
