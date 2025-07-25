@@ -46,7 +46,7 @@ export default function Category({category, header}: CategroryProps) {
   const [create, setCreate] = useState(false);
 
   //Function for create new catergory
-   const submitCategory = async (category: string, name: string, coverImg: string) => {
+   const submitCategory = async (name: string, category: string, coverImg: string) => {
       try {
         const cID = localStorage.getItem('cID') || "caregiver_0";
         // Replace with actual createCategory function when available

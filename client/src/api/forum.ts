@@ -2,6 +2,8 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5050/api/boards";
 const POST_API_URL = "http://localhost:5050/api/post";
+const COMMENT_API_URL = "http://localhost:5050/api/comment";
+
 
 export async function initTopics(category: string) {
     const token = localStorage.getItem("token");
@@ -40,7 +42,7 @@ export async function postTopic(cID: string, category: string, name: string, cov
   });
        return response.data;
     }
-
+    
 export async function initPost(name: string) {
     console.log("get Post");
     const token = localStorage.getItem("token");
@@ -48,5 +50,13 @@ export async function initPost(name: string) {
     headers: { Authorization: `Bearer ${token}` }
   });
     console.log("Done!");
+       return response.data;
+    }
+
+export async function postPost(cID: string, bID: string, message: string) {
+    const token = localStorage.getItem("token");
+        const response = await axios.post(`${POST_API_URL}/`, { cID,bID, message}, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
        return response.data;
     }

@@ -32,7 +32,10 @@ router.get('/:name', async (req, res) => {
     const board = await Board.findOne({ name: name });
     console.log(board.bID);
     const post = await Post.find({ bID: board.bID });
-    res.json(post); // Send the board data as a JSON response
+    res.json({
+      bID: board.bID,
+      posts: post
+    }); // Send the board data and bID as a JSON response
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch board" });
