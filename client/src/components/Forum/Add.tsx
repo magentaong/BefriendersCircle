@@ -3,7 +3,7 @@ import { uploadImage } from "../../api/forum";
 
 //Props passed to the Category component
 interface AddProps {
-  clickFunction: (atergory: string, txt: string, image: string) => void; // The key used to filter resources by category database
+  clickFunction: (txt: string, catergory: string,  image: string) => void; // The key used to filter resources by category database
   category: string;
 }
 
@@ -13,7 +13,7 @@ const Add = ({clickFunction, category} : AddProps ) => {
     const [previewUrl, setPreviewUrl] = useState("");
 
      async function onSubmitClick() {
-        clickFunction(category, txt, previewUrl);
+        clickFunction(txt, category, previewUrl);
     }
 
     const upload = async (image:File) => {
