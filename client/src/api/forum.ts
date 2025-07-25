@@ -42,7 +42,7 @@ export async function postTopic(cID: string, category: string, name: string, cov
   });
        return response.data;
     }
-
+    
 export async function initPost(name: string) {
     console.log("get Post");
     const token = localStorage.getItem("token");

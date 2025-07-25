@@ -23,6 +23,7 @@ function Forum() {
 
     // Store all post
     const [post, setPost] = useState<Topic[]>([]);
+    const [bId, setBId] = useState("");
 
     // Get the current category from the URL params
     const { currentCategory } = useParams<{ currentCategory: string }>();
@@ -36,8 +37,9 @@ function Forum() {
           try {
             console.log(category);
             const data = await initPost(category);
-            console.log(data);
-            setPost(data);  // Set the resolved data here
+            console.log(data.posts);
+            setPost(data.posts);  // Set the resolved data here
+            setBId(data.bID);
           } catch (error) {
             console.error("Failed to fetch resources:", error);
           }
@@ -56,8 +58,8 @@ function Forum() {
             const cID = localStorage.getItem('cID') || "caregiver_0";
             // Replace with actual createCategory function when available
             console.log("Submitting new category...");
-            console.log(cID, message);
-            const data = await postPost(cID, post[0].bID, message);
+            console.log(cID, bId, message);
+            const data = await postPost(cID, bId, message);
             console.log("Post created successfully:", data);
           } catch (error) {
             console.error("Failed to create post:", error);
