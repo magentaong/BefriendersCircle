@@ -1,19 +1,18 @@
 {
-    "Fatigue":[
-        {
-            "time": "10/30/56",
-            "content": "Fatigue ............",
-            "id": 1,
-            "comments": 23,
-            "like": 12
-        },
-
-        {
-            "time": "1/23/12",
-            "content": "I am tired, help me!!",
-            "id": 2,
-            "comments": 30,
-            "like": 40
-        }
-    ]
+  "1": [
+    {
+      "time": "7/24/25 10:45 AM",
+      "comment": "Try taking 10-minute power naps. It really helps me!"
+    },
+    {
+      "time": "7/25/25 3:56 PM",
+      "comment": "All the best!"
+    }
+  ],
+  "2": [
+    {
+      "time": "7/24/25 10:45 AM",
+      "comment": "Try taking 10-minute power naps. It really helps me!"
+    }
+  ]
 }
