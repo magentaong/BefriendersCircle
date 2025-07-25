@@ -2,8 +2,8 @@ import React from "react";
 
 interface Post {
   id: number;
-  content: string;
   time: string;
+  content: string;
   comments: number;
   like: number;
 }
@@ -14,13 +14,22 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
-    <div className="post-card p-6 bg-white rounded-2xl shadow-md max-w-3xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Post ID: {post.id}</h2>
-      <p className="mb-4">{post.content}</p>
-      <div className="flex justify-between text-sm text-gray-500">
-        <span>Time: {post.time}</span>
-        <span>Comments: {post.comments}</span>
-        <span>Likes: {post.like}</span>
+    <div className="p-6 bg-white max-w-full rounded-2xl shadow-md text-left">
+      <div className="mb-4">
+        <p className="text-gray-700">{post.content}</p>
+      </div>
+      <div className="flex justify-between text-gray-600 text-sm mb-4">
+        <span>{post.time}</span>
+      </div>
+      <div className="flex space-x-8 text-gray-700 text-lg">
+        <div className="flex items-center space-x-2 cursor-pointer select-none">
+          <img src="/Support/Comment.png" alt="comments" className="w-6 h-6" />
+          <span>{post.comments}</span>
+        </div>
+        <div className="flex items-center space-x-2 cursor-pointer select-none">
+          <img src="/Support/Heart.png" alt="likes" className="w-6 h-6" />
+          <span>{post.like}</span>
+        </div>
       </div>
     </div>
   );
