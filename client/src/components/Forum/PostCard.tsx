@@ -45,7 +45,6 @@ interface Post {
   bID: string;
   cID: string;
   message: string;
-  comments: number;
   likes: number;
   createdAt: string;
   updatedAt: string;
@@ -53,9 +52,10 @@ interface Post {
 
 interface PostCardProps {
   post: Post;
+  comments: number;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, comments }) => {
   return (
     <div className="p-6 bg-white max-w-full rounded-2xl shadow-md text-left">
       <div className="mb-4">
@@ -67,7 +67,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <div className="flex space-x-8 text-gray-700 text-lg">
         <div className="flex items-center space-x-2 cursor-pointer select-none">
           <img src="/Support/Comment.png" alt="comments" className="w-6 h-6" />
-          <span>{post.comments}</span>
+          <span>{comments}</span>
         </div>
         <div className="flex items-center space-x-2 cursor-pointer select-none">
           <img src="/Support/Heart.png" alt="likes" className="w-6 h-6" />
