@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CategoryCard from "../common/CardBase"
 import SearchBar from '../common/SearchBar'; 
-import { initTopics } from "../../api/forum";
+import { initTopics, postTopic } from "../../api/forum";
 import Add from '../Forum/Add.tsx'
 
 //Defines a single resource object with a name and image URL from database
@@ -23,15 +23,18 @@ export default function Category({category, header}: CategroryProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [resources, setResources] = useState<Resources[]>([]);
 
-    useEffect( () => {
-        const fetchResources = async () => {
+  const fetchResources = async () => {
       try {
         const data = await initTopics(category);
+        console.log(data);
         setResources(data);  // Set the resolved data here
       } catch (error) {
         console.error("Failed to fetch resources:", error);
       }
-    };  fetchResources();
+    };
+
+    useEffect( () => {
+          fetchResources();
   }, [category]);
 
   // Filter the resources based on the search term based on word user input 
@@ -43,20 +46,20 @@ export default function Category({category, header}: CategroryProps) {
   const [create, setCreate] = useState(false);
 
   //Function for create new catergory
-   const submitCatergory = async (catergory: string) => {
+   const submitCategory = async (name: string, category: string, coverImg: string) => {
       try {
+        const cID = localStorage.getItem('cID') || "caregiver_0";
         // Replace with actual createCategory function when available
         console.log("Submitting new category...");
+        console.log(cID,category, name, coverImg);
+        const data = await postTopic(cID,category, name, coverImg);
+        console.log("Category created successfully:", data);
       } catch (error) {
         console.error("Failed to create category:", error);
       }
-          /*try {
-            const data = await createCatorgy( nameTxt, category);
-          } catch (error) {
-            console.error("Failed to fetch resources:", error);
-          }*/
          finally{
           setCreate(false);
+          fetchResources();
          }
         };
 
@@ -74,7 +77,7 @@ export default function Category({category, header}: CategroryProps) {
                 </div>
 
                 {/* Popup to create new*/}
-                {create && (<Add clickFunction={submitCatergory} category={category}/>)}
+                {create && (<Add clickFunction={submitCategory} category={category}/>)}
 
                 {/* Grid of all/filtered resource cards */}
                 <div className="mt-6 grid grid-cols-2 gap-16">

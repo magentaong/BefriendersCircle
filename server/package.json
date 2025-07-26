@@ -22,7 +22,10 @@
     "mongoose": "^8.16.2",
     "nanoid": "^3.3.11",
     "openai": "^5.8.3",
-    "supertest": "^7.1.4"
+    "supertest": "^7.1.4",
+    "multer": "^2.0.2",
+    "nanoid": "^5.1.5",
+    "openai": "^5.8.3"
   },
   "devDependencies": {
     "jest": "^30.0.5",
