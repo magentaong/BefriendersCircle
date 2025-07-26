@@ -199,6 +199,7 @@ const resources = [
     source: "SupportGoWhere",
     isVerified: true
   },
+
   {
     title: "#DementiaFriendlySG Movement",
     category: "Support Groups",
@@ -323,6 +324,15 @@ const resources = [
     isVerified: true
   },
   
+      {
+    title: "TOUCH Caregivers Support",
+    category: "Community Support",
+    url: "https://www.touch.org.sg/get-assistance/caregivers.html",
+    tags: ["caregivers", "programmes", "support"],
+    source: "Caregiving Welfare Association",
+    isVerified: true
+  },
+
     {
     title: "CAL Caregiver Support",
     category: "Community Support",
@@ -338,6 +348,15 @@ const resources = [
     url: "https://www.clubheal.sg/crest-caregivers",
     tags: ["caregivers", "support", "mental health"],
     source: "Club HEAL",
+    isVerified: true
+  },
+
+    {
+    title: "Autism Association Caregiver Support Network",
+    category: "Community Support",
+    url: "https://www.autismlinks.org.sg/caregiver-support/caregiver-support-network",
+    tags: ["community", "support", "club", "network"],
+    source: "SupportGoWhere",
     isVerified: true
   },
 
@@ -382,6 +401,15 @@ const resources = [
     category: "Community Support",
     url: "https://www.snsa.org.sg/getsupport/",
     tags: ["caregivers", "stroke", "survivor support"],
+    source: "Facebook",
+    isVerified: true
+  },
+
+      {
+    title: "MINDS For Caregivers",
+    category: "Community Support",
+    url: "https://www.minds.org.sg/for-caregivers/",
+    tags: ["caregivers", "training", "service", "community", "intellectual disability"],
     source: "Facebook",
     isVerified: true
   },
