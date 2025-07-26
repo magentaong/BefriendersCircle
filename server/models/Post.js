@@ -7,7 +7,6 @@ const postSchema = new mongoose.Schema({
   bID: {type: String, required: true}, // under the board
   cID: { type: String, required: true }, // caregiver/user who created
   message: { type: String, required: true},
-  comments: { type: Number, default: 0},
   likes: { type: Number, default: 0},
 }, { timestamps: true });
 

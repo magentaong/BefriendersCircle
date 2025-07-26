@@ -11,11 +11,12 @@ interface Data {
 }
 //Props passed to the Category component
 interface TopicProps {
+  comment: number;
   data: Data; // URL to navigate to when the card is clicked
   url: string, // Get Topic data defined in Topic.jsx
 }
 
-const TopicCard: React.FC<TopicProps> = ({ data, url}) => {
+const TopicCard: React.FC<TopicProps> = ({comment, data, url}) => {
   const navigate = useNavigate();
 
   return (
@@ -30,7 +31,7 @@ const TopicCard: React.FC<TopicProps> = ({ data, url}) => {
         {data.time}
       </div>
       <div className="h-[20px] w-full text-center text-charcoal font-heading text-base flex items-center justify-center text-xl">
-        <p>{data.comments}</p>
+        <p>{comment}</p>
         <img src="/Support/Comment.png" alt="comment" />
       </div>
       <div className="h-[20px] w-full text-center text-charcoal font-heading text-base flex items-center justify-center text-xl">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout.tsx";
 import { useParams } from "react-router-dom";
 import PostCard from "../components/Forum/PostCard.tsx";
-import { initPostDetail, postComment } from "../api/forum.ts";
+import { initPostDetail, postComment, getComments } from "../api/forum.ts";
 
 
 interface Comment {
@@ -30,6 +30,7 @@ function PostDetail() {
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [numComment, setNumComment] = useState(0);
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +54,20 @@ function PostDetail() {
         setError("Failed to load post details.");
       })
       .finally(() => setLoading(false));
+
+      getComments(postId).then(data => {
+        console.log(data)
+        if (data) {
+          console.log(data.length)
+          setNumComment(data.length);
+        } else {
+          setError("Comment Count not found.");
+        }
+      })
+      .catch(() => {
+        setError("Failed to load comment count.");
+      })
+      .finally(() => setLoading(false));
   }, [postId]);
 
   const handleAddComment = async () => {
@@ -64,6 +79,7 @@ function PostDetail() {
       const createdComment = await postComment(cID, postId, newComment.trim());
       setComments(prev => [...prev, createdComment]);
       setNewComment("");
+      setNumComment(prev => prev + 1); // Increment the comment count
     } catch (err) {
       console.error("Failed to post comment", err);
     } finally {
@@ -92,7 +108,7 @@ return (
       <section>
         <div className="w-full flex justify-center">
           <div className="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mt-6 max-w-4xl">
-            <PostCard post={post} />
+            <PostCard comments={numComment} post={post} />
 
             {comments.length > 0 ? (
               <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow w-full">

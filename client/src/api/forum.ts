@@ -49,7 +49,7 @@ export async function initPost(name: string) {
     const response = await axios.get(`${POST_API_URL}/${name}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
-    console.log("Done!");
+    console.log(response.data);
        return response.data;
     }
 
@@ -88,4 +88,12 @@ export async function initPostDetail(postId: string) {
     headers: { Authorization: `Bearer ${token}` }
   });
   return response.data; // returns { post, comments }
+}
+
+export async function getComments(pID: string,) {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${COMMENT_API_URL}/${pID}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data;
 }

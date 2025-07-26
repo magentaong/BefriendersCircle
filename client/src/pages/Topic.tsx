@@ -24,6 +24,7 @@ function Forum() {
     // Store all post
     const [post, setPost] = useState<Topic[]>([]);
     const [bId, setBId] = useState("");
+    const [comment, setComment] = useState(0);
 
     // Get the current category from the URL params
     const { currentCategory } = useParams<{ currentCategory: string }>();
@@ -80,7 +81,7 @@ function Forum() {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {post.length > 0 && post.map(topic => (
                     <div className="col-span-2 lg:col-span-1" key={topic.pID}>
-                      <TopicCard data={topic} url={`./${topic.pID}`}/>
+                      <TopicCard comment={comment} data={topic} url={`./${topic.pID}`}/>
                     </div>
                     ))}
                 </div>
