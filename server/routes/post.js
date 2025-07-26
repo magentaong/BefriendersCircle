@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Post = require("../models/Post");
 const Board = require("../models/Board");
+const Comment = require("../models/Comment");
 
 // GET /api/post
 router.get("/", async (req, res) => {
@@ -39,6 +40,24 @@ router.get('/:name', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch board" });
+  }
+});
+
+module.exports = router; 
+
+//newly added
+router.get('/details/:postId', async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const post = await Post.findOne({ pID: postId });
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const comments = await Comment.find({ pID: postId });
+
+    res.json({ post, comments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch post details" });
   }
 });
 

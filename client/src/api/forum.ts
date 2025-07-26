@@ -60,3 +60,32 @@ export async function postPost(cID: string, bID: string, message: string) {
   });
        return response.data;
     }
+
+export async function initComment(pID: string) {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${COMMENT_API_URL}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    params: { pID },
+  });
+  return response.data;
+}
+
+export async function postComment(cID: string, pID: string, message: string) {
+  const token = localStorage.getItem("token");
+  const response = await axios.post(`${COMMENT_API_URL}`, 
+    { cID, pID, message }, 
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+  return response.data;
+}
+
+
+export async function initPostDetail(postId: string) {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${POST_API_URL}/details/${postId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data; // returns { post, comments }
+}
