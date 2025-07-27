@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
       console.log("runId:", runId);
       runStatus = await openai.beta.threads.runs.retrieve(runId, {
         thread_id: threadId
-      });
+      }); //NOTE TO SELF: OPENAI SDK V5.8.3 EXPECTS THIS FORMAT GRRRR
 
       console.log("Polling:", runStatus.status, '| runId:', runId, '| threadId:', threadId);
     } while (runStatus.status !== "completed");

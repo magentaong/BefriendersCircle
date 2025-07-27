@@ -1,7 +1,6 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Mic, Search } from "lucide-react";
-import CardBase from "../components/CardBase";
+import CardBase from "../components/common/CardBase";
 
 import elderlyImg from "/Community.png";     
 import computerImg from "/Resources.png";
@@ -9,18 +8,30 @@ import breathingImg from "/Training.png";
 
 export default function Home() {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
+  const isLoggedIn = Boolean(token);
+  
   return (
     <main className="w-full max-w-6xl mx-auto px-5 py-5">
       {/* Header */}
       <header className="flex justify-between items-center mb-12">
         <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-20 w-20" />
-        <button
-          onClick={() => navigate("/login")}
-          className="bg-latte text-charcoal font-heading text-lg px-5 py-2 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
-        >
-          Login
-        </button>
+        {isLoggedIn ? (
+          <img
+            src="/Avatar.png"
+            alt="User Avatar"
+            className="h-15 w-15 rounded-full cursor-pointer"
+            onClick={() => navigate("/profile")} 
+          />
+        ) : (
+          <button
+            onClick={() => navigate("/login")}
+            className="bg-latte text-charcoal font-heading text-lg px-5 py-2 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
+          >
+            Login
+          </button>
+        )}
+
       </header>
 
       {/* Mic */}

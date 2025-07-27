@@ -1,10 +1,20 @@
 require("dotenv").config();
+// console.log("MONGO_URI from .env is:", process.env.MONGO_URI); debug to check smth
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./db");
 const openaiRoutes = require("./routes/openai");
+const resourceRoutes = require("./routes/resource");//for database of resources
+const boardRoutes = require("./routes/board");
+const trainingRoutes = require("./routes/training")
+const postRoutes = require("./routes/post")
+const commentRoutes = require("./routes/comment")
+const authRoutes = require("./routes/auth");
+const auth = require("./middleware/auth")
+const path = require("path");
 
 const app = express();
+connectDB();
 
 app.get("/", (req, res) => {
   res.json({ status: "Server is running!" }); //check if server is running
@@ -17,11 +27,19 @@ app.use(cors({
 
 app.use(express.json());
 
-connectDB();
-
+// Routes
 app.use("/api/openai", openaiRoutes);
-
+app.use("/api/resources", auth, resourceRoutes);//I still hope I'm right here, For resource database
+app.use("/api/boards", auth, boardRoutes);
+app.use("/api/training", auth, trainingRoutes);
+app.use("/api/post", auth, postRoutes);
+app.use("/api/comment", auth, commentRoutes);
+app.use("/api/auth", authRoutes);
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-});
+}); 
+
+
+module.exports = app; 

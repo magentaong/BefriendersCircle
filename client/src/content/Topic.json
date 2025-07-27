@@ -1,0 +1,19 @@
+{
+    "Fatigue":[
+        {
+            "time": "10/30/56",
+            "content": "Fatigue ............",
+            "id": 1,
+            "comments": 23,
+            "like": 12
+        },
+
+        {
+            "time": "1/23/12",
+            "content": "I am tired, help me!!",
+            "id": 2,
+            "comments": 30,
+            "like": 40
+        }
+    ]
+}

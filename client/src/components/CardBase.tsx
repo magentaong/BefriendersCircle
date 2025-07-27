@@ -1,14 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-interface CategoryCardProps {
+interface CardBaseProps {
   title: string;
   icon: string;
   bg: string;
   path: string;
 }
 
-const CategoryCard: React.FC<CategoryCardProps> = ({ title, icon, bg, path }) => {
+const CardBase: React.FC<CardBaseProps> = ({ title, icon, bg, path }) => {
   const navigate = useNavigate();
 
   return (
@@ -26,4 +26,4 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ title, icon, bg, path }) =>
   );
 };
 
-export default CategoryCard;
+export default CardBase;
