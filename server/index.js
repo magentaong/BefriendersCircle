@@ -11,6 +11,8 @@ const postRoutes = require("./routes/post")
 const commentRoutes = require("./routes/comment")
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
+const forumLikesRoutes = require("./routes/forumLikes");
+const resourceLikesRoutes = require("./routes/resourceLikes");
 
 const app = express();
 connectDB();
@@ -34,6 +36,8 @@ app.use("/api/training", auth, trainingRoutes);
 app.use("/api/post", auth, postRoutes);
 app.use("/api/comment", auth, commentRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/forumLikes", auth, forumLikesRoutes);
+app.use("/api/resourceLikes", auth, resourceLikesRoutes);
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
