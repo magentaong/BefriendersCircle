@@ -2,8 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
+interface HomeSafetySceneProps {
+  activeAnimation: string | null;
+}
 
-const HomeSafetyScene: React.FC = () => {
+const HomeSafetyScene: React.FC<HomeSafetySceneProps> = ({ activeAnimation }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const mixerRef = useRef<THREE.AnimationMixer | null>(null);
     const actionsRef = useRef<Record<string, THREE.AnimationAction>>({});
@@ -57,7 +60,7 @@ const HomeSafetyScene: React.FC = () => {
                     LRAction.enabled = true;
                     LRAction.play();
                 } else {
-                    console.warn('Animation "Live_Rotate" not found!');
+                    console.warn('Animation "LivingRoomFan" not found!');
                 }
                 const BRclip = THREE.AnimationClip.findByName(gltf.animations, 'BedroomFan');
                 if (BRclip) {
@@ -67,7 +70,7 @@ const HomeSafetyScene: React.FC = () => {
                     BRAction.enabled = true;
                     BRAction.play();
                 } else {
-                    console.warn('Animation "Live_Rotate" not found!');
+                    console.warn('Animation "BedroomFan" not found!');
                 }
 
                 gltf.animations.forEach((clip) => {

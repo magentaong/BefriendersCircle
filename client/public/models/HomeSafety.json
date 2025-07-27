@@ -1,0 +1,12 @@
+[
+  {
+    "id": "RunErrands",
+    "buttonText": "Run some errands in the neighbourhood",
+    "responseText": "You decide to run some errands in the neighbourhood."
+  },
+  {
+    "id": "CheckSocial",
+    "buttonText": "Catch up on your social media",
+    "responseText": "You catch up on your social media feed while waiting."
+  }
+]
