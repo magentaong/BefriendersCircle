@@ -6,12 +6,13 @@ import { initPost, postPost } from "../api/forum.ts";
 import topicResources from "../content/Topic.json" // for testing, remove when connect to backend
 import Add from '../components/Forum/Add.tsx';
 import {getComments} from "../api/forum.ts";
+import SearchBar from '../components/common/SearchBar.tsx'; 
 
 // Type definition for a topic card
 interface Topic {
   pID: string; // unqiure 
   bID: string;
-  time: string; // date and time of user created post
+  createdAt: string; // date and time of user created post
   message: string; // Content of the post (e.g. "I need help...")
   comments: number; // Number of people commented on post
   likes: number; // Number of people like the post
@@ -23,13 +24,19 @@ interface Topic {
 function Forum() {
 
     // Store all post
+    const [searchTerm, setSearchTerm] = useState('');
     const [post, setPost] = useState<Topic[]>([]);
-    const [bId, setBId] = useState("");
-    const [comment, setComment] = useState(0);    
+    const [bId, setBId] = useState("");   
 
     // Get the current category from the URL params
     const { currentCategory } = useParams<{ currentCategory: string }>();
     const category = currentCategory || "default";
+
+
+    // Filter the resources based on the search term based on word user input 
+    const filteredPost = post.filter((curPost) =>
+      curPost.message.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     // Get data of define topic
     // Else fallback to 'default' or empty array if category not found
@@ -90,20 +97,34 @@ function Forum() {
   return (
     <Layout header={category}>  
         <section >
-          <div id="stuorgs" className="section-container flex justify-center bg-blossom">
-            <div
-              className={"w-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-16 gap-x-16 justify-evenly"}>
-                <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
-                <div className="mt-6 grid grid-cols-2 gap-16">
-                    {post.length > 0 && post.map(topic => (
+          <div id="stuorgs" className="section-container flex justify-center">
+            <div className="section-container bg-blossom p-8 rounded-xl">
+              <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
+                <div className='flex flex-row content-center gap-7 align-middle'>
+                    <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
+                    {/* DIfferent type of Catergory heading */}
+                    <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{currentCategory}</h1>
+                </div>
+
+                <div className='flex flex-row gap-7 justify-self-end'>
+                  {/* Search input field */}
+                  <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder={`Search Post...`}/>
+                </div>
+              </div>
+
+              <div className={"w-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 justify-evenly mt-5"}>
+                    {filteredPost.length > 0 ? post.map(topic => (
                     <div className="col-span-2 lg:col-span-1" key={topic.pID}>
                       <TopicCard comment={topic.comments} data={topic} url={`./${topic.pID}`}/>
                     </div>
-                    ))}
-                </div>
+                    )) : (
+                    <p className="mt-8 text-center text-gray-500">No post yet.</p>
+                  )}
+            </div>
+            
 
                 {/* Popup to create new*/}
-                {create && (<Add clickFunction={submitCategory} category={"Post"}/>)}
+                {create && (<Add closeFunction={setCreate} clickFunction={submitCategory} category={"Post"} buttonString="Create"/>)}
             </div>
          </div>
         </section>
