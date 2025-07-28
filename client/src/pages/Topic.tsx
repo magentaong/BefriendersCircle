@@ -5,6 +5,7 @@ import TopicCard from '../components/Forum/TopicCard.tsx';
 import { initPost, postPost } from "../api/forum.ts";
 import topicResources from "../content/Topic.json" // for testing, remove when connect to backend
 import Add from '../components/Forum/Add.tsx';
+import {getComments} from "../api/forum.ts";
 
 // Type definition for a topic card
 interface Topic {
@@ -24,7 +25,7 @@ function Forum() {
     // Store all post
     const [post, setPost] = useState<Topic[]>([]);
     const [bId, setBId] = useState("");
-    const [comment, setComment] = useState(0);
+    const [comment, setComment] = useState(0);    
 
     // Get the current category from the URL params
     const { currentCategory } = useParams<{ currentCategory: string }>();
@@ -39,7 +40,22 @@ function Forum() {
             console.log(category);
             const data = await initPost(category);
             console.log(data.posts);
-            setPost(data.posts);  // Set the resolved data here
+            const postsWithCommentCounts = await Promise.all(
+              data.posts.map(async (p: Topic) => {
+                try {
+                  const comments = await getComments(p.pID); // same as PostDetail logic
+                  console.log(`Post ${p.pID} has ${comments.length} comments.`);
+                  return {
+                    ...p, comments: comments.length,
+                  };
+                } catch (err) {
+                  console.error(`Failed to fetch comments for post ${p.pID}`);
+                  return { ...p, comments: 0 }; // fallback to 0 comments
+                }
+              })
+            );            
+
+            setPost(postsWithCommentCounts); 
             setBId(data.bID);
           } catch (error) {
             console.error("Failed to fetch resources:", error);
@@ -81,7 +97,7 @@ function Forum() {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {post.length > 0 && post.map(topic => (
                     <div className="col-span-2 lg:col-span-1" key={topic.pID}>
-                      <TopicCard comment={comment} data={topic} url={`./${topic.pID}`}/>
+                      <TopicCard comment={topic.comments} data={topic} url={`./${topic.pID}`}/>
                     </div>
                     ))}
                 </div>
