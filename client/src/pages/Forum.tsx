@@ -7,10 +7,12 @@ function Forum() {
   return (
     <>
     <Layout header="Community Forum">
-      {/* Category section for discussion topics */}
-      <Category category="Topics" header="Topics"></Category>
-      {/* Category section for discussion topics */}
-      <Category category="Events" header="Events"></Category>
+      <div className='flex flex-col content-center gap-7'>
+        {/* Category section for discussion topics */}
+        <Category category="Topics" header="Topics"></Category>
+        {/* Category section for discussion topics */}
+        <Category category="Events" header="Events"></Category>
+      </div>
     </Layout>
     </>
   )
