@@ -90,7 +90,7 @@ function Forum() {
   return (
     <Layout header={category}>  
         <section >
-          <div id="stuorgs" className="section-container flex justify-center">
+          <div id="stuorgs" className="section-container flex justify-center bg-blossom">
             <div
               className={"w-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-16 gap-x-16 justify-evenly"}>
                 <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>

@@ -66,15 +66,22 @@ export default function Category({category, header}: CategroryProps) {
     return (
         <>
         <section>
-            <div className="section-container">
-              {/* DIfferent type of Catergory heading */}
-                <h1 className="text-center text-4xl font-bold">{header}</h1>
-                 
-                <div className='flex flex-row content-center gap-7'>
+            <div className="section-container bg-blossom p-8 rounded-xl">
+              <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
+                <div className='flex flex-row content-center gap-7 align-middle'>
+                    {/* DIfferent type of Catergory heading */}
+                  <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{header}</h1>
                   <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
-                  {/* Search input field */}
-                  <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder="Search resources..."/>
                 </div>
+              
+                 
+                <div className='flex flex-row gap-7 justify-self-end'>
+                  {/* Search input field */}
+                  <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder={`Search ${header}...`}/>
+                </div>
+
+              </div>
+              
 
                 {/* Popup to create new*/}
                 {create && (<Add clickFunction={submitCategory} category={category}/>)}
@@ -83,7 +90,7 @@ export default function Category({category, header}: CategroryProps) {
                 <div className="mt-6 grid grid-cols-2 gap-16">
                     {filteredResources.map(resource => (
                         <div className="col-span-2 lg:col-span-1" key={resource.name}>
-                            <CategoryCard title={resource.name} icon={resource.coverImg} bg="bg-white"path={`./${resource.name}`}/>
+                            <CategoryCard title={resource.name} icon={resource.coverImg} bg="bg-white" path={`./${resource.name}`}/>
                         </div>
                     ))}
                 </div>
