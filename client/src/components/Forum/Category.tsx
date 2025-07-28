@@ -87,7 +87,7 @@ export default function Category({category, header}: CategroryProps) {
                 {create && (<Add clickFunction={submitCategory} category={category}/>)}
 
                 {/* Grid of all/filtered resource cards */}
-                <div className="mt-6 grid grid-cols-2 gap-16">
+                <div className="mt-5 grid grid-cols-2 gap-5">
                     {filteredResources.map(resource => (
                         <div className="col-span-2 lg:col-span-1" key={resource.name}>
                             <CategoryCard title={resource.name} icon={resource.coverImg} bg="bg-white" path={`./${resource.name}`}/>
