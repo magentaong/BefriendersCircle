@@ -68,10 +68,10 @@ export default function Category({category, header}: CategroryProps) {
         <section>
             <div className="section-container bg-blossom p-8 rounded-xl">
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
-                <div className='flex flex-row content-center gap-7 align-middle'>
+                <div className='flex flex-row content-center gap-[2vw] sm:gap-7 align-middle'>
                     {/* DIfferent type of Catergory heading */}
                   <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{header}</h1>
-                  <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
+                  <button className='w-[15vw] sm:w-100' onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
                 </div>
               
                  
@@ -84,7 +84,7 @@ export default function Category({category, header}: CategroryProps) {
               
 
                 {/* Popup to create new*/}
-                {create && (<Add clickFunction={submitCategory} category={category}/>)}
+                {create && (<Add closeFunction={setCreate} clickFunction={submitCategory} category={category} buttonString="Post"/>)}
 
                 {/* Grid of all/filtered resource cards */}
                 <div className="mt-5 grid grid-cols-2 gap-5">

@@ -113,16 +113,18 @@ function Forum() {
               </div>
 
               <div className={"w-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5 justify-evenly mt-5"}>
-                    {filteredPost.length > 0 && post.map(topic => (
+                    {filteredPost.length > 0 ? post.map(topic => (
                     <div className="col-span-2 lg:col-span-1" key={topic.pID}>
                       <TopicCard comment={topic.comments} data={topic} url={`./${topic.pID}`}/>
                     </div>
-                    ))}
+                    )) : (
+                    <p className="mt-8 text-center text-gray-500">No post yet.</p>
+                  )}
             </div>
             
 
                 {/* Popup to create new*/}
-                {create && (<Add clickFunction={submitCategory} category={"Post"}/>)}
+                {create && (<Add closeFunction={setCreate} clickFunction={submitCategory} category={"Post"} buttonString="Create"/>)}
             </div>
          </div>
         </section>
