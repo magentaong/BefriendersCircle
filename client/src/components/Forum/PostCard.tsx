@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { div } from "three/tsl";
 import { deletePostDetail } from "../../api/forum";
+import Time from "./Time";
 
 interface Post {
   pID: string;
@@ -26,16 +27,6 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
 
   const navigate = useNavigate();
 
-  let formattedDate = new Date(post.createdAt).toLocaleString('en-US', {
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-  month: 'numeric',
-  day: 'numeric',
-  year: '2-digit',
-  });
-
-  formattedDate = formattedDate.replace('AM', 'am').replace('PM', 'pm');
   // Local state to track user report post
   const [report, setReport] = useState(false);
   const [status, setStatus] = useState(false);
@@ -81,7 +72,7 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
           <p className="text-gray-700">{post.message}</p>
         </div>
         <div className="flex justify-between text-gray-600 text-sm mb-4">
-          <span>{formattedDate}</span>
+          <Time time={post.createdAt}/>
         </div>
         <div className="flex space-x-8 text-gray-700 text-lg">
           <div className="flex items-center space-x-2 cursor-pointer select-none">

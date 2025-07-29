@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Time from "./Time";
 
 // Type for individual topic data, defiend in Topic.jsx
 interface Data {
@@ -18,17 +19,6 @@ interface TopicProps {
 
 const TopicCard: React.FC<TopicProps> = ({comment, data, url}) => {
   const navigate = useNavigate();
-  let formattedDate = new Date(data.createdAt).toLocaleString('en-US', {
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-  month: 'numeric',
-  day: 'numeric',
-  year: '2-digit',
-});
-
-formattedDate = formattedDate.replace('AM', 'am').replace('PM', 'pm');
-
   return (
     <button
       onClick={() => navigate(url)}
@@ -38,8 +28,8 @@ formattedDate = formattedDate.replace('AM', 'am').replace('PM', 'pm');
       </div>
       <div className="flex flex-row gap-2 justify-between w-full mt-5 items-end">
         
-        <div className="h-full w-full tracking-tight text-charcoal font-heading text-base flex justify-center text-xl items-end">
-          {formattedDate}
+        <div className="h-full w-full tracking-tight text-charcoal font-heading text-base flex justify-left text-xl items-end">
+          <Time time={data.createdAt}/>
         </div>
 
         <div className="flex flex-col gap-2 justify-between mt-4 mb-1.5">
