@@ -30,6 +30,7 @@ function PostDetail() {
   const { currentCategory, postId } = useParams<{ currentCategory: string; postId: string }>();
   const [post, setPost] = useState<Post | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [currentCommentIndex, setCurrentCommentIndex] = useState(0);
   const [newComment, setNewComment] = useState("");
   const [numComment, setNumComment] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -81,11 +82,20 @@ function PostDetail() {
       setComments(prev => [...prev, createdComment]);
       setNewComment("");
       setNumComment(prev => prev + 1); // Increment the comment count
+      setCurrentCommentIndex(comments.length); //Increment the comment index
     } catch (err) {
       console.error("Failed to post comment", err);
     } finally {
       setPosting(false);
     }
+  };
+
+  const handleNext = () => {
+    setCurrentCommentIndex((prev) => (prev + 1 < comments.length ? prev + 1 : prev));
+  };
+
+  const handlePrevious = () => {
+    setCurrentCommentIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
   if (loading) {
@@ -112,16 +122,42 @@ return (
             <PostCard topic={currentCategory} comments={numComment} post={post} />
 
             {comments.length > 0 ? (
-              <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow w-full">
-                <h2 className="self-auto text-left text-2xl font-bold text-gray-600 leading-none self-center pb-4">Comments</h2>
-                <ul className="space-y-4">
-                  {comments.map((c) => (
-                    <li key={c._id} className="bg-white p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-500"> <Time time={c.createdAt}/></p>
-                      <p className="mt-2 text-gray-800">{c.message}</p>
-                    </li>
-                  ))}
-                </ul>
+              <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow text-center w-[80vw] sm:w-[70vw] md:w-[60vw] lg:w-[50vw] xl:w-[40vw] mx-auto">
+                <h2 className="text-2xl font-semibold mb-4">Comment</h2>
+                <div className="bg-white p-4 rounded-md shadow-sm">
+                  <p className="text-sm text-gray-500">
+                    <Time time={comments[currentCommentIndex].createdAt} />
+                  </p>
+                  <p className="mt-2 text-gray-800">{comments[currentCommentIndex].message}</p>
+                  <p className="text-sm text-gray-500 mt-4">
+                    {`${currentCommentIndex + 1} / ${comments.length} comments`}
+                  </p>
+                </div>
+
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={handlePrevious}
+                    disabled={currentCommentIndex === 0}
+                    className={`px-4 py-2 rounded ${
+                      currentCommentIndex === 0
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    disabled={currentCommentIndex === comments.length - 1}
+                    className={`px-4 py-2 rounded ${
+                      currentCommentIndex === comments.length - 1
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             ) : (
               <p className="mt-8 text-center text-gray-500">No comments yet.</p>
