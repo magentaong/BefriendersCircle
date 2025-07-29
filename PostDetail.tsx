@@ -1,0 +1,165 @@
+import React, { useEffect, useState } from "react";
+import Layout from "../components/Layout.tsx";
+import { useParams } from "react-router-dom";
+import PostCard from "../components/Forum/PostCard.tsx";
+import { initPostDetail, postComment, getComments } from "../api/forum.ts";
+import Time from "../components/Forum/Time.tsx";
+
+interface Comment {
+  _id: string;
+  pID: string;
+  cID: string;
+  message: string;
+  likes: number;
+  createdAt: string;
+}
+
+interface Post {
+  pID: string;
+  bID: string;
+  cID: string;
+  message: string;
+  comments: number;
+  likes: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function PostDetail() {
+  const { currentCategory, postId } = useParams<{ currentCategory: string; postId: string }>();
+  const [post, setPost] = useState<Post | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
+  const [numComment, setNumComment] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [posting, setPosting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!postId) return;
+
+    setLoading(true);
+    setError(null);
+
+    initPostDetail(postId)
+      .then(data => {
+        if (data?.post) {
+          setPost(data.post);
+          setComments(data.comments || []);
+        } else {
+          setError("Post not found.");
+        }
+      })
+      .catch(() => {
+        setError("Failed to load post details.");
+      })
+      .finally(() => setLoading(false));
+
+    getComments(postId).then(data => {
+      console.log(data)
+      if (data) {
+        console.log(data.length)
+        setNumComment(data.length);
+      } else {
+        setError("Comment Count not found.");
+      }
+    })
+    .catch(() => {
+      setError("Failed to load comment count.");
+    })
+    .finally(() => setLoading(false));
+  }, [postId]);
+
+  const handleAddComment = async () => {
+    if (!postId || !newComment.trim()) return;
+
+    setPosting(true);
+    try {
+      const cID = localStorage.getItem("cID") || "anonymous";
+      const createdComment = await postComment(cID, postId, newComment.trim());
+      setComments(prev => [...prev, createdComment]);
+      setNewComment("");
+      setNumComment(prev => prev + 1); // Increment the comment count
+    } catch (err) {
+      console.error("Failed to post comment", err);
+    } finally {
+      setPosting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Layout header="Loading...">
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal"></div>
+          <span className="ml-3 text-charcoal">Loading post details...</span>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !post) {
+    return (
+      <Layout header="Error">
+        <div className="text-center py-8">
+          <p className="text-red-500 text-lg">{error || "Post not found."}</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout header="Community Forum">
+      <section className="w-full max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6">
+        <div className="bg-blossom rounded-2xl p-4 md:p-6 shadow-md">
+          <PostCard topic={currentCategory} comments={numComment} post={post} />
+
+          {comments.length > 0 ? (
+            <div className="mt-6 md:mt-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
+              <h2 className="text-lg md:text-xl font-bold text-charcoal mb-4 md:mb-6">Comments</h2>
+              <div className="space-y-4 md:space-y-6">
+                {comments.map((c) => (
+                  <div key={c._id} className="bg-canary p-3 md:p-4 rounded-xl shadow-sm">
+                    <p className="text-xs md:text-sm text-charcoal mb-2">
+                      <Time time={c.createdAt}/>
+                    </p>
+                    <p className="text-sm md:text-base text-charcoal">{c.message}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 md:mt-8 text-center py-8">
+              <p className="text-charcoal">No comments yet.</p>
+            </div>
+          )}
+
+          <div className="mt-6 md:mt-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
+            <h3 className="text-base md:text-lg font-bold text-charcoal mb-3 md:mb-4">Add a Comment</h3>
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Share your thoughts..."
+              className="w-full p-3 md:p-4 border-2 border-canary rounded-xl bg-white text-charcoal placeholder:text-gray-500 focus:outline-none resize-none"
+              rows={3}
+              disabled={posting}
+            />
+            <button
+              onClick={handleAddComment}
+              disabled={!newComment.trim() || posting}
+              className={`mt-3 md:mt-4 px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold transition-all ${
+                newComment.trim() && !posting
+                  ? "bg-latte text-charcoal hover:brightness-90"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {posting ? "Posting..." : "Post Comment"}
+            </button>
+          </div>
+        </div>
+      </section>
+    </Layout>
+  );
+}
+
+export default PostDetail;
