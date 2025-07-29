@@ -63,4 +63,24 @@ router.get('/details/:postId', async (req, res) => {
   }
 });
 
+//delete bad post
+router.delete('/details/:postId', async (req, res) => {
+  const { postId } = req.params;
+  try {
+    const post = await Post.deleteOne({ pID: postId });
+    
+    // If no document was deleted
+    if (post.deletedCount === 0) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const comments = await Comment.deleteMany({ pID: postId });
+
+    res.json({ message: "Post and Comment deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch post details" });
+  }
+});
+
 module.exports = router; 

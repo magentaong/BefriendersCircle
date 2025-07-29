@@ -60,21 +60,23 @@ const Add = ({closeFunction, clickFunction, category, buttonString} : AddProps )
                 </div>
 
                 <p className=" text-gray-500">{category} Image:</p>
-                <label className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
-                  <img src="/Support/Add.png" alt="Add Image" className="w-8 h-8 mb-2" />
-                  <span className="text-base font-medium text-gray-500">Add Image</span>
-                  <input className="border-3 hidden" type="file" accept="image/*" name="image" placeholder="Name"  onChange={handleFileChange} required />
-                </label>
+
                 
                 {/*Preview Image*/}
-                {previewUrl && (
-                <div className="mt-4 border-3 rounded-sm border-blossom">
+                {previewUrl ? (
+                <div className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                   <img
                     src={previewUrl}
                     alt="Preview"
-                    className="w-40 h-40 object-cover border rounded shadow"
+                    className="w-auto h-[19vh] sm:h-49 object-cover rounded shadow"
                   />
-                </div>)}
+                </div>) :(
+                  <label className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
+                    <img src="/Support/Add.png" alt="Add Image" className="w-8 h-8 mb-2" />
+                    <span className="text-base font-medium text-gray-500">Add Image</span>
+                    <input className="border-3 hidden" type="file" accept="image/*" name="image" placeholder="Name"  onChange={handleFileChange} required />
+                </label>
+                )}
 
               </div>):( <textarea
                 value={txt}

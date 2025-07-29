@@ -90,6 +90,14 @@ export async function initPostDetail(postId: string) {
   return response.data; // returns { post, comments }
 }
 
+export async function deletePostDetail(postId: string) {
+  const token = localStorage.getItem("token");
+  const response = await axios.delete(`${POST_API_URL}/details/${postId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data; // returns { message }
+}
+
 export async function getComments(pID: string,) {
   const token = localStorage.getItem("token");
   const response = await axios.get(`${COMMENT_API_URL}/${pID}`, {
