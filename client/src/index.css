@@ -115,9 +115,9 @@
   --color-charcoal: #333333; /* for text */
   --color-white: #FFFAFA; 
 
-  --color-support: var(--color-blossom);     /*community Support */
-  --color-resources: var(--color-pistachio); /* Caregiving Resources */
-  --color-training: var(--color-serene);     /* Specialised Training */
+  --color-support: var(--color-blossom);     /*this is the colour for community Support */
+  --color-resources: var(--color-pistachio); /* colour for Caregiving Resources */
+  --color-training: var(--color-serene);     /* colour for Specialised Training */
 
   --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 

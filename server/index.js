@@ -29,7 +29,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/openai", openaiRoutes);
-app.use("/api/resources", auth, resourceRoutes);//I still hope I'm right here, For resource database
+app.use("/api/resources", resourceRoutes);//Public access to resources
 app.use("/api/boards", auth, boardRoutes);
 app.use("/api/training", auth, trainingRoutes);
 app.use("/api/post", auth, postRoutes);

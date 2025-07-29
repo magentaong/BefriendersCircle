@@ -57,4 +57,3 @@ export default function Profile() {
     </main>
   );
 }
-//TODO: Edit modal for profile :(, handle deleting account

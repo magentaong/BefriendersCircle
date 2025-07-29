@@ -1,47 +1,96 @@
 {
-    "Topics":[
-        {
-            "name": "Fatigue",
-            "image": "/Support/Fatigue.png",
-            "url": "/forum/Fatigue"
-        },
-        {
-            "name": "Exercise",
-            "image": "/Support/Exercise.png",
-            "url": "/forum/Exercise"
-        },
-        {
-            "name": "Family",
-            "image": "/Support/Family.png",
-            "url": "/forum/Family"
-        },
-        {
-            "name": "Connection",
-            "image": "/Support/Connection.png",
-            "url": "/forum/Connection"
-        }
-    ],
-
-    "Events":[
-        {
-            "name": "Charity Run 2025",
-            "image": "/Support/CR2025.png",
-            "url": "/forum/CharityRun2025"
-        },
-        {
-            "name": "Marina Barrage Outing",
-            "image": "/Support/MBO.png",
-            "url": "/forum/MarinaBarrageOuting"
-        },
-        {
-            "name": "Christmas 2025",
-            "image": "/Support/Christmas2025.png",
-            "url": "/forum/Christmas2025"
-        },
-        {
-            "name": "Chinese New Year 2025",
-            "image": "/Support/CNY2025.png",
-            "url": "/forum/ChineseNewYear2025"
-        }
-    ] 
+  "resources": [
+    {
+      "id": "1",
+      "title": "Seniors Mobility & Enabling Fund",
+      "description": "Financial assistance for mobility aids and home healthcare items to help seniors maintain independence and quality of life.",
+      "tags": ["Age 60+", "Financial", "Mobility", "Healthcare"],
+      "image": "/Support/Exercise.png",
+      "url": "https://www.aic.sg/financial-assistance/smef"
+    },
+    {
+      "id": "2", 
+      "title": "Caregivers Training Grant",
+      "description": "Up to $200 per year for caregivers to attend approved training courses to better care for their loved ones.",
+      "tags": ["Caregivers", "Training", "Financial", "Education"],
+      "image": "/Support/Training.png",
+      "url": "https://www.aic.sg/financial-assistance/ctg"
+    },
+    {
+      "id": "3",
+      "title": "Home Caregiving Grant",
+      "description": "Monthly cash grant of $200 for families caring for seniors with permanent moderate disability at home.",
+      "tags": ["Caregivers", "Financial", "Home Care", "Monthly"],
+      "image": "/Support/Family.png",
+      "url": "https://www.aic.sg/financial-assistance/hcg"
+    },
+    {
+      "id": "4",
+      "title": "Foreign Domestic Worker Levy Concession",
+      "description": "Reduced levy rates for families hiring foreign domestic workers to care for seniors or persons with disabilities.",
+      "tags": ["Caregivers", "Financial", "Domestic Worker", "Levy"],
+      "image": "/Support/Connection.png",
+      "url": "https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-domestic-worker/foreign-domestic-worker-levy"
+    },
+    {
+      "id": "5",
+      "title": "Community Health Assist Scheme (CHAS)",
+      "description": "Subsidies for medical and dental care at participating clinics for seniors and their families.",
+      "tags": ["Healthcare", "Medical", "Dental", "Subsidies"],
+      "image": "/Support/Exercise.png",
+      "url": "https://www.chas.sg"
+    },
+    {
+      "id": "6",
+      "title": "Silver Support Scheme",
+      "description": "Quarterly cash supplement for seniors aged 65 and above with lower lifetime wages and less family support.",
+      "tags": ["Age 65+", "Financial", "Quarterly", "Support"],
+      "image": "/Support/Family.png",
+      "url": "https://www.mof.gov.sg/policies/silver-support-scheme"
+    }
+  ],
+  "Topics": [
+    {
+      "name": "Fatigue",
+      "image": "/Support/Fatigue.png",
+      "url": "/forum/Fatigue"
+    },
+    {
+      "name": "Exercise",
+      "image": "/Support/Exercise.png",
+      "url": "/forum/Exercise"
+    },
+    {
+      "name": "Family",
+      "image": "/Support/Family.png",
+      "url": "/forum/Family"
+    },
+    {
+      "name": "Connection",
+      "image": "/Support/Connection.png",
+      "url": "/forum/Connection"
+    }
+  ],
+  "Events": [
+    {
+      "name": "Charity Run 2025",
+      "image": "/Support/CR2025.png",
+      "url": "/forum/CharityRun2025"
+    },
+    {
+      "name": "Marina Barrage Outing",
+      "image": "/Support/MBO.png",
+      "url": "/forum/MarinaBarrageOuting"
+    },
+    {
+      "name": "Christmas 2025",
+      "image": "/Support/Christmas2025.png",
+      "url": "/forum/Christmas2025"
+    },
+    {
+      "name": "Chinese New Year 2025",
+      "image": "/Support/CNY2025.png",
+      "url": "/forum/ChineseNewYear2025"
+    }
+  ]
 }
