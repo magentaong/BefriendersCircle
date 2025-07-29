@@ -36,8 +36,9 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
   });
 
   formattedDate = formattedDate.replace('AM', 'am').replace('PM', 'pm');
-  // Local state to track user create new post
-  const [create, setCreate] = useState(false);
+  // Local state to track user report post
+  const [report, setReport] = useState(false);
+  const [status, setStatus] = useState(false);
 
   //Function for create new catergory
   const check = async () => {
@@ -51,14 +52,21 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
           console.log("Report successfully");
           navigate(-1);
           const data = await deletePostDetail(post.pID);
+          
+        }
+        else{
+          console.log("Report unsuccessful");
+          setStatus(true)
         }
       }
-      console.log("Report unsuccessful");
      } catch (error) {
        console.error("Failed to report post:");
      }
         finally{
-         setCreate(false);
+          setTimeout(() => {
+            setReport(false);
+            setStatus(false)
+          }, 1000); // Delay for 1 second (1000 ms)
         }
        };
 
@@ -66,7 +74,7 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
     <div className="p-6 bg-white max-w-full rounded-2xl shadow-md text-left">
       <div className="flex flex-row content-center gap-7 justify-between">
         <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{topic}</h1>
-        <button className="p-2" onClick={() => setCreate(true)}><img src="/Support/Report.png" alt="add" /></button>
+        <button className="p-2" onClick={() => setReport(true)}><img src="/Support/Report.png" alt="add" /></button>
       </div>
       <div className="max-w-full rounded-2xl text-left">
         <div className="mb-4">
@@ -86,14 +94,21 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
           </div>
 
           {/* Popup to create new*/}
-                {create && (
+                {report && (
                   <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-500/50 gap-5 overflow-hidden">
                     <div className="bg-white p-8 rounded-xl">
-                      <h2>Confrim to report this post?</h2>
-                      <div className="flex flex-row content-center gap-7 justify-between px-5 mt-2">
-                        <button onClick={check} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">Yes</button>
-                        <button onClick={() => setCreate(false)} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">No</button>
-                      </div>
+                      {!status ? (
+                        <div>
+                          <h2>Confrim to report this post?</h2>
+                          <div className="flex flex-row content-center gap-7 justify-between px-5 mt-2">
+                            <button onClick={check} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">Yes</button>
+                            <button onClick={() => setReport(false)} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">No</button>
+                          </div>
+                        </div>
+                      ) : (
+                        <h2>Report unsuccessful</h2>
+                      )}
+                      
                     </div>
                   </div>
                 )}
