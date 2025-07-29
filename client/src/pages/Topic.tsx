@@ -57,7 +57,7 @@ function Forum() {
                   };
                 } catch (err) {
                   console.error(`Failed to fetch comments for post ${p.pID}`);
-                  return { ...p, comments: 0 }; // fallback to 0 comments
+                  return { ...p, comments: 0 }; 
                 }
               })
             );            
