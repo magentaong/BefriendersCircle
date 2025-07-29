@@ -34,26 +34,27 @@ export default function Onboarding() {
   };
 
   return (
-    <main className="flex flex-col items-center gap-10 p-6">
-      <img src="/ESC.svg" alt="Logo" className="w-16" />
-      <h2 className="text-xl font-semibold">What is your preferred language?</h2>
+    <main className="flex flex-col items-center gap-8 md:gap-10 p-4 md:p-6 max-w-4xl mx-auto">
+      <img src="/ESC.svg" alt="Logo" className="w-12 md:w-16 mt-8 md:mt-12" />
+      <h2 className="text-lg md:text-xl font-semibold text-charcoal">What is your preferred language?</h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 w-full max-w-md">
         {languages.map((lang) => (
           <button
             key={lang.label}
-            className={`rounded-2xl shadow-md bg-canary flex flex-col items-center outline-none border-2 px-5 pt-5 ${
-              selected === lang.label ? "border-[#964B00]" : "border-transparent"
+            className={`rounded-2xl shadow-md bg-canary flex flex-col items-center outline-none border-2 px-3 md:px-4 pt-3 md:pt-4 ${
+              selected === lang.label ? "border-charcoal" : "border-transparent"
             }`}
             onClick={() => setSelected(lang.label)}
           >
-            <img src={lang.img} alt={lang.label} className="w-30 h-30 object-cover" />
+            <img src={lang.img} alt={lang.label} className="w-20 h-20 md:w-24 md:h-24 object-cover" />
+            <span className="text-xs md:text-sm text-charcoal mt-2">{lang.label}</span>
           </button>
         ))}
       </div>
 
       <button
-        className="bg-latte text-black px-5 py-2 rounded-2xl shadow hover:brightness-95"
+        className="bg-latte text-charcoal px-4 md:px-6 py-2 md:py-3 rounded-2xl shadow-md hover:brightness-95 font-semibold w-full max-w-md"
         onClick={handleSelect}
         disabled={!selected}
       >
@@ -62,4 +63,3 @@ export default function Onboarding() {
     </main>
   );
 }
-//TODO: I'm p sure galaxy fold 5 messes up the responsiveness here.. SCREW THAT PHONE MODEL HMPH
