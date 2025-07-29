@@ -95,7 +95,7 @@ function Forum() {
             };
       
   return (
-    <Layout header={category}>  
+    <Layout header="Community Forum"> 
         <section >
           <div id="stuorgs" className="section-container flex justify-center">
             <div className="section-container bg-blossom p-8 rounded-xl">

@@ -3,6 +3,7 @@ import Layout from "../components/Layout.tsx";
 import { useParams } from "react-router-dom";
 import PostCard from "../components/Forum/PostCard.tsx";
 import { initPostDetail, postComment, getComments } from "../api/forum.ts";
+import Time from "../components/Forum/Time.tsx";
 
 
 interface Comment {
@@ -104,19 +105,19 @@ function PostDetail() {
   }
 
 return (
-    <Layout header={currentCategory}>
+    <Layout header="Community Forum">
       <section>
-        <div className="w-full flex justify-center">
-          <div className="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mt-6 max-w-4xl">
+        <div className="w-full flex justify-center bg-blossom rounded-xl">
+          <div className="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-16 mt-6 max-w-4xl">
             <PostCard topic={currentCategory} comments={numComment} post={post} />
 
             {comments.length > 0 ? (
               <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow w-full">
-                <h2 className="text-2xl font-semibold mb-4">Comments</h2>
+                <h2 className="self-auto text-left text-2xl font-bold text-gray-600 leading-none self-center pb-4">Comments</h2>
                 <ul className="space-y-4">
                   {comments.map((c) => (
                     <li key={c._id} className="bg-white p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-500">{new Date(c.createdAt).toLocaleString()}</p>
+                      <p className="text-sm text-gray-500"> <Time time={c.createdAt}/></p>
                       <p className="mt-2 text-gray-800">{c.message}</p>
                     </li>
                   ))}
@@ -126,19 +127,19 @@ return (
               <p className="mt-8 text-center text-gray-500">No comments yet.</p>
             )}
 
-            <div className="mt-6">
+            <div className="m-6">
               <textarea
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Add your comment"
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded bg-white"
                 rows={3}
                 disabled={posting}
               />
               <button
                 onClick={handleAddComment}
                 disabled={!newComment.trim() || posting}
-                className={`mt-2 px-4 py-2 rounded ${
+                className={`mt-2 px-4 py-2 rounded bg-white ${
                   newComment.trim() && !posting
                     ? "bg-blue-600 text-white hover:bg-blue-700"
                     : "bg-gray-300 cursor-not-allowed"
