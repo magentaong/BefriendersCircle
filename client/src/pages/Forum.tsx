@@ -9,6 +9,7 @@ function Forum() {
 
   return (
     <main className="w-full max-w-6xl mx-auto px-4 md:px-6 py-4 md:py-6">
+      {/* Header with Logo and Profile */}
       <header className="flex justify-between items-center mb-6 md:mb-8">
         <Link to="/">
           <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
@@ -30,7 +31,9 @@ function Forum() {
       </div>
 
       <div className='flex flex-col content-center gap-7 md:gap-8'>
+        {/* Category section for discussion topics */}
         <Category category="Topics" header="Topics"></Category>
+        {/* Category section for discussion topics */}
         <Category category="Events" header="Events"></Category>
       </div>
     </main>
