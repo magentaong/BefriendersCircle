@@ -1,10 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import Category from "../components/Forum/Category.tsx";
 
 // Main forum page that displays different categories (Topics & Events)
 function Forum() {
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
 
