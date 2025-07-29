@@ -108,7 +108,7 @@ return (
       <section>
         <div className="w-full flex justify-center">
           <div className="w-full px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 mt-6 max-w-4xl">
-            <PostCard comments={numComment} post={post} />
+            <PostCard topic={currentCategory} comments={numComment} post={post} />
 
             {comments.length > 0 ? (
               <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow w-full">
