@@ -12,6 +12,8 @@ const commentRoutes = require("./routes/comment")
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
 const audioRoutes = require("./routes/audio.js")
+const resourceChatRoutes = require("./routes/resourceChat");
+
 
 const app = express();
 connectDB();
@@ -36,6 +38,8 @@ app.use("/api/post", auth, postRoutes);
 app.use("/api/comment", auth, commentRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/audio", audioRoutes);
+app.use("/api/resourcechat", resourceChatRoutes);
+
 
 
 const PORT = process.env.PORT || 5050;
