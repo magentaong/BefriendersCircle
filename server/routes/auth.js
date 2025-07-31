@@ -97,8 +97,19 @@ router.patch("/me", authMiddleware, async (req, res) => {
   }
 });
 
+// DELETE /api/auth/me to allow users to delete their own accounts
+router.delete("/me", authMiddleware, async (req, res) => {
+  try {
+    const result = await User.deleteOne({ cID: req.user.cID });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete account", error: err.message });
+  }
+});
+
 
 module.exports = router;
 
-
-//TOOD: include .delete 

@@ -12,6 +12,7 @@ const commentRoutes = require("./routes/comment")
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
 const path = require("path");
+const testRoutes = require("./routes/test");
 
 const app = express();
 connectDB();
@@ -29,7 +30,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/openai", openaiRoutes);
-app.use("/api/resources", auth, resourceRoutes);//I still hope I'm right here, For resource database
+app.use("/api/resources", resourceRoutes);//Public access to resources
 app.use("/api/boards", auth, boardRoutes);
 app.use("/api/training", auth, trainingRoutes);
 app.use("/api/post", auth, postRoutes);
@@ -41,5 +42,8 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 }); 
 
+if (process.env.NODE_ENV === "development") {
+  app.use("/api/test", testRoutes);
+}
 
 module.exports = app; 

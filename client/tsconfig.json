@@ -3,5 +3,9 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ], 
+  "compilerOptions": {
+    "types": ["vitest/globals", "vite/client"], 
+    "module": "ES2015" //dude what. idgi https://github.com/cypress-io/cypress/issues/30313 - mag
+  }
 }
