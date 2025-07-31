@@ -35,6 +35,7 @@ router.post("/speak", async (req, res) => {
 
     const audioBuffer = Buffer.from(await response.arrayBuffer());
     res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Content-Length", audioBuffer.length);
     res.send(audioBuffer);
   } catch (error) {
     console.error("TTS Error:", error);
