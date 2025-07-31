@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Mic, Search, Volume2, ThumbsUp, ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import ModularCard from "../components/ModularCard";
+import ModularCard from "../components/ModularCard.tsx";
 
 // INTERFACE DEFINITIONS=======================================================
 interface Resource {
