@@ -47,7 +47,9 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white space-y-4 md:space-y-6 py-4 md:py-6"
       >
-        <h2 className="text-lg md:text-xl font-semibold text-charcoal mb-2 py-2">
+
+        {/* Title */}
+        <h2 className="text-xl font-semibold text-gray-800 mb-2 py-2">
           {isSignup
             ? "Register with us to join the community!"
             : "Want to access our caregiver community?"}
@@ -66,7 +68,7 @@ export default function LoginPage() {
 
         {/*email*/}
         <input
-          className="w-full p-3 md:p-4 border-2 border-canary rounded-2xl focus:outline-none placeholder:text-gray-500 text-charcoal"
+          className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400 mt-4"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
