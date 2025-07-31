@@ -12,6 +12,7 @@ const commentRoutes = require("./routes/comment")
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
 const path = require("path");
+const testRoutes = require("./routes/test");
 
 const app = express();
 connectDB();
@@ -41,5 +42,8 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 }); 
 
+if (process.env.NODE_ENV === "development") {
+  app.use("/api/test", testRoutes);
+}
 
 module.exports = app; 
