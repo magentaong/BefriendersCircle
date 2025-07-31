@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { vi } from "vitest";
-import LoginPage from "../../pages/Login.tsx";
+import LoginPage from "../pages/Login.tsx";
 
 // Mock navigation buttons
 const mockedNavigate = vi.fn();
@@ -66,7 +66,7 @@ describe("<LoginPage />", () => {
     });
     fireEvent.click(screen.getByText("Log In"));
 
-    const { login } = await import("../../api/auth.ts");
+    const { login } = await import("../api/auth.ts");
     expect(login).not.toHaveBeenCalled();
   });
 
@@ -94,7 +94,7 @@ describe("<LoginPage />", () => {
     localStorage.clear(); 
     mockedNavigate.mockClear(); 
 
-    const { login } = await import("../../api/auth.ts");
+    const { login } = await import("../api/auth.ts");
     (login as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Invalid credentials"));
     // simulate logging in with wrong pass
     fireEvent.click(screen.getByText("Already have an account? Log in"));
@@ -135,7 +135,7 @@ describe("<LoginPage />", () => {
     localStorage.clear(); 
     mockedNavigate.mockClear(); 
 
-    const { login } = await import("../../api/auth.ts");
+    const { login } = await import("../api/auth.ts");
     (login as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Invalid credentials"));
     // simulate logging in with wrong email
     fireEvent.click(screen.getByText("Already have an account? Log in"));
