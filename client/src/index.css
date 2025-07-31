@@ -4,108 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@layer base {
-  
-  *:focus {
-    outline: 2px solid var(--color-charcoal);
-    outline-offset: 2px;
-  }
-
-  
-  html {
-    font-size: 16px; /* Base font size for mobile */
-  }
-
-  @media (min-width: 768px) {
-    html {
-      font-size: 18px; /* Larger font size for desktop */
-    }
-  }
-
-
-  .btn-primary {
-    @apply bg-latte text-charcoal font-heading py-3 px-6 rounded-2xl shadow-md transition-all duration-200 hover:brightness-90;
-  }
-
-  .btn-secondary {
-    @apply bg-white text-charcoal font-heading py-3 px-6 rounded-2xl shadow-md transition-all duration-200 hover:brightness-90;
-  }
-
-
-  .resource-card {
-    @apply bg-white rounded-2xl p-4 md:p-6 shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300;
-  }
-
-
-  .search-bar {
-    @apply relative flex items-center bg-white rounded-2xl border-2 border-canary px-4 py-3 shadow-md;
-  }
-
-  .tag-pill {
-    @apply inline-block px-3 py-2 rounded-full text-sm font-medium;
-  }
-
-  .header-bar {
-    @apply flex items-center justify-between w-full py-4 px-4 bg-white shadow-md rounded-2xl mb-4;
-  }
-
-  .mic-button-large {
-    @apply w-24 h-24 md:w-32 md:h-32 rounded-full bg-latte shadow-md flex items-center justify-center transition-all duration-200 hover:brightness-90;
-  }
-}
-
-
-.swiper-button-next,
-.swiper-button-prev {
-  color: var(--color-charcoal) !important;
-  background: white !important;
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50% !important;
-  box-shadow: var(--shadow-card) !important;
-  border: 1px solid var(--color-latte) !important;
-}
-
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-  background: var(--color-latte) !important;
-}
-
-.swiper-pagination-bullet {
-  background: var(--color-charcoal) !important;
-  opacity: 0.5 !important;
-}
-
-.swiper-pagination-bullet-active {
-  opacity: 1 !important;
-}
-
-
-@keyframes pulse-red {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(217, 203, 194, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 0 15px rgba(217, 203, 194, 0);
-  }
-}
-
-.voice-listening {
-  animation: pulse-red 2s infinite;
-}
-
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
 @theme {
   --color-canary: #FDEEB5;
   --color-blossom: #F6CBD2;
@@ -115,9 +13,9 @@
   --color-charcoal: #333333; /* for text */
   --color-white: #FFFAFA; 
 
-  --color-support: var(--color-blossom);     /*this is the colour for community Support */
-  --color-resources: var(--color-pistachio); /* colour for Caregiving Resources */
-  --color-training: var(--color-serene);     /* colour for Specialised Training */
+  --color-support: var(--color-blossom);     /* Community Support */
+  --color-resources: var(--color-pistachio); /* Caregiving Resources */
+  --color-training: var(--color-serene);     /* Specialised Training */
 
   --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -134,37 +32,16 @@ html, body, #root {
   padding: 0;
   box-sizing: border-box;
   background-color: #FFFAFA;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 #root {
-  --color-blossom: #F6CBD2;
-  --color-charcoal: #222;
-  --color-white: #FFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-body {
-  background: var(--color-white);
-  color: var(--color-charcoal);
-}
-
-
+/* tailwind.css or global.css */
 .noscroll {
   overflow: hidden;
-}
-
-
-@media (max-width: 768px) {
-  .mobile-full-width {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-  }
-  
-  .mobile-padding {
-    padding: 1rem;
-  }
-  
-  .mobile-text-large {
-    font-size: 1.25rem;
-  }
 }
