@@ -53,16 +53,18 @@ router.post("/", async (req, res) => {
       ${resourceContext || "No known resources found."}
 
       Always return your answer in the following JSON format:
-      {
-        "title": "<scheme name>",
-        "description": "<empathetic introduction + short scheme summary>",
-        "eligibility": ["point 1", "point 2"],
-        "steps": ["step 1", "step 2"],
-        "link": "<official URL from above resources>",
-        "category": "<Financial | Medical | General>",
-        "tags": ["tag1", "tag2"]
-      }
-
+      [
+        {
+          "title": "<scheme name>",
+          "description": "<empathetic introduction + short scheme summary>",
+          "eligibility": ["point 1", "point 2"],
+          "steps": ["step 1", "step 2"],
+          "link": "<official URL from above resources>",
+          "category": "<Financial | Medical | General>",
+          "tags": ["tag1", "tag2"]
+        },
+        ...
+      ]
       User Question: ${prompt}
     `;
 
@@ -96,18 +98,23 @@ router.post("/", async (req, res) => {
     const reply = latestMessage?.content[0]?.text?.value || "No response.";
     console.log("[OpenAI Reply Raw]", reply);
 
-    // 7. Parse AI reply and cross-check with Resource DB
-    const parsedResource = await parseChatbotReply(reply, resourcesFromDB.map((r) => r.url));
+    // 7. Parse AI reply into multiple schemes
+    const parsedResults = await parseChatbotReply(reply, resourcesFromDB.map((r) => r.url));
+    const schemes = Array.isArray(parsedResults) ? parsedResults : (parsedResults ? [parsedResults] : []);
 
-    if (parsedResource?.metadata) {
-      let { title, link, description, tags, category, eligibility, steps } = parsedResource.metadata;
+    // 8. Save each scheme into ResourceChat
+    const savedSchemes = [];
+    for (const scheme of schemes) {
+      if (!scheme || !scheme.metadata) continue;
 
-      // Ensure link is valid 
+      let { title, link, description, tags, category, eligibility, steps, note } = scheme.metadata;
+
+      // Validate link
       if (!link || !link.startsWith("http")) {
         link = resourcesFromDB[0]?.url || "https://www.lionsbefrienders.org.sg/";
       }
 
-      // Clean up data
+      // Clean up fields
       title = (title || "Untitled Resource").trim();
       description = (description || "").trim();
       tags = Array.isArray(tags) && tags.length > 0 ? tags : ["general"];
@@ -115,52 +122,65 @@ router.post("/", async (req, res) => {
       eligibility = Array.isArray(eligibility) ? eligibility.filter((e) => e.trim() !== "") : [];
       steps = Array.isArray(steps) ? steps.filter((s) => s.trim() !== "") : [];
 
-      // Validation: Skip saving if no meaningful data
-      if (!title || (!description && eligibility.length === 0 && steps.length === 0)) {
-        console.log("[Skipped Saving] No meaningful resource content detected.");
-      } else {
-        try {
-          const existing = await ResourceChat.findOne({
-            title: { $regex: `^${title}$`, $options: "i" },
+      // Skip saving if data is incomplete
+      if (!title || title.toLowerCase().includes("it's wonderful") || title.toLowerCase().includes("you're")) {
+        console.log("[Skipped Saving] Invalid AI title:", title);
+        continue;  // Skip saving
+      }
+
+      try {
+        const existing = await ResourceChat.findOne({
+          title: { $regex: `^${title}$`, $options: "i" },
+        });
+
+        if (!existing) {
+          const newResource = await ResourceChat.create({
+            title,
+            description,
+            eligibility,
+            steps,
+            link,
+            tags,
+            category,
+            source: "Chatbot AI",
+            note: note || "",
           });
-
-          if (!existing) {
-            await ResourceChat.create({
-              title,
-              description,
-              eligibility,
-              steps,
-              link,
-              tags,
-              category,
-              source: "Chatbot AI",
-              note: parsedResource.metadata?.note || "",
-            });
-
-            console.log("[New Chat Resource Saved]:", title);
-          } else {
-            console.log("[Skipped Saving] Duplicate resource detected:", title);
-          }
-        } catch (e) {
-          if (e.code === 11000) {
-            console.log("[Skipped Saving] Duplicate title (MongoDB unique index):", title);
-          } else {
-            console.error("[DB Error] Failed to save chat resource:", e);
-          }
+          console.log("[New Chat Resource Saved]:", title);
+          savedSchemes.push(newResource);
+        } else {
+          console.log("[Skipped Saving] Duplicate resource detected:", title);
+          savedSchemes.push(existing);
+        }
+      } catch (e) {
+        if (e.code === 11000) {
+          console.log("[Skipped Saving] Duplicate title (MongoDB unique index):", title);
+        } else {
+          console.error("[DB Error] Failed to save chat resource:", e);
         }
       }
     }
 
-    // 8. Save chat history
-    const chatContent =
-      parsedResource?.metadata?.description?.replace(/```json|```/gi, "").trim() || reply;
+    // 9. Save chat history (use first scheme's description)
+    const firstScheme = schemes[0]?.metadata;
+    const chatContent = firstScheme?.description?.replace(/```json|```/gi, "").trim() || reply;
     await Chat.create({ userId, role: "user", content: prompt });
     await Chat.create({ userId, role: "assistant", content: chatContent });
 
-    // 9. Return chatbot reply + verified resource
+    // 10. Deduplicate schemes by title and return
+    const allSchemesRaw = [...schemes.map(s => s.metadata), ...savedSchemes];
+
+    const uniqueSchemes = [
+      ...new Map(
+        allSchemesRaw
+          .filter(s => s && s.title)
+          .map(s => [s.title.trim().toLowerCase(), s]) // normalize
+      ).values()
+    ];
+
     res.json({
       reply: chatContent,
-      verifiedResource: parsedResource?.metadata || null,
+      verifiedResource: uniqueSchemes[0] || null,
+      relatedSchemes: uniqueSchemes
     });
 
   } catch (error) {

@@ -1,26 +1,38 @@
 const Resource = require("../models/Resource");
 
-// Parse AI Response (JSON or fallback text)
+// --- Parse AI Response (JSON or fallback text) ---
 function parseAIResponse(rawReply) {
   if (!rawReply || typeof rawReply !== "string") return null;
 
+  // Remove markdown code fences like ```json
   rawReply = rawReply.replace(/```json|```/gi, "").trim();
 
-  // Attempt JSON parsing
   try {
-    const jsonStart = rawReply.indexOf("{");
-    const jsonEnd = rawReply.lastIndexOf("}") + 1;
-    if (jsonStart !== -1 && jsonEnd !== -1) {
-      const jsonStr = rawReply.slice(jsonStart, jsonEnd);
-      const parsed = JSON.parse(jsonStr);
+    // --- Attempt robust JSON extraction ---
+    const firstBracket = rawReply.indexOf("[");
+    const lastBracket = rawReply.lastIndexOf("]");
+    const firstBrace = rawReply.indexOf("{");
+    const lastBrace = rawReply.lastIndexOf("}");
 
+    let jsonStr = null;
+    if (firstBracket !== -1 && lastBracket !== -1 && lastBracket > firstBracket) {
+      jsonStr = rawReply.slice(firstBracket, lastBracket + 1);
+    } else if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      jsonStr = rawReply.slice(firstBrace, lastBrace + 1);
+    }
+
+    if (jsonStr) {
+      const parsed = JSON.parse(jsonStr);
+      if (Array.isArray(parsed)) {
+        return parsed.map((item) => sanitizeParsedResource(item));
+      }
       return sanitizeParsedResource(parsed);
     }
   } catch (e) {
-    console.warn("[parseAIResponse] Failed JSON parse, falling back to text parsing.", e);
+    console.warn("[parseAIResponse] JSON parse failed, falling back to text parsing.", e);
   }
 
-  // Fallback Text Parsing 
+  // --- Fallback Text Parsing (single scheme fallback) ---
   const lines = rawReply.split("\n").map((l) => l.trim()).filter(Boolean);
   const title = lines[0] || "General Advice";
 
@@ -58,15 +70,16 @@ function parseAIResponse(rawReply) {
     eligibility,
     steps,
     link,
-    category: "General", // default
+    category: "General",
     tags: inferTags(rawReply),
   });
 }
 
-// Sanitize resource data
+// --- Sanitize resource data ---
 function sanitizeParsedResource(parsed) {
-  let category = (parsed.category || "").toLowerCase();
+  if (!parsed || typeof parsed !== "object") return null;
 
+  let category = (parsed.category || "").toLowerCase();
   if (category.includes("finance") || category.includes("fund") || category.includes("grant")) {
     category = "Financial";
   } else if (
@@ -77,11 +90,11 @@ function sanitizeParsedResource(parsed) {
   ) {
     category = "Medical";
   } else {
-    category = "General"; // Force fallback
+    category = "General";
   }
 
   return {
-    title: (parsed.title || "General Advice").trim(),
+    title: (typeof parsed.title === "string" ? parsed.title : "General Advice").trim(),
     description: (parsed.description || "").trim(),
     eligibility: Array.isArray(parsed.eligibility) ? parsed.eligibility.map((e) => e.trim()) : [],
     steps: Array.isArray(parsed.steps) ? parsed.steps.map((s) => s.trim()) : [],
@@ -91,7 +104,7 @@ function sanitizeParsedResource(parsed) {
   };
 }
 
-// Infer tags from text 
+// --- Infer tags from text ---
 function inferTags(text) {
   const tags = [];
   const lower = text.toLowerCase();
@@ -106,18 +119,16 @@ function inferTags(text) {
   return tags;
 }
 
-// Cross-check with DB resources 
+// --- Cross-check with DB resources ---
 async function crossCheckResource(parsed) {
   if (!parsed) return null;
 
   let matched = null;
 
-  // Match by exact link
   if (parsed.link && /^https?:\/\//.test(parsed.link)) {
     matched = await Resource.findOne({ url: parsed.link }).lean();
   }
 
-  // Match by exact title
   if (!matched && parsed.title && parsed.title.length > 3) {
     matched = await Resource.findOne({
       title: { $regex: `^${parsed.title}$`, $options: "i" },
@@ -127,33 +138,46 @@ async function crossCheckResource(parsed) {
   return matched;
 }
 
-// Main Parse Chatbot Reply Function 
+// --- Main Parse Chatbot Reply Function ---
 async function parseChatbotReply(rawReply) {
   const parsed = parseAIResponse(rawReply);
   if (!parsed) return null;
 
-  const dbResource = await crossCheckResource(parsed);
+  if (Array.isArray(parsed)) {
+    const results = [];
+    for (const scheme of parsed) {
+      const checked = await processSingleResource(scheme);
+      if (checked) results.push({ metadata: checked });
+    }
+    return results;
+  }
+
+  const checked = await processSingleResource(parsed);
+  return { metadata: checked };
+}
+
+// --- Process a single resource ---
+async function processSingleResource(resource) {
+  if (!resource) return null;
+
+  const dbResource = await crossCheckResource(resource);
 
   if (dbResource) {
-    // Overwrite with verified DB resource details
-    parsed.title = dbResource.title || parsed.title;
-    parsed.link = dbResource.url || parsed.link;
-    parsed.tags = Array.from(new Set([...(parsed.tags || []), ...(dbResource.tags || [])]));
-    parsed.description = parsed.description || dbResource.description || dbResource.title;
+    resource.title = dbResource.title;
+    resource.link = dbResource.url || resource.link;
+    resource.tags = Array.from(new Set([...(resource.tags || []), ...(dbResource.tags || [])]));
+    resource.description = resource.description || dbResource.description;
   } else {
-    // Add note for AI-generated content
-    parsed.note =
+    resource.note =
       "Note: This scheme and link are AI-generated and not verified in our resource database. Please verify details from official sources.";
   }
 
-  // Ensure only allowed categories
   const allowedCategories = ["Financial", "Medical", "General"];
-  if (!allowedCategories.includes(parsed.category)) {
-    parsed.category = "General";
+  if (!allowedCategories.includes(resource.category)) {
+    resource.category = "General";
   }
 
-  console.log("[Parsed AI Resource]:", parsed);
-  return { metadata: parsed };
+  return resource;
 }
 
 module.exports = parseChatbotReply;
