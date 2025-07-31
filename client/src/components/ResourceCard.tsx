@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ResourceCardProps {
   title: string;
   description: string;

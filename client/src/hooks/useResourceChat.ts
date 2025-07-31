@@ -27,20 +27,20 @@ export function useResourceChat(): UseResourceChatResult {
   const [error, setError] = useState("");
 
   const fetchResources = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const res = await fetch("http://localhost:5050/api/resourcechat");
-      if (!res.ok) throw new Error("Failed to fetch chatbot resources.");
-      const data = await res.json();
-      setResources(data.resources);
-      setCategories(["Chatbot", ...data.categories]);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    setError("");
+    const res = await fetch("http://localhost:5050/api/resourcechat", { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch chatbot resources.");
+    const data = await res.json();
+    setResources(data.resources.filter((r: ResourceChat) => r._id));
+    setCategories(["Chatbot", ...data.categories]);
+  } catch (err: any) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     fetchResources();
