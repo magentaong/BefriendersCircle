@@ -1,64 +1,61 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { login, register } from "../api/auth";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import axios from "axios";
 
 export default function LoginPage() {
-  const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [isSignup, setIsSignup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage("");
-
     try {
-      const endpoint = isSignup ? "/auth/register" : "/auth/login";
-      const data = isSignup ? { name, email, password } : { email, password };
+      const data = isSignup
+        ? await register(email, password, name)
+        : await login(email, password);
 
-      const response = await axios.post(`http://localhost:5050/api${endpoint}`, data);
-      
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("cID", response.data.cID);
-        window.location.href = "/";
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("cID", data.cID);
+
+      if (data.isOnboarded) {
+        navigate("/");
+      } else {
+        navigate("/onboarding");
       }
     } catch (err: any) {
-      setErrorMessage(err.response?.data?.message || "Something went wrong");
+      setErrorMessage(err.message);
     }
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center px-4 md:px-6 py-8 md:py-12 bg-white text-center">
-      <img src="/ESC.svg" alt="Logo" className="w-12 md:w-16 mb-6 md:mb-8" />
-      
-      {/*retreat arrow aka back arrow*/}
-      <div className="absolute top-6 md:top-8 left-4 md:left-6">
+    <main className="min-h-screen flex flex-col items-center px-6 py-30 bg-white text-center">
+      <img src="/ESC.svg" alt="Logo" className="w-15 mb-6" />
+    {/* Back arrow */}
+    <div className="absolute top-10 left-6">
         <Link to="/">
-          <button className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-latte shadow text-lg flex items-center justify-center">
-            <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
+        <button className="w-12 h-12 rounded-full bg-latte shadow text-lg flex items-center justify-center">
+            <ArrowLeft className="w-6 h-6" />
+        </button>
         </Link>
-      </div>
-      
+    </div>
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white space-y-4 md:space-y-6 py-4 md:py-6"
+        className="w-full max-w-md bg-white space-y-6 py-5 "
       >
-
-        {/* Title */}
-        <h2 className="text-xl font-semibold text-gray-800 mb-2 py-2">
+        <h2 className="text-lg md:text-xl font-semibold text-charcoal mb-2 py-2">
           {isSignup
             ? "Register with us to join the community!"
             : "Want to access our caregiver community?"}
         </h2>
 
-        {/*put in useranme, only in sign up section*/}
+        {/* Name Input (Signup only) */}
         {isSignup && (
           <input
-            className="w-full p-3 md:p-4 border-2 border-canary rounded-2xl focus:outline-none placeholder:text-gray-500 text-charcoal"
+            className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400"
             placeholder="Username"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -66,9 +63,9 @@ export default function LoginPage() {
           />
         )}
 
-        {/*email*/}
+        {/* Email */}
         <input
-          className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400 mt-4"
+          className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -76,9 +73,9 @@ export default function LoginPage() {
           required
         />
 
-        {/*secret password segment*/}
+        {/* Password */}
         <input
-          className="w-full p-3 md:p-4 border-2 border-canary rounded-2xl focus:outline-none placeholder:text-gray-500 text-charcoal"
+          className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -86,26 +83,40 @@ export default function LoginPage() {
           required
         />
 
-        {/*error messages*/}
+        {/* Error */}
         {errorMessage && (
-          <div className="text-red-500 text-sm md:text-base">{errorMessage}</div>
+          <div className="text-red-500 text-sm">{errorMessage}</div>
         )}
 
-        {/*change betwene Signup/Login */}
-        <button
-          type="submit"
-          className="bg-latte text-charcoal px-4 md:px-6 py-2 md:py-3 rounded-2xl shadow-md hover:brightness-95 w-full font-semibold"
-        >
-          {isSignup ? "Register" : "Login"}
-        </button>
-
+        {/* Toggle Signup/Login */}
         <button
           type="button"
+          className="text-sm text-[#964B00] underline hover:opacity-80"
           onClick={() => setIsSignup(!isSignup)}
-          className="text-charcoal underline text-sm md:text-base"
         >
-          {isSignup ? "Already have an account? Login" : "Don't have an account? Register"}
+          {isSignup ? "Already have an account? Log in" : "New here? Sign up"}
         </button>
+        
+        {/* Buttons */}
+        <div className="flex gap-4 justify-center">
+          {!isSignup && (
+            <button
+              type="submit"
+              className="bg-[#D9CBC2] text-black px-6 py-2 rounded-2xl shadow hover:brightness-95"
+            >
+              Log In
+            </button>
+          )}
+          {isSignup && (
+            <button
+                type="submit"
+                className="bg-latte text-black px-6 py-2 rounded-2xl shadow hover:brightness-95"
+            >
+                Register
+            </button>
+            )}
+
+        </div>
       </form>
     </main>
   );
