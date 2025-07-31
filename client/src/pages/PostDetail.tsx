@@ -114,25 +114,21 @@ function PostDetail() {
         <div className="bg-blossom rounded-2xl p-4 md:p-6 shadow-md">
           <PostCard topic={currentCategory} comments={numComment} post={post} />
 
-          {comments.length > 0 ? (
-            <div className="mt-6 md:mt-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
-              <h2 className="text-lg md:text-xl font-bold text-charcoal mb-4 md:mb-6">Comments</h2>
-              <div className="space-y-4 md:space-y-6">
-                {comments.map((c) => (
-                  <div key={c._id} className="bg-canary p-3 md:p-4 rounded-xl shadow-sm">
-                    <p className="text-xs md:text-sm text-charcoal mb-2">
-                      <Time time={c.createdAt}/>
-                    </p>
-                    <p className="text-sm md:text-base text-charcoal">{c.message}</p>
-                  </div>
-                ))}
+            {comments.length > 0 ? (
+              <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow w-full">
+                <h2 className="self-auto text-left text-2xl font-bold text-gray-600 leading-none self-center pb-4">Comments</h2>
+                <ul className="space-y-4">
+                  {comments.map((c) => (
+                    <li key={c._id} className="bg-white p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-500"> <Time time={c.createdAt}/></p>
+                      <p className="mt-2 text-gray-800">{c.message}</p>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          ) : (
-            <div className="mt-6 md:mt-8 text-center py-8">
-              <p className="text-charcoal">No comments yet.</p>
-            </div>
-          )}
+            ) : (
+              <p className="mt-8 text-center text-gray-500">No comments yet.</p>
+            )}
 
           <div className="mt-6 md:mt-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
             <h3 className="text-base md:text-lg font-bold text-charcoal mb-3 md:mb-4">Add a Comment</h3>
