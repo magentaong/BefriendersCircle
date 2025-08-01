@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout.tsx";
 import { useParams } from "react-router-dom";
 import PostCard from "../components/Forum/PostCard.tsx";
-import { initPostDetail, postComment, getComments } from "../api/forum.ts";
+import { initPostDetail, postComment, getComments,checkUserLiked, toggleLike } from "../api/forum.ts";
 import Time from "../components/Forum/Time.tsx";
 
 interface Comment {
@@ -34,6 +34,10 @@ function PostDetail() {
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const cID = localStorage.getItem("cID") || "anonymous";
+
 
   useEffect(() => {
     if (!postId) return;
@@ -46,6 +50,7 @@ function PostDetail() {
         if (data?.post) {
           setPost(data.post);
           setComments(data.comments || []);
+          setLikesCount(data.post.likes);
         } else {
           setError("Post not found.");
         }
@@ -68,7 +73,9 @@ function PostDetail() {
       setError("Failed to load comment count.");
     })
     .finally(() => setLoading(false));
-  }, [postId]);
+    checkUserLiked(cID, postId).then(data => {setLiked(data.liked);});
+}, [postId]);
+
 
   const handleAddComment = async () => {
     if (!postId || !newComment.trim()) return;
@@ -87,6 +94,20 @@ function PostDetail() {
     }
   };
 
+  const handleToggleLike = async () => {
+    const cID = localStorage.getItem("cID") || "";
+    if (!cID || !postId) return;
+
+    try {
+      const data = await toggleLike(cID, postId);
+      setLiked(data.liked);
+      setLikesCount(prev => data.liked ? prev + 1 : prev - 1);
+    } catch (err) {
+      console.error("Failed to toggle like", err);
+    }
+  };
+
+
   if (loading) {
     return (
       <Layout header="Loading...">
@@ -101,21 +122,30 @@ function PostDetail() {
   if (error || !post) {
     return (
       <Layout header="Error">
-        <div className="text-center py-8">
-          <p className="text-red-500 text-lg">{error || "Post not found."}</p>
-        </div>
+
+        <p className="text-center mt-8 text-lg text-red-600">{error || "Post not found."}</p>
+
       </Layout>
     );
   }
 
-  return (
+
+return (
     <Layout header="Community Forum">
       <section className="w-full max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6">
         <div className="bg-blossom rounded-2xl p-4 md:p-6 shadow-md">
-          <PostCard topic={currentCategory} comments={numComment} post={post} />
+          <PostCard
+          topic={currentCategory}
+          comments={numComment}
+          post={post}
+          liked={liked}
+          likesCount={likesCount}
+          handleToggleLike={handleToggleLike}
+          />
 
             {comments.length > 0 ? (
-              <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow w-full">
+              <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow overflow-y-auto max-h-[400px] w-full max-w-[600px]">
+
                 <h2 className="self-auto text-left text-2xl font-bold text-gray-600 leading-none self-center pb-4">Comments</h2>
                 <ul className="space-y-4">
                   {comments.map((c) => (
@@ -157,5 +187,6 @@ function PostDetail() {
     </Layout>
   );
 }
+
 
 export default PostDetail;
