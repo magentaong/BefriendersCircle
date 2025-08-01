@@ -3,13 +3,73 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 interface HomeSafetySceneProps {
-  activeAnimation: string | null;
+    activeAnimation: string[] | null;
+    cameraAnimation: string | null;
+    onAnimationFinished?: () => void;
+    leaveRef?: React.RefObject<() => Promise<void>>;
 }
 
-const HomeSafetyScene: React.FC<HomeSafetySceneProps> = ({ activeAnimation }) => {
+const LOOPING_ANIMATIONS = ['LivingRoomFan', 'BedroomFan'];
+
+const HomeSafetyScene: React.FC<HomeSafetySceneProps> = ({ activeAnimation, cameraAnimation, onAnimationFinished }) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const mixerRef = useRef<THREE.AnimationMixer | null>(null);
-    const actionsRef = useRef<Record<string, THREE.AnimationAction>>({});
+    const sceneRef = useRef<THREE.Scene | null>(null);
+    const cameraRef = useRef<THREE.Camera | null>(null);
+    const gltfRef = useRef<THREE.Group | null>(null);
+
+    const objectMixerRef = useRef<THREE.AnimationMixer | null>(null);
+    const cameraMixerRef = useRef<THREE.AnimationMixer | null>(null);
+
+    const objectActionsRef = useRef<Record<string, THREE.AnimationAction>>({});
+    const cameraActionsRef = useRef<Record<string, THREE.AnimationAction>>({});
+
+
+    const setupModel = (model: THREE.Group, animations: THREE.AnimationClip[]) => {
+        const scene = sceneRef.current;
+        if (!scene) return;
+
+        scene.add(model);
+
+        // Set up mixers
+        const objectMixer = new THREE.AnimationMixer(model);
+        objectMixerRef.current = objectMixer;
+
+        const cameraObject = model.getObjectByName('Camera');
+        let cameraMixer: THREE.AnimationMixer | null = null;
+
+        if (cameraObject && (cameraObject as THREE.Camera).isCamera) {
+            cameraRef.current = cameraObject as THREE.Camera;
+            cameraMixer = new THREE.AnimationMixer(cameraObject);
+        } else {
+            const fallbackCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+            fallbackCamera.position.set(0, 2, 5);
+            cameraRef.current = fallbackCamera;
+            cameraMixer = new THREE.AnimationMixer(fallbackCamera);
+        }
+
+        cameraMixerRef.current = cameraMixer;
+
+        // Separate animations
+        animations.forEach((clip) => {
+            if (clip.name.startsWith('Camera')) {
+                const action = cameraMixer.clipAction(clip);
+                action.setLoop(THREE.LoopOnce, 1);
+                action.clampWhenFinished = true;
+                cameraActionsRef.current[clip.name] = action;
+            } else {
+                const action = objectMixer.clipAction(clip);
+                if (LOOPING_ANIMATIONS.includes(clip.name)) {
+                    action.setLoop(THREE.LoopRepeat, Infinity);
+                    action.play();
+                } else {
+                    action.setLoop(THREE.LoopOnce, 1);
+                    action.clampWhenFinished = true;
+                    action.loop = THREE.LoopOnce;
+                }
+                objectActionsRef.current[clip.name] = action;
+            }
+        });
+    };
 
     useEffect(() => {
         if (typeof window === 'undefined' || !containerRef.current) return;
@@ -18,107 +78,157 @@ const HomeSafetyScene: React.FC<HomeSafetySceneProps> = ({ activeAnimation }) =>
         const width = containerRef.current.clientWidth;
         const height = containerRef.current.clientHeight;
 
-        // Scene Camera -- use later to move along track
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-        camera.position.set(1, 1.5, 6);
-        camera.lookAt(1, 1, 0);
+        scene.background = new THREE.Color(0xffffff);
+        sceneRef.current = scene;
 
-        // Container Sizing
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(width, height);
         renderer.domElement.style.width = '100%';
         renderer.domElement.style.height = '100%';
         renderer.domElement.style.display = 'block';
         renderer.domElement.style.borderRadius = '0.75rem';
-
         containerRef.current.appendChild(renderer.domElement);
 
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-        scene.add(ambientLight);
+        // Lights
+        scene.add(new THREE.AmbientLight(0xffffff, 1));
 
         // Load model
-        const loader = new GLTFLoader();
-        loader.load(
-            '/models/testScene.gltf',
+        new GLTFLoader().load(
+            '/models/HSScene.glb',
             (gltf) => {
-                const model = gltf.scene;
-                model.position.set(0, 0, 0);
-                model.scale.set(0.5, 0.5, 0.5);
-                scene.add(model);
-
-                const mixer = new THREE.AnimationMixer(model);
-                mixerRef.current = mixer;
-
-                // constant fan animation
-                const LRclip = THREE.AnimationClip.findByName(gltf.animations, 'LivingRoomFan');
-                if (LRclip) {
-                    const LRAction = mixer.clipAction(LRclip);
-                    LRAction.setLoop(THREE.LoopRepeat, Infinity);
-                    LRAction.clampWhenFinished = false;
-                    LRAction.enabled = true;
-                    LRAction.play();
-                } else {
-                    console.warn('Animation "LivingRoomFan" not found!');
-                }
-                const BRclip = THREE.AnimationClip.findByName(gltf.animations, 'BedroomFan');
-                if (BRclip) {
-                    const BRAction = mixer.clipAction(BRclip);
-                    BRAction.setLoop(THREE.LoopRepeat, Infinity);
-                    BRAction.clampWhenFinished = false;
-                    BRAction.enabled = true;
-                    BRAction.play();
-                } else {
-                    console.warn('Animation "BedroomFan" not found!');
-                }
-
-                gltf.animations.forEach((clip) => {
-                    const action = mixer.clipAction(clip);
-                    actionsRef.current[clip.name] = action;
-                });
+                gltfRef.current = gltf.scene;
+                setupModel(gltf.scene, gltf.animations);
             },
             (xhr) => {
                 console.log(`Model ${Math.round((xhr.loaded / xhr.total) * 100)}% loaded`);
             },
-            (error) => {
-                console.error('An error happened while loading the GLTF model', error);
+            (err) => {
+                console.error('Failed to load model:', err);
             }
         );
 
-        // Animation render loop
         const clock = new THREE.Clock();
         const animate = () => {
             requestAnimationFrame(animate);
-
             const delta = clock.getDelta();
-            if (mixerRef.current) {
-                mixerRef.current.update(delta);
-            }
+            objectMixerRef.current?.update(delta);
+            cameraMixerRef.current?.update(delta);
 
-            renderer.render(scene, camera);
+            if (cameraRef.current) renderer.render(scene, cameraRef.current);
         };
         animate();
 
-        const handleResize = () => {
-            if (!containerRef.current) return;
+        // Responsive resizing
+        const onResize = () => {
+            if (!containerRef.current || !cameraRef.current) return;
             const width = containerRef.current.clientWidth;
             const height = containerRef.current.clientHeight;
-
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
+            if ((cameraRef.current as THREE.PerspectiveCamera).isPerspectiveCamera) {
+                const cam = cameraRef.current as THREE.PerspectiveCamera;
+                cam.aspect = width / height;
+                cam.updateProjectionMatrix();
+            }
             renderer.setSize(width, height);
         };
 
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', onResize);
 
         return () => {
-            window.removeEventListener('resize', handleResize);
-            if (containerRef.current?.contains(renderer.domElement)) {
-                containerRef.current.removeChild(renderer.domElement);
-            }
+            window.removeEventListener('resize', onResize);
+            renderer.dispose();
+            containerRef.current?.removeChild(renderer.domElement);
         };
     }, []);
+
+    const currentCameraActionRef = useRef<THREE.AnimationAction | null>(null);
+    const currentObjectActionRef = useRef<THREE.AnimationAction | null>(null);
+
+    const playAction = (actionName: string | null, isCamera = false) => {
+        if (!actionName) return;
+
+        const mixer = isCamera ? cameraMixerRef.current : objectMixerRef.current;
+        const actions = isCamera ? cameraActionsRef.current : objectActionsRef.current;
+
+        if (!actions[actionName] || !mixer) return;
+
+        const action = actions[actionName];
+
+        // Prevent replaying same camera action
+        if (isCamera && currentCameraActionRef.current === action) return;
+
+        // Stop other non-looping actions
+        Object.entries(actions).forEach(([name, a]) => {
+            if (name !== actionName && a.loop === THREE.LoopOnce) {
+                a.stop();
+            }
+        });
+
+        action.reset();
+        action.play();
+
+        if (isCamera) currentCameraActionRef.current = action;
+        else currentObjectActionRef.current = action;
+
+        const onFinished = () => {
+            mixer.removeEventListener('finished', onFinished);
+            if (!isCamera) action.stop(); // Keep camera pose at end
+            onAnimationFinished?.();
+        };
+        mixer.addEventListener('finished', onFinished);
+    };
+
+    const playObjectAnimations = (animationNames: string[]) => {
+        const mixer = objectMixerRef.current;
+        if (!mixer) return;
+
+        let completedCount = 0;
+        const total = animationNames.length;
+
+        animationNames.forEach((name) => {
+            const action = objectActionsRef.current[name];
+            if (!action) {
+                console.warn(`Missing object animation: ${name}`);
+                completedCount++;
+                if (completedCount === total) onAnimationFinished?.();
+                return;
+            }
+
+            // Stop if it's a previously playing non-looping action
+            if (action.loop === THREE.LoopOnce) {
+                action.stop();
+            }
+
+            action.reset();
+            action.setLoop(THREE.LoopOnce, 1);
+            action.clampWhenFinished = true;
+            action.play();
+
+            const onFinished = () => {
+                mixer.removeEventListener('finished', onFinished);
+                completedCount++;
+                if (completedCount === total) {
+                    onAnimationFinished?.();
+                }
+            };
+
+            mixer.addEventListener('finished', onFinished);
+        });
+    };
+
+    useEffect(() => {
+        if (!activeAnimation) {
+            return;
+        }
+
+        const animationList = Array.isArray(activeAnimation) ? activeAnimation : [activeAnimation];
+
+        playObjectAnimations(animationList);
+    }, [activeAnimation]);
+
+    useEffect(() => {
+        playAction(cameraAnimation, true);
+    }, [cameraAnimation]);
 
     return <div ref={containerRef} className="w-full h-full" />;
 };
