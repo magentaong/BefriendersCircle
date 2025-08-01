@@ -19,11 +19,14 @@ interface PostCardProps {
   topic?: string;
   post: Post;
   comments: number;
+  liked: boolean;
+  likesCount: number;
+  handleToggleLike: () => void;
 }
 
 const negativeWords = ["fuck", "hate", "shit"]
 
-const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
+const PostCard: React.FC<PostCardProps> = ({ topic, post, comments, liked, likesCount, handleToggleLike }) => {
 
   const navigate = useNavigate();
 
@@ -79,10 +82,18 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
             <img src="/Support/Comment.png" alt="comments" className="w-6 h-6" />
             <span>{comments}</span>
           </div>
-          <div className="flex items-center space-x-2 cursor-pointer select-none">
-            <img src="/Support/Heart.png" alt="likes" className="w-6 h-6" />
-            <span>{post.likes}</span>
-          </div>
+        <div className="flex items-center space-x-2 cursor-pointer select-none" onClick={handleToggleLike}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-6 w-6 ${liked ? "fill-red-500 stroke-red-600" : "fill-none stroke-gray-500"}`}
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 21l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+          </svg>
+          <span className="text-gray-700 font-semibold">{likesCount}</span>
+        </div>
 
           {/* Popup to create new*/}
                 {report && (
@@ -90,7 +101,7 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments }) => {
                     <div className="bg-white p-8 rounded-xl">
                       {!status ? (
                         <div>
-                          <h2>Confrim to report this post?</h2>
+                          <h2>Confirm to report this post?</h2>
                           <div className="flex flex-row content-center gap-7 justify-between px-5 mt-2">
                             <button onClick={check} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">Yes</button>
                             <button onClick={() => setReport(false)} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">No</button>

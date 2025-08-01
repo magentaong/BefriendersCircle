@@ -3,6 +3,8 @@ import axios from "axios";
 const API_URL = "http://localhost:5050/api/boards";
 const POST_API_URL = "http://localhost:5050/api/post";
 const COMMENT_API_URL = "http://localhost:5050/api/comment";
+const FORUMLIKE_API_URL = "http://localhost:5050/api/like";
+
 
 
 export async function initTopics(category: string) {
@@ -81,7 +83,6 @@ export async function postComment(cID: string, pID: string, message: string) {
   return response.data;
 }
 
-
 export async function initPostDetail(postId: string) {
   const token = localStorage.getItem("token");
   const response = await axios.get(`${POST_API_URL}/details/${postId}`, {
@@ -104,4 +105,25 @@ export async function getComments(pID: string,) {
     headers: { Authorization: `Bearer ${token}` }
   });
   return response.data;
+}
+
+// Check if user liked a post
+export async function checkUserLiked(cID: string, forumID: string) {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`${FORUMLIKE_API_URL}/status`, {
+    headers: { Authorization: `Bearer ${token}` },
+    params: { cID, forumID, isPost: true }
+  });
+  return response.data; // { liked: boolean }
+}
+
+// Toggle like/unlike
+export async function toggleLike(cID: string, forumID: string) {
+  const token = localStorage.getItem("token");
+  const response = await axios.post(
+    `${FORUMLIKE_API_URL}/toggle`,
+    { cID, forumID, isPost: true },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data; // { liked: true/false }
 }

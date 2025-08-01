@@ -9,6 +9,7 @@ const boardRoutes = require("./routes/board");
 const trainingRoutes = require("./routes/training")
 const postRoutes = require("./routes/post")
 const commentRoutes = require("./routes/comment")
+const forumLikeRoutes = require("./routes/like");
 const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
 const path = require("path");
@@ -34,9 +35,17 @@ app.use("/api/boards", auth, boardRoutes);
 app.use("/api/training", auth, trainingRoutes);
 app.use("/api/post", auth, postRoutes);
 app.use("/api/comment", auth, commentRoutes);
+app.use("/api/like", forumLikeRoutes);
 app.use("/api/auth", authRoutes);
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+if (process.env.NODE_ENV === "development") {
+  app.use("/api/test", testRoutes);
+}
+
+module.exports = app; 
+
