@@ -10,6 +10,10 @@ router.post("/register", async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
+    if (!email || !password || !name) {
+      return res.status(400).json({ message: "All fields are required" });
+    } //email, password and name can't be empty
+
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "Email already in use" });
 
@@ -34,6 +38,10 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password ) {
+      return res.status(400).json({ message: "All fields are required" });
+    } //email, password can't be empty
 
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -89,8 +97,19 @@ router.patch("/me", authMiddleware, async (req, res) => {
   }
 });
 
+// DELETE /api/auth/me to allow users to delete their own accounts
+router.delete("/me", authMiddleware, async (req, res) => {
+  try {
+    const result = await User.deleteOne({ cID: req.user.cID });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete account", error: err.message });
+  }
+});
+
 
 module.exports = router;
 
-
-//TOOD: include .delete 

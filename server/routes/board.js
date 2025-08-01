@@ -11,18 +11,6 @@ const path = require("path");
 const uploadsDir = path.join(__dirname,'..', 'uploads');
 console.log("Uploads Directory Path:", uploadsDir);  // Check path
 
-// Ensure the uploads directory exists
-if (!fs.existsSync(uploadsDir)) {
-  try {
-    fs.mkdirSync(uploadsDir);
-    console.log('uploads/ directory created');
-  } catch (err) {
-    console.error('Failed to create uploads/ directory:', err);
-    return res.status(500).json({ message: 'Error creating uploads directory' });
-  }
-} else {
-  console.log('uploads/ directory already exists');
-}
 
 // Set up storage configuration for Multer
 const storage = multer.diskStorage({
@@ -40,6 +28,14 @@ const upload = multer({ storage: storage });
 // POST /api/upload - Upload image and return URL
 router.post('/upload', upload.single('image'), (req, res) => {
 
+  // Ensure directory exists (shifted here cause npm test not happy)
+  try {
+    fs.mkdirSync(uploadsDir);
+    console.log('uploads/ directory created');
+  } catch (err) {
+      console.error('Failed to create uploads/ directory:', err);
+      return res.status(500).json({ message: 'Error creating uploads directory' });
+   } 
   // Check if the file was uploaded
   if (!req.file) {
     console.error('No file uploaded');

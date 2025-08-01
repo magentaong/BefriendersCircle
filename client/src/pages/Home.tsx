@@ -8,6 +8,7 @@ import breathingImg from "/Training.png";
 
 export default function Home() {
   const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
   
@@ -16,6 +17,7 @@ export default function Home() {
       {/* Header */}
       <header className="flex justify-between items-center mb-12">
         <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-20 w-20" />
+  
         {isLoggedIn ? (
           <img
             src="/Avatar.png"

@@ -5,7 +5,6 @@ import PostCard from "../components/Forum/PostCard.tsx";
 import { initPostDetail, postComment, getComments,checkUserLiked, toggleLike } from "../api/forum.ts";
 import Time from "../components/Forum/Time.tsx";
 
-
 interface Comment {
   _id: string;
   pID: string;
@@ -77,6 +76,7 @@ function PostDetail() {
     checkUserLiked(cID, postId).then(data => {setLiked(data.liked);});
 }, [postId]);
 
+
   const handleAddComment = async () => {
     if (!postId || !newComment.trim()) return;
 
@@ -107,10 +107,14 @@ function PostDetail() {
     }
   };
 
+
   if (loading) {
     return (
       <Layout header="Loading...">
-        <p className="text-center mt-8 text-lg">Loading post details...</p>
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal"></div>
+          <span className="ml-3 text-charcoal">Loading post details...</span>
+        </div>
       </Layout>
     );
   }
@@ -118,10 +122,13 @@ function PostDetail() {
   if (error || !post) {
     return (
       <Layout header="Error">
+
         <p className="text-center mt-8 text-lg text-red-600">{error || "Post not found."}</p>
+
       </Layout>
     );
   }
+
 
 return (
     <Layout header="Community Forum">
@@ -138,6 +145,7 @@ return (
 
             {comments.length > 0 ? (
               <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow overflow-y-auto max-h-[400px] w-full max-w-[600px]">
+
                 <h2 className="self-auto text-left text-2xl font-bold text-gray-600 leading-none self-center pb-4">Comments</h2>
                 <ul className="space-y-4">
                   {comments.map((c) => (
@@ -178,5 +186,7 @@ return (
       </section>
     </Layout>
   );
-  }
+}
+
+
 export default PostDetail;

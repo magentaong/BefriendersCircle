@@ -1,0 +1,232 @@
+{
+  "scenes": [
+    {
+      "id": "kitchen1",
+      "cameraAnimation": "Camera1",
+      "question": "Your mum uses the kitchen often, but uses the wall to support herself while walking. Is this dustbin in a good spot?",
+      "options": [
+        {
+          "text": "No, I will move it away from the entrance",
+          "isCorrect": true,
+          "explanation": "Exactly, it is important to keep walkways clear to reduce tripping hazards!",
+          "animation": ["dustbinShift"]
+        },
+        {
+          "text": "Yes, it is near the stove",
+          "isCorrect": false,
+          "explanation": "No, it is important to keep walkways clear to reduce tripping hazards!",
+          "animation": ["dustbinShift"]
+        }
+      ]
+    },
+    {
+      "id": "kitchen2",
+      "cameraAnimation": "Camera2",
+      "question": "You usually leave your pet's bowl out for her, but is it safe to leave it here?",
+      "options": [
+        {
+          "text": "Store the bowl when not in use",
+          "isCorrect": true,
+          "explanation": "Right, pet bowls can also be a tripping hazard for the elderly.",
+          "animation": ["dogbowlShift"]
+        },
+        {
+          "text": "Leave it, my cat might need it",
+          "isCorrect": false,
+          "explanation": "No, pet bowls can also be a tripping hazard for the elderly.",
+          "animation": ["dogbowlShift"]
+        }
+      ]
+    },
+    {
+      "id": "kitchen3",
+      "cameraAnimation": "Camera3",
+      "question": "Where should you store utensils for your parents?",
+      "options": [
+        {
+          "text": "In the upper cupboards with your other utensils.",
+          "isCorrect": false,
+          "explanation": "No, placing it too high can be inconvenient and dangerous.",
+          "animation": ["bowlShift"]
+        },
+        {
+          "text": "Place it on the counter or somewhere reachable.",
+          "isCorrect": true,
+          "explanation": "That's right, placing it too high can be inconvenient and dangerous.",
+          "animation": ["bowlShift"]
+        }
+      ]
+    },
+    {
+      "id": "livingRoom1",
+      "cameraAnimation": "Camera4",
+      "question": "You tend to leave you shoes by the door, for convenience, but is it safe...?",
+      "options": [
+        {
+          "text": "I will place it neatly on the rack instead.",
+          "isCorrect": true,
+          "explanation": "Good, shoes can also be a tripping hazard, especially when left by the door.",
+          "animation": ["shoesReturn"]
+        },
+        {
+          "text": "It's fine, it'll be easier for me to wear it later.",
+          "isCorrect": false,
+          "explanation": "No, shoes can also be a tripping hazard, especially when left by the door.",
+          "animation": ["shoesReturn"]
+        }
+      ]
+    },
+    {
+      "id": "livingRoom2",
+      "cameraAnimation": "Camera5",
+      "question": "It's only now that you notice how easily the carpet curls and shifts under your feet.",
+      "options": [
+        {
+          "text": "I will use rug tape or a non slip rug pad to secure it.",
+          "isCorrect": true,
+          "explanation": "Right, while it is mostly secured by furniture, elderly can still slip on the edges.",
+          "animation": ["carpetBend"]
+        },
+        {
+          "text": "It's not blocking the walkway, it should be fine like this.",
+          "isCorrect": false,
+          "explanation": "While it is mostly secured by furniture, elderly can still slip on the edges.",
+          "animation": ["carpetBend"]
+        }
+      ]
+    },
+    {
+      "id": "livingRoom3",
+      "cameraAnimation": "Camera6",
+      "question": "You brought the house phone here to reach it easily when watching tv... is this fine?",
+      "options": [
+        {
+          "text": "My parents should be able to see the wire, it's not a problem.",
+          "isCorrect": false,
+          "explanation": "False, wires can be a dangerous tripping hazard, especially when it is thin and low to the ground.",
+          "animation": ["phoneShift", "wireShift"]
+        },
+        {
+          "text": "I should place it near the walls, so the wires can be secured.",
+          "isCorrect": true,
+          "explanation": "Right, wires can be a dangerous tripping hazard, especially when it is thin and low to the ground.",
+          "animation": ["phoneShift", "wireShift"]
+        }
+      ]
+    },
+    {
+      "id": "bedroom1",
+      "cameraAnimation": "Camera7",
+      "question": "I usually return to my bed in the moonlight, since the light switch is far away. Can my parents do the same?",
+      "options": [
+        {
+          "text": "I will get a nightlamp to help them see.",
+          "isCorrect": true,
+          "explanation": "Good, dim lighting makes it difficult for elderly to see obstacles in their way.",
+          "animation": ["lampAppear"]
+        },
+        {
+          "text": "I can just wait for them to sleep before turning off the light.",
+          "isCorrect": false,
+          "explanation": "No, dim lighting makes it difficult for elderly to see obstacles in their way, what if you're not around?",
+          "animation": ["lampAppear"]
+        }
+      ]
+    },
+    {
+      "id": "bedroom2",
+      "cameraAnimation": "Camera8",
+      "question": "I don't usually need to pack the room properly, when it's just me...",
+      "options": [
+        {
+          "text": "I should clear up the clutter.",
+          "isCorrect": true,
+          "explanation": "Great! Ensure walkways are clear to reduce tripping hazards.",
+          "animation": ["bookStack", "rugStraighten"]
+        },
+        {
+          "text": "They should learn to live like i do.",
+          "isCorrect": false,
+          "explanation": "Bad idea, ensure walkways are clear to reduce tripping hazards.",
+          "animation": ["bookStack", "rugStraighten"]
+        }
+      ]
+    },
+    {
+      "id": "bedroom3",
+      "cameraAnimation": "Camera9",
+      "question": "My mom does struggle to sit or stand, and this bed is a little higher than she's used to. Is this bed a good height for her?",
+      "options": [
+        {
+          "text": "She can use the bed to support herself.",
+          "isCorrect": false,
+          "explanation": "The sheets might be slippery, a stool helps them support themselves getting in and out of bed on their own.",
+          "animation": ["stoolAppear"]
+        },
+        {
+          "text": "I shall get her a stool to support herself.",
+          "isCorrect": true,
+          "explanation": "Nice, having a stool helps them support themselves getting in and out of bed on their own.",
+          "animation": ["stoolAppear"]
+        }
+      ]
+    },
+    {
+      "id": "toilet1",
+      "cameraAnimation": "Camera10",
+      "question": "You tend to wait for the water to evaporate on its own in the bathroom...",
+      "options": [
+        {
+          "text": "Just wait, it'll disappear on its own.",
+          "isCorrect": false,
+          "explanation": "Waiting takes too long, water is very dangerous and slippery, keep the bathroom dry instead!",
+          "animation": ["puddleRemove"]
+        },
+        {
+          "text": "Use a mop to clean the floor after use.",
+          "isCorrect": true,
+          "explanation": "That's right, water is very dangerous and slippery, keep the bathroom dry instead!",
+          "animation": ["puddleRemove"]
+        }
+      ]
+    },
+    {
+      "id": "toilet2",
+      "cameraAnimation": "Camera11",
+      "question": "You heard from a friend that HDB can install grab bars in homes... is it necessary?",
+      "options": [
+        {
+          "text": "Yes, there are subsidies to offset the cost.",
+          "isCorrect": true,
+          "explanation": "Yes, grab bars allow elderly to hold on when they slip to save themselves.",
+          "animation": ["grabBarAppear"]
+        },
+        {
+          "text": "Save some money, as long as you keep it clean it's okay.",
+          "isCorrect": false,
+          "explanation": "It's better to be safe, grab bars allow elderly to hold on when they slip to save themselves.",
+          "animation": ["grabBarAppear"]
+        }
+      ]
+    },
+    {
+      "id": "toilet3",
+      "cameraAnimation": "Camera12",
+      "question": "Your old grip mats are worn down and slippery to the touch.",
+      "options": [
+        {
+          "text": "I can use them until they break.",
+          "isCorrect": false,
+          "explanation": "No, elderly can slip and fall on such mats, replace them often!",
+          "animation": ["placeMat", "removeMat"]
+        },
+        {
+          "text": "I should replace them with new ones.",
+          "isCorrect": true,
+          "explanation": "Exactly, elderly can slip and fall on such mats, replace them often!",
+          "animation": ["placeMat", "removeMat"]
+        }
+      ]
+    }
+  ]
+}
