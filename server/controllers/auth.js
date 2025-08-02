@@ -39,7 +39,7 @@ async function loginUser({ email, password}) {
     if (!email || !password ) {
       const err = new Error("All fields are required")
       err.status = 400;
-      throw new err;
+      throw err;
     } //email, password can't be empty
 
     const user = await User.findOne({ email });
