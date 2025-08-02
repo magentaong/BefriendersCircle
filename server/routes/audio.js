@@ -1,22 +1,17 @@
 const express = require("express");
 const multer = require("multer");
-const { readFileSync, unlinkSync } = require("fs");
-const OpenAI = require("openai");
-
+const { unlinkSync } = require("fs");
+const { transcribeAudio, speechAudio } = require("../controllers/audio");
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
 
 // Transcribing audio file, speech to text
 router.post("/transcribe", upload.single("file"), async (req, res) => {
   try {
-    const transcription = await client.audio.transcriptions.create({
-      model: "gpt-4o-mini-transcribe",
-      file: readFileSync(req.file.path),
-    });
-
-    res.json({ text: transcription.text });
+    const text = await transcribeAudio(req.file.path);
     unlinkSync(req.file.path);
+    res.json({ text });
   } catch (error) {
     console.error("Transcription Error:", error);
     res.status(500).json({ error: "Transcription failed." });
@@ -27,13 +22,8 @@ router.post("/transcribe", upload.single("file"), async (req, res) => {
 router.post("/speak", async (req, res) => {
   try {
     const { text } = req.body;
-    const response = await client.audio.speech.create({
-      model: "gpt-4o-mini-tts",
-      voice: "alloy", // alloy, verse, shimmer, etc.
-      input: text,
-    });
+    const audioBuffer = await speechAudio(text);
 
-    const audioBuffer = Buffer.from(await response.arrayBuffer());
     res.setHeader("Content-Type", "audio/mpeg");
     res.setHeader("Content-Length", audioBuffer.length);
     res.send(audioBuffer);
