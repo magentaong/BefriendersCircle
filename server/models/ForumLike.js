@@ -14,7 +14,7 @@ const forumLikeSchema = new mongoose.Schema({
 // Auto-generate fLID if not provided
 forumLikeSchema.pre("save", function (next) {
   if (!this.fLID) {
-    this.fLID = fL_${nanoid(8)};   // e.g., "fL_ab12CD34"
+    this.fLID = `fL_${nanoid(8)}`;   // e.g., "fL_ab12CD34"
 
   }
   next();
