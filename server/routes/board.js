@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Board = require("../models/Board");
-
 //this for storing image
 const multer = require("multer");
 const fs = require('fs');
 const path = require("path");
+const { retrieveBoards, createBoard, getBoardsByCategory } = require("../controllers/board");
 
 // Define the uploads directory path (use absolute path)
 const uploadsDir = path.join(__dirname,'..', 'uploads');
@@ -29,13 +29,15 @@ const upload = multer({ storage: storage });
 router.post('/upload', upload.single('image'), (req, res) => {
 
   // Ensure directory exists (shifted here cause npm test not happy)
-  try {
-    fs.mkdirSync(uploadsDir);
-    console.log('uploads/ directory created');
-  } catch (err) {
-      console.error('Failed to create uploads/ directory:', err);
-      return res.status(500).json({ message: 'Error creating uploads directory' });
-   } 
+  if (!fs.existsSync(uploadsDir)) { 
+    try {
+      fs.mkdirSync(uploadsDir);
+      console.log('uploads/ directory created');
+    } catch (err) {
+        console.error('Failed to create uploads/ directory:', err);
+        return res.status(500).json({ message: 'Error creating uploads directory' });
+    } 
+  }
   // Check if the file was uploaded
   if (!req.file) {
     console.error('No file uploaded');
@@ -52,19 +54,18 @@ router.post('/upload', upload.single('image'), (req, res) => {
 // GET /api/boards
 router.get("/", async (req, res) => {
   try {
-    const boards = await Board.find();
+    const boards = await retrieveBoards(Board);
     res.json(boards);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch boards." });
+    res.status(error.status || 500).json({ message: "Failed to fetch boards." });
   }
 });
 
 // POST /api/boards
 router.post("/", async (req, res) => {
   try {
-    const newBoard = new Board(req.body);
+    const newBoard = await createBoard(Board, req.body);
     // Log the board data before saving to check the bID (auto-generated)
-    await newBoard.save();
     res.status(201).json(newBoard);
  } catch (error) {
   res.status(400).json({
@@ -76,17 +77,13 @@ router.post("/", async (req, res) => {
 
 // GET /api/boards/:catergory
 router.get('/:category', async (req, res) => {
-  const { category } = req.params;
   try {
-    const board = await Board.find({ category: category });
-    console.log(board);
+    const board = await getBoardsByCategory(Board, req.params.category);
     res.json(board); // Send the board data as a JSON response
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to fetch board" });
+    res.status(error.status || 500).json({ message: error.message });
   }
 });
-
 
 
 module.exports = router; 
