@@ -21,13 +21,14 @@ router.post("/", async (req, res) => {
     res.status(error.status ||400).json({ message: "Failed to create Post." });
   }
 });
-router.delete("/details/:postId", async (req, res) => {
+router.get('/details/:postId', async (req, res) => {
   try {
-    const post = await deletePostAndComments(req.params.postId);
+    const post = await getPostDetails(req.params.postId);
+    console.log("Looking for:", req.params.postId); //debug why cannot fetch jn
     res.json(post);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to delete post" });
+    res.status(error.status || 500).json({ message: "Failed to fetch post details" });
   }
 });
 
@@ -39,7 +40,7 @@ router.delete('/details/:postId', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch post details" });
-    }
+    } 
   });
 
 // GET /api/post/:catergory
