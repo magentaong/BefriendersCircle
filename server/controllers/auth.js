@@ -72,7 +72,7 @@ async function getUserProfile(cID) {
 }
 
 
-async function updateProfile({language, name, profileImg}) {
+async function updateProfile(cID, {language, name, profileImg}) {
     const updated = await User.findOneAndUpdate(
           { cID },
           { $set: { language, name, profileImg } },
@@ -95,4 +95,5 @@ async function deleteAccount(cID) {
     throw err;
   }
 }
+
 module.exports = { registerUser, loginUser, getUserProfile , updateProfile, deleteAccount}
