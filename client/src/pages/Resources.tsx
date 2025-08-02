@@ -16,8 +16,8 @@ import {
 import { Link } from "react-router-dom";
 
 import Navigation from "../components/Navigation";
-import TagFilterGrid from "../components/TagFilterGrid";
-import ChatbotPanel from "../components/ChatbotPanel";
+import TagFilterGrid from "../components/resources/TagFilterGrid";
+import ChatbotPanel from "../components/resources/ChatbotPanel";
 import { useResourceChat } from "../hooks/useResourceChat";
 import { useCarousel } from "../hooks/useCarousel";
 import { useChatbotAPI } from "../hooks/useChatbotAPI";
