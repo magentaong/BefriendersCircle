@@ -11,49 +11,6 @@ router.use((req, res, next) => {
   next();
 });
 
-// Image mapping for different resource categories
-const getImageForResource = (resource) => {
-  const title = resource.title.toLowerCase();
-  const category = resource.category.toLowerCase();
-  const tags = resource.tags?.map(tag => tag.toLowerCase()) || [];
-
-  // Government schemes and financial assistance
-  if (category === "finance" || tags.includes("finance") || tags.includes("grant")) {
-    if (title.includes("mobility") || title.includes("smf")) {
-      return "/Support/Exercise.png";
-    }
-    if (title.includes("training") || title.includes("ctg")) {
-      return "/Support/Training.png";
-    }
-    if (title.includes("home") || title.includes("hcg")) {
-      return "/Support/Family.png";
-    }
-    if (title.includes("domestic") || title.includes("levy")) {
-      return "/Support/Connection.png";
-    }
-    if (title.includes("health") || title.includes("chas")) {
-      return "/Support/Exercise.png";
-    }
-    if (title.includes("silver") || title.includes("support")) {
-      return "/Support/Family.png";
-    }
-    return "/Support/Exercise.png"; // Default for financial resources
-  }
-
-  // Support groups and community
-  if (category === "support groups" || category === "community support") {
-    return "/Support/Connection.png";
-  }
-
-  // Training and courses
-  if (category === "courses" || tags.includes("training")) {
-    return "/Support/Training.png";
-  }
-
-  // Default image
-  return "/Support/Family.png";
-};
-
 // GET /api/resources
 // Fetch all resources with image mapping
 router.get("/", async (req, res) => {
