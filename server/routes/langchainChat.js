@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { handleLangChainChat } = require("../controllers/langchain");
+const { handleLangChainChat } = require("../controllers/langchainChat");
 
 router.post("/", async (req, res) => {
   const { userId, prompt } = req.body;
