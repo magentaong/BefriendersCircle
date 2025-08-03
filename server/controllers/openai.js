@@ -8,8 +8,12 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function getRelevantDocs(prompt) {
   try {
+    console.log("[LangChain] Retrieving resources for prompt:", prompt);
     const retriever = await getResourceRetriever();
-    return await retriever.getRelevantDocuments(prompt);
+    const docs = await retriever.getRelevantDocuments(prompt);
+    console.log("[LangChain] Retrieved documents count:", docs.length);
+    console.log("[LangChain] Documents:", JSON.stringify(docs, null, 2));
+    return docs
   } catch (e) {
     console.warn("[LangChain Error]", e);
     return [];
@@ -18,7 +22,7 @@ async function getRelevantDocs(prompt) {
 
 function buildPrompt(userPrompt, docs) {
   const context = docs.map((r, i) => `${i + 1}. ${r.metadata?.title || r.title}: ${r.metadata?.url || r.url}`).join("\n");
-  return `
+  const fullPrompt = `
     You are a warm, empathetic caregiver assistant for Singapore seniors.
     Always refer to the following trusted resources and their links when answering:
 
@@ -39,6 +43,8 @@ function buildPrompt(userPrompt, docs) {
 
     User Question: ${userPrompt}
   `;
+  console.log("[LangChain] Constructed fullPrompt:\n", fullPrompt);
+  return fullPrompt;
 }
 
 async function runOpenAIChat(prompt) {
@@ -49,20 +55,24 @@ async function runOpenAIChat(prompt) {
     role: "user",
     content: prompt,
   });
-
+  console.log("Thread ID:", threadId);
   const run = await openai.beta.threads.runs.create(threadId, {
     assistant_id: process.env.ASSISTANT_ID,
   });
+  console.log("Run ID:", run.id);
 
   let status;
   do {
     await new Promise((r) => setTimeout(r, 1000));
     status = await openai.beta.threads.runs.retrieve(run.id, { thread_id: threadId });
+    console.log("Polling:", status.status);
   } while (status.status !== "completed");
 
   const messages = await openai.beta.threads.messages.list(threadId);
   const assistant = messages.data.find((m) => m.role === "assistant");
-  return assistant?.content[0]?.text?.value || "No response.";
+  const reply = assistant?.content[0]?.text?.value || "No response.";
+  console.log("[OpenAI Reply]", reply);
+  return reply
 }
 
 function extractReply(parsedSchemes, fallback) {
