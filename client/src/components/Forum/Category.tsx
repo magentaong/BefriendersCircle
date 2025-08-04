@@ -27,6 +27,7 @@ export default function Category({category, header}: CategroryProps) {
       try {
         const data = await initTopics(category);
         console.log(data);
+        console.log('initTopics data:', data);  // Should log your mock data
         setResources(data);  // Set the resolved data here
       } catch (error) {
         console.error("Failed to fetch resources:", error);
