@@ -46,7 +46,7 @@ const Add = ({closeFunction, clickFunction, category, buttonString} : AddProps )
         <div className="bg-white p-8 rounded-xl">
           <div className="flex flex-row justify-between ">
             <div className="text-gray-500 font-bold self-center">Create new {category}</div>
-            <button onClick={handleClose}><img src="/Support/Close.png" alt="Add Image" className="w-8 h-8 mb-2" /></button>
+            <button onClick={handleClose}><img src="/Support/Close.png" alt="Close" className="w-8 h-8 mb-2" /></button>
           </div>
           
 
@@ -67,14 +67,14 @@ const Add = ({closeFunction, clickFunction, category, buttonString} : AddProps )
                 <div className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                   <img
                     src={previewUrl}
-                    alt="Preview"
+                    alt="add"
                     className="w-auto h-[19vh] sm:h-49 object-cover rounded shadow"
                   />
                 </div>) :(
                   <label className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                     <img src="/Support/Add.png" alt="Add Image" className="w-8 h-8 mb-2" />
                     <span className="text-base font-medium text-gray-500">Add Image</span>
-                    <input className="border-3 hidden" type="file" accept="image/*" name="image" placeholder="Name"  onChange={handleFileChange} required />
+                    <input className="border-3 hidden" type="file" accept="image/*" name="image" onChange={handleFileChange} required />
                 </label>
                 )}
 
