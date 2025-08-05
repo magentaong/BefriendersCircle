@@ -9,13 +9,14 @@ export default function LoginPage() {
   const [isSignup, setIsSignup] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const data = isSignup
-        ? await register(email, password, name)
+        ? await register(email, password, confirmPassword, name)
         : await login(email, password);
 
       localStorage.setItem("token", data.token);
@@ -82,6 +83,16 @@ export default function LoginPage() {
           type="password"
           required
         />
+        {isSignup && (
+          <input
+            className="w-full p-3 border border-yellow-300 rounded-xl focus:outline-none placeholder:text-gray-400"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            type="password"
+            required
+          />
+        )}
 
         {/* Error */}
         {errorMessage && (

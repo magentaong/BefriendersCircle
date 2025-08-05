@@ -12,9 +12,9 @@ export async function login(email: string, password: string) {
   }
 }
 
-export async function register(email: string, password: string, name: string) {
+export async function register(email: string, password: string, confirmPassword: string, name: string) {
   try {
-    const res = await axios.post(`${API_URL}/register`, { email, password , name});
+    const res = await axios.post(`${API_URL}/register`, { email, password, confirmPassword , name});
     return res.data;
   } catch (err: any) {
     throw new Error(err.response?.data?.message || "Signup failed");
