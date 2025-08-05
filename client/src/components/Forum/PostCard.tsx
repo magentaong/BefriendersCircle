@@ -24,7 +24,12 @@ interface PostCardProps {
   handleToggleLike: () => void;
 }
 
-const negativeWords = ["fuck", "hate", "shit"]
+const negativeWords = ["bad", "wrong", "ugly", "awful", "terrible", "horrible", "nasty", "poor", "lousy", "disgusting",
+    "hate", "rage", "furious", "annoying", "bitter", "resentful", "hostile", "spiteful", "vicious", "vindictive",
+    "sad", "depressed", "miserable", "hopeless", "heartbroken", "gloomy", "lonely", "despairing", "downcast", "melancholy",
+    "scared", "anxious", "nervous", "frightened", "panicked", "terrified", "paranoid", "uncertain", "worried", "apprehensive",
+    "incompetent", "ineffective", "untrustworthy", "dishonest", "lazy", "irresponsible", "rude", "arrogant", "ignorant", "selfish",
+    "fuck", "shit", "damn", "bastard", "bitch", "crap", "asshole", "jerk", "moron", "idiot"]
 
 const PostCard: React.FC<PostCardProps> = ({ topic, post, comments, liked, likesCount, handleToggleLike }) => {
 
