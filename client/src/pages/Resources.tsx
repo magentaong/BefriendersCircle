@@ -13,9 +13,8 @@ import {
   AlertTriangle,
   RefreshCw,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import Navigation from "../components/Navigation";
 import TagFilterGrid from "../components/resources/TagFilterGrid";
 import ChatbotPanel from "../components/resources/ChatbotPanel";
 import { useResourceChat } from "../hooks/useResourceChat";
@@ -198,18 +197,30 @@ export default function ResourceLibrary() {
   const groupSize = 3;
   const totalGroups = Math.max(1, Math.ceil(filteredResources.length / groupSize));
 
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const isLoggedIn = Boolean(token);
+
   // RENDER COMPONENT=======================================================
   return (
     <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
-      <Navigation />
+      {/* Header with Logo and Profile */}
+      <header className="flex justify-between items-center w-full mb-6 md:mb-8">
+        <Link to="/">
+          <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
+        </Link>
+        <h1 className="text-lg md:text-xl font-bold text-charcoal">Resource Library</h1>
+        {isLoggedIn && (
+          <Link to="/profile">
+            <img src="/Avatar.png" alt="User Profile" className="h-8 w-8 md:h-10 md:w-10 rounded-full" />
+          </Link>
+        )}
+      </header>
       {/* Top Navigation */}
       <div className="flex items-center justify-between w-full mt-2">
         <Link to="/forum">
           <button className="w-12 h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center"><ArrowLeft></ArrowLeft></button>
         </Link>
-        <h1 className="text-lg font-bold text-center w-full max-w-xs mx-auto">
-          Resource Library
-        </h1>
         <Link to="/training">
           <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center"><ArrowRight></ArrowRight></button>
         </Link>
