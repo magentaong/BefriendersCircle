@@ -15,19 +15,25 @@ describe("Auth Controller Unit Tests", () => {
     {/* registerUser unit tests*/}
     it("registerUser: should throw error if email is missing", async () => {
     await expect(
-        registerUser({ email: "", password: "pass", name: "Test" })
+        registerUser({ email: "", password: "pass", confirmPassword: "pass", name: "Test" })
     ).rejects.toThrow("All fields are required");
     });
 
     it("registerUser: should throw error if password is missing", async () => {
     await expect(
-        registerUser({ email: "test@example.com", password: "", name: "Test" })
+        registerUser({ email: "test@example.com", password: "", confirmPassword: "", name: "Test" })
     ).rejects.toThrow("All fields are required");
+    });
+
+    it("registerUser: should throw error if confirm password does not match", async () => {
+    await expect(
+        registerUser({ email: "test@example.com", password: "pass", confirmPassword: "wrongpass",name: "Test" })
+    ).rejects.toThrow("Passwords do not match!");
     });
 
     it("registerUser: should throw error if name is missing", async () => {
     await expect(
-        registerUser({ email: "test@example.com", password: "pass", name: "" })
+        registerUser({ email: "test@example.com", password: "pass", confirmPassword: "pass", name: "" })
     ).rejects.toThrow("All fields are required");
     });
   
@@ -36,6 +42,7 @@ describe("Auth Controller Unit Tests", () => {
         registerUser({
             email: "existingexample",
             password: "pass",
+            confirmPassword: "pass",
             name: "Test",
         })
         ).rejects.toThrow("Invalid email format");
@@ -48,6 +55,7 @@ describe("Auth Controller Unit Tests", () => {
         registerUser({
             email: "existing@example.com",
             password: "pass",
+            confirmPassword: "pass",
             name: "Test",
         })
         ).rejects.toThrow("Email already in use");
@@ -68,6 +76,7 @@ describe("Auth Controller Unit Tests", () => {
         const result = await registerUser({
         email: "test@example.com",
         password: "pass",
+        confirmPassword: "pass",
         name: "Test User",
         });
 
