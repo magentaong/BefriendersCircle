@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { createTraining, updateTraining, getTraining } from "../api/simulation";
+import SceneTextButton from "../components/training/SceneTextButton";
 import HomeSafetyScene from "../scenes/HomeSafetyScene";
 import animationData from "../content/HomeSafety.json";
 
@@ -122,7 +123,7 @@ export default function HomeSafetyLesson() {
       } else {
         setStage("complete");
       }
-    }, 4000);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -146,9 +147,9 @@ export default function HomeSafetyLesson() {
       </div>
 
       {/* Simulation */}
-      <div className="flex-1 flex flex-col justify-center items-center w-full px-2 pb-4">
-        <div className="w-full bg-serene rounded-xl overflow-hidden shadow-lg flex flex-col items-center justify-center min-h-[50vh] md:min-h-[400px] max-h-[70vh] my-4 p-4 md:p-8">
-          <div className="w-full h-full grow">
+      <div className="flex-1 flex flex-col items-center w-full px-2 pb-4">
+        <div className="w-full bg-serene rounded-xl overflow-hidden shadow-lg flex items-center justify-center min-h-[50vh] md:min-h-[400px] max-h-[70vh] my-4 p-4 md:p-8">
+          <div className="w-full h-full">
             <HomeSafetyScene
               activeAnimation={selectedAnimation}
               cameraAnimation={stage === "camera" ? currentItem.cameraAnimation : null}
@@ -159,12 +160,12 @@ export default function HomeSafetyLesson() {
 
         {/* Start Button */}
         {stage === "start" && (
-          <button
+          <SceneTextButton
+            title="Start Simulation"
+            bg="bg-serene"
             onClick={handleStart}
-            className="w-64 bg-serene px-4 py-2 rounded shadow hover:bg-blue-300"
-          >
-            Start Simulation
-          </button>
+            className="w-64"
+          />
         )}
 
         {/* Question and Choices */}
@@ -173,14 +174,13 @@ export default function HomeSafetyLesson() {
             <p className="text-charcoal text-sm md:text-base mb-4">{currentItem.question}</p>
             <div className="flex justify-center gap-4 flex-wrap">
               {currentItem.options.map((option, idx) => (
-                <button
+                <SceneTextButton
                   key={idx}
-                  className="w-64 bg-serene px-4 py-2 rounded shadow hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  title={option.text}
+                  bg="bg-serene"
                   onClick={() => handleOptionClick(option.isCorrect, idx.toString())}
                   disabled={optionsDisabled}
-                >
-                  {option.text}
-                </button>
+                />
               ))}
             </div>
           </div>
@@ -195,19 +195,26 @@ export default function HomeSafetyLesson() {
 
         {/* Completion Message */}
         {stage === "complete" && (
-          <div className="text-center text-charcoal mt-4">
-            <p className="text-lg font-semibold">Simulation Complete!</p>
-            <p>Your score: {score} / {animationData.scenes.length}</p>
-            <Link to="/training">
-              <button
-                onClick={handleEnd}
-                className="w-64 bg-serene px-4 py-2 rounded shadow hover:bg-blue-300"
-              >
-                End Simulation
-              </button>
-            </Link>
+          <div className="text-charcoal mt-4 w-full px-4">
+            <div className="flex justify-between items-center w-full max-w-3xl mx-auto">
+              <div>
+                <p className="text-lg font-semibold">Simulation Complete!</p>
+                <p className="text-base">
+                  Your score: {score} / {animationData.scenes.length}
+                </p>
+              </div>
+              <Link to="/training">
+                <SceneTextButton
+                  title="End Simulation"
+                  bg="bg-serene"
+                  onClick={handleEnd}
+                  className="w-40 py-2"
+                />
+              </Link>
+            </div>
           </div>
         )}
+
 
       </div>
     </main>
