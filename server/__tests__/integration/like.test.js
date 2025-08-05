@@ -87,7 +87,7 @@ afterAll(async () => {
 });
 
 describe("Like API", () => {
-  // Test 1: Like a Post
+  //=====TEST 1 - LIKE A POST=====
   it("should like a post and increase like count", async () => {
     const likeData = {
       cID: testUserId.toString(),
@@ -117,7 +117,7 @@ describe("Like API", () => {
     expect(updatedPost.likes).toBe(1);
   });
 
-  // Test 2: Like Already Liked Post
+  //=====TEST 2 - LIKE ALREADY LIKED POST=====
   it("should prevent duplicate likes by same user on same post", async () => {
     const likeData = {
       cID: testUserId.toString(),
@@ -154,7 +154,7 @@ describe("Like API", () => {
     expect(updatedPost.likes).toBe(0);
   });
 
-  // Test 3: Unlike a Post
+  //=====TEST 3 - UNLIKE A POST=====
   it("should unlike a previously liked post and decrease like count", async () => {
     const likeData = {
       cID: testUserId.toString(),
@@ -192,7 +192,7 @@ describe("Like API", () => {
     expect(post.likes).toBe(0);
   });
 
-  // Test 4: Like Post - Invalid Post ID
+  //=====TEST 4 - LIKE POST INVALID POST ID=====
   it("should handle invalid post ID gracefully", async () => {
     const likeData = {
       cID: testUserId.toString(),
@@ -219,7 +219,7 @@ describe("Like API", () => {
     expect(likeRecord).toBeTruthy();
   });
 
-  // Test 5: Get Like Status
+  //=====TEST 5 - GET LIKE STATUS=====
   it("should return correct like status for a post", async () => {
     const likeData = {
       cID: testUserId.toString(),
@@ -258,7 +258,7 @@ describe("Like API", () => {
     expect(res.body.liked).toBe(true);
   });
 
-  // Test 6: Missing Required Fields
+  //=====TEST 6 - MISSING REQUIRED FIELDS=====
   it("should fail with missing cID", async () => {
     const likeData = {
       forumID: testPostId,
@@ -316,7 +316,7 @@ describe("Like API", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  // Test 7: Multiple Users Like Same Post
+  //=====TEST 7 - MULTIPLE USERS LIKE SAME POST=====
   it("should allow multiple users to like the same post", async () => {
     // Create a second test user (handle potential duplicate)
     let secondUser;
@@ -372,7 +372,7 @@ describe("Like API", () => {
     await ForumLike.deleteMany({ cID: secondUser._id.toString() });
   });
 
-  // Test 8: Like Comment (isPost: false)
+  //=====TEST 8 - LIKE COMMENT=====
   it("should handle liking comments", async () => {
     const commentLikeData = {
       cID: testUserId.toString(),
@@ -397,7 +397,7 @@ describe("Like API", () => {
     expect(likeRecord.isLiked).toBe(true);
   });
 
-  // Test 9: Get Like Status for Comment
+  //=====TEST 9 - GET LIKE STATUS FOR COMMENT=====
   it("should return correct like status for a comment", async () => {
     const commentLikeData = {
       cID: testUserId.toString(),
@@ -435,7 +435,7 @@ describe("Like API", () => {
     expect(res.body.liked).toBe(true);
   });
 
-  // Test 10: Missing Query Parameters for Status
+  //=====TEST 10 - MISSING QUERY PARAMETERS FOR STATUS=====
   it("should fail status check with missing query parameters", async () => {
     const res = await request(app)
       .get("/api/like/status")
@@ -449,7 +449,7 @@ describe("Like API", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  // Test 11: Error Handling
+  //=====TEST 11 - ERROR HANDLING=====
   it("should handle API errors gracefully", async () => {
     // Test with malformed request
     const res = await request(app)
@@ -460,7 +460,7 @@ describe("Like API", () => {
     expect([400, 500]).toContain(res.statusCode);
   });
 
-  // Test 12: Like Count Consistency
+  //=====TEST 12 - LIKE COUNT CONSISTENCY=====
   it("should maintain consistent like count across multiple operations", async () => {
     const likeData = {
       cID: testUserId.toString(),

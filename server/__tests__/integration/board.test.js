@@ -1,21 +1,20 @@
-// Set required environment variables for testing
+// set up environment variables for testing
 process.env.NODE_ENV = "test";
 process.env.OPENAI_API_KEY = "test-api-key-for-testing";
 process.env.ASSISTANT_ID = "test-assistant-id";
 process.env.JWT_SECRET = "test-jwt-secret";
 process.env.MONGO_URI = "mongodb://localhost:27017/test";
 
-// Mock the server startup to prevent port conflicts
+// prevent server from starting on port 5050 to avoid conflicts
 const originalListen = require('http').Server.prototype.listen;
 require('http').Server.prototype.listen = function(port) {
-  // Only prevent server from starting if it's the default port
   if (port === 5050) {
     return this;
   }
-  // Allow the server to start for testing
   return originalListen.call(this, port);
 };
 
+// import required modules
 require("dotenv").config();
 const request = require("supertest");
 const mongoose = require("mongoose");
@@ -30,9 +29,8 @@ jest.setTimeout(10000);
 let authToken;
 let testUserId;
 
-// Setup: Create a test user and get auth token
+// set up test user and get auth token
 beforeAll(async () => {
-  // Create a test user
   const testUser = await User.create({
     email: "boardtest@example.com",
     password: "StrongPassword123",
@@ -40,7 +38,6 @@ beforeAll(async () => {
   });
   testUserId = testUser._id;
 
-  // Login to get auth token
   const loginRes = await request(app).post("/api/auth/login").send({
     email: "boardtest@example.com",
     password: "StrongPassword123"
@@ -48,18 +45,18 @@ beforeAll(async () => {
   authToken = loginRes.body.token;
 });
 
-// Cleanup after each test
+// clean up after each test
 afterEach(async () => {
   await Board.deleteMany({ cID: testUserId.toString() });
 });
 
-// Cleanup after all tests
+// clean up after all tests
 afterAll(async () => {
   try {
     await User.deleteOne({ email: "boardtest@example.com" });
     await Board.deleteMany({ cID: testUserId.toString() });
     
-    // Clean up any test uploads
+    // clean up test files
     const uploadsDir = path.join(__dirname, '../../uploads');
     if (fs.existsSync(uploadsDir)) {
       const files = fs.readdirSync(uploadsDir);
@@ -70,12 +67,12 @@ afterAll(async () => {
       });
     }
     
-    // Close mongoose connection
+    // close database connection
     if (mongoose.connection.readyState !== 0) {
       await mongoose.connection.close();
     }
     
-    // Force close any remaining handles
+    // waitinggggg for cleanup
     await new Promise(resolve => {
       setTimeout(resolve, 100);
     });
@@ -85,9 +82,9 @@ afterAll(async () => {
 });
 
 describe("Board API", () => {
-  // Test 1: Fetch All Boards
+  //=====TEST 1 - FETCH ALL BOARDS=====
   it("should fetch all boards successfully", async () => {
-    // Create some test boards first
+    // create test boards
     await Board.create([
       {
         cID: testUserId.toString(),
@@ -113,9 +110,9 @@ describe("Board API", () => {
     expect(res.body[0]).toHaveProperty("name");
   });
 
-  // Test 2: Fetch Boards by Category
+  //=====TEST 2 - FETCH BOARDS BY CATEGORY=====
   it("should fetch boards by category successfully", async () => {
-    // Create test boards with specific category
+    // create boards with different categories
     await Board.create([
       {
         cID: testUserId.toString(),
@@ -144,7 +141,7 @@ describe("Board API", () => {
     expect(res.body.every(board => board.category === "Mental Health")).toBe(true);
   });
 
-  // Test 3: Create Board
+  //=====TEST 3 - CREATE NEW BOARD=====
   it("should create a new board successfully", async () => {
     const boardData = {
       cID: testUserId.toString(),
@@ -164,7 +161,7 @@ describe("Board API", () => {
     expect(res.body.cID).toBe(testUserId.toString());
   });
 
-  // Test 4: Create Board - Missing Fields
+  //=====TEST 4 - MISSING REQUIRED FIELDS=====
   it("should fail board creation with missing category", async () => {
     const boardData = {
       cID: testUserId.toString(),
@@ -195,9 +192,9 @@ describe("Board API", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  // Test 5: Upload Board Image
+  //=====TEST 5 - UPLOAD BOARD IMAGE=====
   it("should upload board image successfully", async () => {
-    // Create a test image file
+    // create test image file
     const testImagePath = path.join(__dirname, '../../uploads/test-image.png');
     const testImageContent = Buffer.from('fake image data');
     fs.writeFileSync(testImagePath, testImageContent);
@@ -212,13 +209,13 @@ describe("Board API", () => {
     expect(res.body).toContain('/uploads/');
     expect(res.body).toMatch(/\.png$/);
 
-    // Clean up test file
+    // clean up test file
     fs.unlinkSync(testImagePath);
   });
 
-  // Test 6: Upload Invalid File Type
+  //=====TEST 6 - UPLOAD INVALID FILE TYPE=====
   it("should reject non-image file upload", async () => {
-    // Create a test text file
+    // create test text file
     const testTextPath = path.join(__dirname, '../../uploads/test-file.txt');
     fs.writeFileSync(testTextPath, 'This is a text file, not an image');
 
@@ -227,16 +224,14 @@ describe("Board API", () => {
       .set("Authorization", `Bearer ${authToken}`)
       .attach('image', testTextPath);
 
-    // Note: This test might pass or fail depending on multer configuration
-    // If multer is configured to accept only images, it should fail
-    // If multer accepts all files, it might pass
+    // test might pass or fail depending on multer config
     expect([200, 400]).toContain(res.statusCode);
 
-    // Clean up test file
+    // clean up test file
     fs.unlinkSync(testTextPath);
   });
 
-  // Test 7: Upload Without File
+  //=====TEST 7 - UPLOAD WITHOUT FILE=====
   it("should return error when no file is uploaded", async () => {
     const res = await request(app)
       .post("/api/boards/upload")
@@ -247,7 +242,7 @@ describe("Board API", () => {
     expect(res.body.message).toBe("No file uploaded");
   });
 
-  // Additional test: Unauthorized access
+  //=====TEST 8 - UNAUTHORIZED ACCESS=====
   it("should deny access without authentication token", async () => {
     const res = await request(app)
       .get("/api/boards");
@@ -256,7 +251,7 @@ describe("Board API", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  // Additional test: Invalid token
+  //=====TEST 9 - INVALID TOKEN=====
   it("should deny access with invalid authentication token", async () => {
     const res = await request(app)
       .get("/api/boards")

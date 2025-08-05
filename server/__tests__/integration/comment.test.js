@@ -84,9 +84,9 @@ afterAll(async () => {
 });
 
 describe("Comment API", () => {
-  // Test 1: Fetch Comments for Post
+  //=====TEST 1 - FETCH COMMENTS FOR POST=====
   it("should fetch all comments for a valid post ID", async () => {
-    // Create some test comments first
+    //create some test comments first
     await Comment.create([
       {
         pID: testPostId,
@@ -114,7 +114,7 @@ describe("Comment API", () => {
     expect(res.body[0].pID).toBe(testPostId);
   });
 
-  // Test 2: Fetch Comments - Invalid Post ID
+  //=====TEST 2 - FETCH COMMENTS INVALID POST ID=====
   it("should return empty array for non-existent post ID", async () => {
     const invalidPostId = "non_existent_post_123";
 
@@ -127,7 +127,7 @@ describe("Comment API", () => {
     expect(res.body.length).toBe(0);
   });
 
-  // Test 3: Create Comment
+  //=====TEST 3 - CREATE COMMENT=====
   it("should create a new comment successfully", async () => {
     const commentData = {
       pID: testPostId,
@@ -149,7 +149,7 @@ describe("Comment API", () => {
     expect(res.body.likes).toBe(0);
   });
 
-  // Test 4: Create Comment - Invalid Post ID
+  //=====TEST 4 - CREATE COMMENT INVALID POST ID=====
   it("should fail comment creation with invalid post ID", async () => {
     const commentData = {
       pID: "invalid_post_id_123",
@@ -168,7 +168,7 @@ describe("Comment API", () => {
     expect([200, 201, 400]).toContain(res.statusCode);
   });
 
-  // Test 5: Create Comment - Missing Fields
+  //=====TEST 5 - CREATE COMMENT MISSING FIELDS=====
   it("should fail comment creation with missing message", async () => {
     const commentData = {
       pID: testPostId,
@@ -231,7 +231,7 @@ describe("Comment API", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  // Test 6: Fetch All Comments (General endpoint)
+  //=====TEST 6 - FETCH ALL COMMENTS=====
   it("should fetch all comments successfully", async () => {
     // Create some test comments
     await Comment.create([
@@ -260,7 +260,7 @@ describe("Comment API", () => {
     expect(res.body[0]).toHaveProperty("message");
   });
 
-  // Test 7: Create Comment with Likes
+  //=====TEST 7 - CREATE COMMENT WITH LIKES=====
   it("should create comment with default likes value", async () => {
     const commentData = {
       pID: testPostId,

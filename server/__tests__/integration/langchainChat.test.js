@@ -80,7 +80,7 @@ afterAll(async () => {
 });
 
 describe("LangChain Chat API", () => {
-  // Test 1: Valid Text Query
+  //=====TEST 1 - VALID TEXT QUERY=====
   it("should handle valid query and return accurate response", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -98,7 +98,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 2: Invalid Query
+  //=====TEST 2 - INVALID QUERY=====
   it("should handle gibberish or irrelevant inputs gracefully", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -117,7 +117,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 3: Partial Match
+  //=====TEST 3 - PARTIAL MATCH=====
   it("should handle fuzzy or near-match queries", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -135,7 +135,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 4: Multiple Intents
+  //=====TEST 4 - MULTIPLE INTENTS=====
   it("should handle multiple queries in one message", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -153,7 +153,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 5: Database Connectivity Success
+  //=====TEST 5 - DATABASE CONNECTIVITY SUCCESS=====
   it("should successfully connect to MongoDB and store chat history", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -175,7 +175,7 @@ describe("LangChain Chat API", () => {
     expect(chatHistory.some(chat => chat.role === "assistant")).toBe(true);
   });
 
-  // Test 6: Missing Required Fields
+  //=====TEST 6 - MISSING REQUIRED FIELDS=====
   it("should fail with missing userId", async () => {
     const queryData = {
       prompt: "Test query without userId"
@@ -219,7 +219,7 @@ describe("LangChain Chat API", () => {
     expect(res.body).toHaveProperty("error");
   });
 
-  // Test 7: Empty Result Handling
+  //=====TEST 7 - EMPTY RESULT HANDLING=====
   it("should handle queries that return no matching resources", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -238,7 +238,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 8: Latency Handling
+  //=====TEST 8 - LATENCY HANDLING=====
   it("should respond within reasonable time threshold", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -259,7 +259,7 @@ describe("LangChain Chat API", () => {
     expect(responseTime).toBeLessThan(15000);
   });
 
-  // Test 9: Concurrent Requests
+  //=====TEST 9 - CONCURRENT REQUESTS=====
   it("should handle multiple concurrent requests without blocking", async () => {
     const queryData1 = {
       userId: testUserId.toString(),
@@ -303,7 +303,7 @@ describe("LangChain Chat API", () => {
     });
   });
 
-  // Test 10: Conversation Context
+  //=====TEST 10 - CONVERSATION CONTEXT=====
   it("should maintain conversation context across multiple messages", async () => {
     const firstQuery = {
       userId: testUserId.toString(),
@@ -334,7 +334,7 @@ describe("LangChain Chat API", () => {
     expect(typeof res2.body.reply).toBe("string");
   });
 
-  // Test 11: Special Characters in Query
+  //=====TEST 11 - SPECIAL CHARACTERS IN QUERY=====
   it("should handle special characters in queries", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -352,7 +352,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 12: Long Query Handling
+  //=====TEST 12 - LONG QUERY HANDLING=====
   it("should handle long queries", async () => {
     const longPrompt = "This is a very long query that contains a lot of text and should test the system's ability to handle lengthy inputs without any issues. The query should be processed normally and return an appropriate response. ".repeat(10);
     
@@ -372,7 +372,7 @@ describe("LangChain Chat API", () => {
     expect(res.body.reply.length).toBeGreaterThan(0);
   });
 
-  // Test 13: Unauthorized Access
+  //=====TEST 13 - UNAUTHORIZED ACCESS=====
   it("should deny access without authentication token", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -389,7 +389,7 @@ describe("LangChain Chat API", () => {
     expect([200, 400, 401, 404]).toContain(res.statusCode);
   });
 
-  // Test 14: Invalid Token
+  //=====TEST 14 - INVALID TOKEN=====
   it("should deny access with invalid authentication token", async () => {
     const queryData = {
       userId: testUserId.toString(),
@@ -405,7 +405,7 @@ describe("LangChain Chat API", () => {
     expect([200, 400, 401, 404]).toContain(res.statusCode);
   });
 
-  // Test 15: Error Handling
+  //=====TEST 15 - ERROR HANDLING=====
   it("should handle API errors gracefully", async () => {
     // Test with malformed request
     const res = await request(app)
