@@ -55,6 +55,18 @@ describe("<ResourceLibrary /> Chatbot Latency & Query Handling", () => {
     vi.clearAllMocks();
   });
 
+  it("displays error message when chatbot interface fails to load", async () => {
+    fetchResponseMock.mockImplementationOnce(async () => {
+      throw new Error("Chat interface failed to load");
+    });
+
+    mockError = "Chat interface failed to load";
+
+    render(<ResourceLibrary />, { wrapper: MemoryRouter });
+    expect(await screen.findByText(/chat interface failed to load/i)).toBeInTheDocument();
+  });
+
+
   // Render latency and restart button
   it("shows yellow latency banner and restart button if chatbot response is slow", () => {
     mockLatency = true;
