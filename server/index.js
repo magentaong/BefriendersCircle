@@ -14,6 +14,16 @@ const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
 const audioRoutes = require("./routes/audio.js")
 const resourceChatRoutes = require("./routes/resourceChat");
+//========NIANN'S SCHENANIGAN, this is so that my board, like comment don't have to mock it =====================
+let langchainChatRoutes;
+if (process.env.NODE_ENV !== "test") {
+  try {
+    langchainChatRoutes = require("./routes/langchainChat");
+  } catch (error) {
+    console.warn("LangChain Chat routes not available:", error.message);
+  }
+}
+//=========NNIann's schananigan ends here =====================
 
 const path = require("path");
 const testRoutes = require("./routes/test");
@@ -43,6 +53,11 @@ app.use("/api/like", forumLikeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/audio", audioRoutes);
 app.use("/api/resourcechat", resourceChatRoutes);
+
+// Conditionally register langchainChat routes
+if (langchainChatRoutes) {
+  app.use("/api/langchainchat", langchainChatRoutes);
+}
 
 
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
