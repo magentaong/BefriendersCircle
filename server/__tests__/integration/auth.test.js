@@ -6,7 +6,8 @@ const User = require("../../models/User");
 
 jest.setTimeout(10000);
 
-beforeEach(async () => {
+
+afterEach(async () => {
   await User.deleteOne({ email: "testuser@example.com" });
   await User.deleteOne({ email: "testuser1@example.com" }); 
   await User.deleteOne({ email: "testuser2@example.com" });//need delete cause if not test cases would always fail :<
@@ -22,6 +23,7 @@ describe("Auth API", () => {
     const res = await request(app).post("/api/auth/register").send({
       email: "testuser@example.com",
       password: "StrongPassword123",
+      confirmPassword: "StrongPassword123",
       name: "Test User"
     });
 
@@ -39,6 +41,7 @@ describe("Auth API", () => {
     const res = await request(app).post("/api/auth/register").send({
       email: "testuser@example.com",
       password: "StrongPassword123",
+      confirmPassword: "StrongPassword123",
       name: "Test User"
     });
 
@@ -49,6 +52,7 @@ describe("Auth API", () => {
     await request(app).post("/api/auth/register").send({
       email: "testuser@example.com",
       password: "StrongPassword123",
+      confirmPassword: "StrongPassword123",
       name: "Test User"
     });
 
@@ -64,7 +68,8 @@ describe("Auth API", () => {
   it("should fail login with wrong password", async () => {
     await request(app).post("/api/auth/register").send({
       email: "testuser@example.com",
-      password: "StrongPassword123",
+      password: "WeakPassword123",
+      confirmPassword: "WeakPassword123",
       name: "Test User"
     });
 
