@@ -1,5 +1,5 @@
 import { ChevronDown } from "lucide-react";
-import type { ResourceChat } from "../hooks/useResourceChat";
+import type { ResourceChat } from "../../hooks/useResourceChat";
 
 export type Resource = ResourceChat;
 
