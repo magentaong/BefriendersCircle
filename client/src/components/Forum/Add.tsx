@@ -74,7 +74,7 @@ const Add = ({closeFunction, clickFunction, category, buttonString} : AddProps )
                   <label className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                     <img src="/Support/Add.png" alt="Add Image" className="w-8 h-8 mb-2" />
                     <span className="text-base font-medium text-gray-500">Add Image</span>
-                    <input className="border-3 hidden" type="file" accept="image/*" name="image" onChange={handleFileChange} required />
+                    <input className="border-3 hidden" data-testid="image-input" type="file" accept="image/*" name="image" onChange={handleFileChange} required />
                 </label>
                 )}
 
