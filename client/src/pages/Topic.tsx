@@ -103,7 +103,7 @@ function Forum() {
                 <div className='flex flex-row content-center gap-7 align-middle'>
                     <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
                     {/* DIfferent type of Catergory heading */}
-                    <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{currentCategory}</h1>
+                    <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{category}</h1>
                 </div>
 
                 <div className='flex flex-row gap-7 justify-self-end'>
