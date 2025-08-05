@@ -4,13 +4,18 @@ const bcrypt = require("bcrypt")
 
 // controller file to abstract out logic from routes (for unit testing of async functions)
 
-async function registerUser({ email, password, name }) {
-    if (!email || ! password || !name) {
+async function registerUser({ email, password, confirmPassword, name }) {
+    if (!email || ! password || !name || !confirmPassword) {
       const err = new Error("All fields are required")
       err.status = 400;
       throw  err;
     }   
 
+    if (password != confirmPassword){
+      const err = new Error("Passwords do not match!")
+      err.status = 400;
+      throw err
+    }
     //email validation for backend side 
     if (!/\S+@\S+\.\S+/.test(email)) {
         const err = new Error("Invalid email format");
