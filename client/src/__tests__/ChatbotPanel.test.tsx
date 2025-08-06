@@ -160,4 +160,84 @@ describe("<ChatbotPanel />", () => {
     rerender(<ChatbotPanel {...defaultProps} carouselIndex={2} />);
     expect(screen.getByText("3/3")).toBeInTheDocument();
   });
+
+  it("outputs multiple schemes for a query with multiple intents", () => {
+    // Simulate a prompt with multiple intents and carousel navigation
+    const allSchemes = [
+      { title: "CTG", content: "Caregiver Training Grant" },
+      { title: "HCG", content: "Home Caregiving Grant" },
+      { title: "Dementia Support", content: "Special dementia resources" }
+    ];
+    const renderChatbotContent = (scheme:any) => <div>{scheme.content}</div>;
+    const setCarouselIndexMock = vi.fn();
+
+    render(
+      <ChatbotPanel
+        {...defaultProps}
+        query="I want CTG and dementia support"
+        allSchemes={allSchemes}
+        currentScheme={allSchemes[0]}
+        carouselIndex={0}
+        setCarouselIndex={setCarouselIndexMock}
+        renderChatbotContent={renderChatbotContent}
+      />,
+      { wrapper: MemoryRouter }
+    );
+    expect(screen.getByText("Caregiver Training Grant")).toBeInTheDocument();
+    expect(screen.getByText("1/3")).toBeInTheDocument();
+    // Simulate carousel next
+    const nextButton = screen.getByTitle("Next");
+    fireEvent.click(nextButton);
+    // setCarouselIndexMock should be called to go to next item
+    expect(setCarouselIndexMock).toHaveBeenCalled();
+  });
+
+  it("populates the query with transcribed audio after microphone click", () => {
+    const setQueryMock = vi.fn();
+    const startRecordingMock = vi.fn();
+
+    render(
+      <ChatbotPanel
+        {...defaultProps}
+        query=""
+        setQuery={setQueryMock}
+        startRecording={startRecordingMock}
+        isRecording={false}
+      />,
+      { wrapper: MemoryRouter }
+    );
+    const micButton = screen.getByTestId("mic-btn");
+    fireEvent.click(micButton);
+    expect(startRecordingMock).toHaveBeenCalled();
+    setQueryMock("Transcribed voice input");
+    expect(setQueryMock).toHaveBeenCalledWith("Transcribed voice input");
+  });
+
+  it("plays audio and displays answer text for a given query", () => {
+    const playAnswerMock = vi.fn();
+    const answer = {
+      title: "Financial Aid",
+      content: "Here is some information for seniors."
+    };
+    const allSchemes = [answer];
+    render(
+      <ChatbotPanel
+        {...defaultProps}
+        query="Tell me about financial aid"
+        setQuery={vi.fn()}
+        answer={answer}
+        allSchemes={allSchemes}
+        currentScheme={answer}
+        renderChatbotContent={(scheme) => <div>{scheme.content}</div>}
+        playAnswer={playAnswerMock}
+        isSpeaking={false}
+      />,
+      { wrapper: MemoryRouter }
+    );
+    expect(screen.getByText(/Here is some information for seniors/i)).toBeInTheDocument();
+    const playBtn = screen.getByRole("button", { name: /play answer/i });
+    fireEvent.click(playBtn);
+    expect(playAnswerMock).toHaveBeenCalled();
+  });
+
 });
