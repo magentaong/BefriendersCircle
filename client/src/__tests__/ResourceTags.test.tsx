@@ -110,4 +110,26 @@ describe("<TagFilterGrid />", () => {
     );
     expect(screen.queryByText("Clear")).toBeNull();
   });
+
+  it("filters and displays only resources with the selected tag", () => {
+    // Filter by the tag 'support'
+    render(
+      <TagFilterGrid
+        resources={mockResources}
+        renderContent={mockRenderContent}
+        selectedTag="support"
+        setSelectedTag={() => {}}
+        expandedCardId={null}
+        setExpandedCardId={() => {}}
+      />
+    );
+
+    // Should show ONLY resources containing the 'support' tag
+    expect(screen.getByText("Community Support Groups")).toBeInTheDocument();
+    expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
+
+    // Should NOT show any resources that don't have the 'support' tag
+    expect(screen.queryByText("Financial Aid for Seniors")).toBeNull();
+    expect(screen.queryByText("Healthcare Resources")).toBeNull();
+  });
 });
