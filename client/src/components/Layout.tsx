@@ -8,7 +8,7 @@ type LayoutProps = {
 
 export default function Layout({ header, children }: LayoutProps) {
   return (
-    <div className="flex flex-col p-2">
+    <div className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
       <Navigation header={header} />
       <main className="w-full h-full">{children}</main>
       {/* <Footer /> */}

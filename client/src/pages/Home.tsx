@@ -48,7 +48,7 @@ export default function Home() {
             aria-label={isRecording ? "Stop recording" : "Start recording"}
             className={`w-32 h-32 rounded-full flex items-center justify-center shadow cursor-pointer transition-transform bg-latte ${isRecording ? "bg-red-400 animate-pulse" : "bg-latte"}`}
           >
-            <Mic className={`w-15 h-15 text-charcoal ${isRecording ? "text-red-500" : ""}`} />
+            <Mic className={`w-15 h-15 text-charcoal hover:scale-105 ${isRecording ? "text-red-500" : ""}`} />
           </button>
 
         {/* Search Bar */}
@@ -60,7 +60,9 @@ export default function Home() {
             placeholder="How can we help you today?"
             className="w-full bg-transparent outline-none placeholder-charcoal text-charcoal"
           />
-          <Search className="w-5 h-5 text-charcoal" />
+          <div className="hover:scale-105">
+            <Search className="w-5 h-5 text-charcoal" />
+          </div>
         </div>
       </section>
 

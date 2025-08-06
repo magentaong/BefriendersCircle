@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
+import Navigation from '../components/Navigation';
+
 import TagFilterGrid from "../components/resources/TagFilterGrid";
 import ChatbotPanel from "../components/resources/ChatbotPanel";
 import { useResourceChat } from "../hooks/useResourceChat";
@@ -208,24 +210,15 @@ export default function ResourceLibrary() {
   return (
     <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
       {/* Header with Logo and Profile */}
-      <header className="flex justify-between items-center w-full mb-6 md:mb-8">
-        <Link to="/">
-          <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
-        </Link>
-        <h1 className="text-lg md:text-xl font-bold text-charcoal">Resource Library</h1>
-        {isLoggedIn && (
-          <Link to="/profile">
-            <img src="/Avatar.png" alt="User Profile" className="h-8 w-8 md:h-10 md:w-10 rounded-full" />
-          </Link>
-        )}
-      </header>
+      <Navigation header={ "Resource Library" } />
+
       {/* Top Navigation */}
-      <div className="flex items-center justify-between w-full mt-2">
+      <div className="flex items-center justify-between w-full mb-4 md:mb-6">
         <Link to="/forum">
-          <button className="w-12 h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center"><ArrowLeft></ArrowLeft></button>
+          <button className="w-12 h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center hover:scale-105"><ArrowLeft></ArrowLeft></button>
         </Link>
         <Link to="/training">
-          <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center"><ArrowRight></ArrowRight></button>
+          <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center hover:scale-105"><ArrowRight></ArrowRight></button>
         </Link>
       </div>
 
@@ -260,7 +253,7 @@ export default function ResourceLibrary() {
       )}
 
       {/* Category Tabs */}
-      <div className="flex flex-wrap gap-2 w-full justify-center my-4">
+      <div className="flex flex-wrap gap-3 w-full justify-center my-4">
         {orderedCategories.map((tab) => (
           <button
             key={tab}

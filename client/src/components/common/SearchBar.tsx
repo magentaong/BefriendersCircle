@@ -33,7 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       value={query}
       onChange={(e) => setQuery(e.target.value)}
       placeholder={placeholder}
-      className="border p-2 w-full bg-white rounded-xl"
+      className="p-3 w-full bg-white rounded-xl"
     />
   );
 };

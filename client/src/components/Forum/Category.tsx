@@ -71,8 +71,8 @@ export default function Category({category, header}: CategroryProps) {
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
                 <div className='flex flex-row content-center gap-[2vw] sm:gap-7 align-middle'>
                     {/* DIfferent type of Catergory heading */}
-                  <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{header}</h1>
                   <button className='w-[15vw] sm:w-100' onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
+                  <h1 className="self-auto text-left text-xl font-bold text-black leading-none self-center">{header}</h1>
                 </div>
               
                  

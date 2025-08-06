@@ -14,7 +14,7 @@ const CardBase: React.FC<CardBaseProps> = ({ title, icon, bg, path }) => {
   return (
     <button
       onClick={() => navigate(path)}
-      className={`p-6 ${bg} max-w-[350px] h-[250px] w-full mx-auto rounded-2xl shadow-md text-center flex flex-col items-center justify-center hover:brightness-90 transition`}
+      className={`p-6 ${bg} max-w-[350px] h-[250px] w-full mx-auto rounded-2xl shadow-md text-center flex flex-col items-center justify-center transform transition-transform duration-300 ease-in-out hover:scale-105 will-change-transform`}
     >
       <div className="h-[190px] w-full overflow-hidden">
         <img src={icon} alt="Community Support Image" className="w-full h-full object-cover" />

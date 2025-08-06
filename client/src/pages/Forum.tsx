@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Category from "../components/Forum/Category.tsx";
+import Navigation from '../components/Navigation';
 
 // Main forum page that displays different categories (Topics & Events)
 function Forum() {
@@ -8,25 +9,16 @@ function Forum() {
   const isLoggedIn = Boolean(token);
 
   return (
-    <main className="w-full max-w-6xl mx-auto px-4 md:px-6 py-4 md:py-6">
+    <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
       {/* Header with Logo and Profile */}
-      <header className="flex justify-between items-center mb-6 md:mb-8">
-        <Link to="/">
-          <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
-        </Link>
-        <h1 className="text-lg md:text-xl font-bold text-charcoal">Community Forum</h1>
-        {isLoggedIn && (
-          <Link to="/profile">
-            <img src="/Avatar.png" alt="User Profile" className="h-8 w-8 md:h-10 md:w-10 rounded-full" />
-          </Link>
-        )}
-      </header>
+      <Navigation header={ "Community Forum" } />
 
-      <div className="flex items-center justify-end w-full mb-4 md:mb-6">
+      <div className="flex items-center justify-between w-full mb-4 md:mb-6">
+        <Link to="/training">
+          <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center hover:scale-105"><ArrowLeft></ArrowLeft></button>
+        </Link>
         <Link to="/resources">
-          <button className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-pistachio shadow text-lg flex items-center justify-center">
-            <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
-          </button>
+          <button className="w-12 h-12 rounded-full bg-pistachio shadow text-lg flex items-center justify-center hover:scale-105"><ArrowRight></ArrowRight></button>
         </Link>
       </div>
 
