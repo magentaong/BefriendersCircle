@@ -163,19 +163,7 @@ describe("LangChain Chat Controller Unit Tests", () => {
         it("should handle empty queries gracefully", async () => {
             const userId = "user_505";
             const prompt = "";
-            const expectedResponse = "I didn't receive any input. How can I help you today?";
-
-            const mockChain = {
-                call: jest.fn().mockResolvedValue({ response: expectedResponse })
-            };
-            const { ConversationChain } = require("langchain/chains");
-            ConversationChain.mockImplementation(() => mockChain);
-            Chat.create.mockResolvedValue({});
-
-            const result = await handleLangChainChat(userId, prompt);
-
-            expect(mockChain.call).toHaveBeenCalledWith({ input: prompt });
-            expect(result).toBe(expectedResponse);
+            await expect(handleLangChainChat(userId, prompt)).rejects.toThrow("Missing userId or prompt");
         });
     });
 

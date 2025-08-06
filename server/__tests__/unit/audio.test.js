@@ -1,8 +1,8 @@
 const { transcribeAudio, speechAudio } = require("../../controllers/audio");
-const { readFileSync } = require("fs");
+const {  createReadStream } = require("fs");
 
 jest.mock("fs", () => ({
-  readFileSync: jest.fn(() => Buffer.from("mock audio data")),
+  createReadStream: jest.fn(() => Buffer.from("mock audio data")),
 }));
 
 // mock the openai SDK 
@@ -27,7 +27,7 @@ describe("Audio Controller Unit Tests", () => {
   it("transcribeAudio: should return transcription text", async () => {
     const result = await transcribeAudio("mockPath");
 
-    expect(readFileSync).toHaveBeenCalledWith("mockPath");
+    expect(createReadStream).toHaveBeenCalledWith("mockPath");
     expect(result).toBe("mock transcript being done");
   });
 

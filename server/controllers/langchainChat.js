@@ -3,7 +3,7 @@ const Chat = require("../models/Chat.js");
 
 const { ChatOpenAI } = require("@langchain/openai");
 const { BufferMemory } = require("langchain/memory");
-const { MongoDBChatMessageHistory } = require("langchain/stores/message/mongodb");
+const { MongoDBChatMessageHistory } = require("@langchain/mongodb");
 const { ConversationChain } = require("langchain/chains");
 
 const getMongoDBMemory = (userId) =>

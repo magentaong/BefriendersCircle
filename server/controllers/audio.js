@@ -1,11 +1,11 @@
 const { OpenAI } = require("openai");
-const { readFileSync } = require("fs");
+const { createReadStream } = require("fs");
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 async function transcribeAudio(filePath) {
   const result = await client.audio.transcriptions.create({
     model: "gpt-4o-mini-transcribe",
-    file: readFileSync(filePath),
+    file: createReadStream(filePath),
   });
 
   return result.text;
