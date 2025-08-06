@@ -313,6 +313,7 @@ export default function ResourceLibrary() {
                   {/* Cards Group View */}
                   <div className="relative w-full overflow-hidden">
                     <button
+                      aria-label="carousel-left"
                       onClick={() => scrollLeft(activeTab)}
                       className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white rounded-full hover:scale-105 transition"
                     >
@@ -363,6 +364,7 @@ export default function ResourceLibrary() {
                     </div>
 
                     <button
+                      aria-label="carousel-right"
                       onClick={() => scrollRight(activeTab)}
                       className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white rounded-full hover:scale-105 transition"
                     >
@@ -373,6 +375,7 @@ export default function ResourceLibrary() {
                   {/* Progress Bar */}
                   <div className="w-40 h-2 bg-gray-200 rounded-full overflow-hidden relative">
                     <div
+                      role="progressbar"
                       className="h-full bg-[#8CBFAB] transition-all duration-300"
                       style={{
                         width: `${((getIndexForTab(activeTab) + 1) / totalGroups) * 100}%`,
