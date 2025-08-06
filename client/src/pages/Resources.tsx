@@ -17,6 +17,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 import TagFilterGrid from "../components/resources/TagFilterGrid";
 import ChatbotPanel from "../components/resources/ChatbotPanel";
+import PageContainer from "../components/common/PageContainer";
+import AppHeader from "../components/common/AppHeader";
+import GradientBackground from "../components/common/GradientBackground";
+
+
 import { useResourceChat } from "../hooks/useResourceChat";
 import { useCarousel } from "../hooks/useCarousel";
 import { useChatbotAPI } from "../hooks/useChatbotAPI";
@@ -205,25 +210,27 @@ export default function ResourceLibrary() {
   const orderedCategories = tabOrder.filter(tab => categories.includes(tab));
 
   // RENDER COMPONENT=======================================================
-  return (
-    <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
-      {/* Header with Logo and Profile */}
-      <header className="flex justify-between items-center w-full mb-6 md:mb-8">
-        <Link to="/">
-          <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
-        </Link>
-        <h1 className="text-lg md:text-xl font-bold text-charcoal">Resource Library</h1>
-        {isLoggedIn && (
-          <Link to="/profile">
-            <img src="/Avatar.png" alt="User Profile" className="h-8 w-8 md:h-10 md:w-10 rounded-full" />
-          </Link>
-        )}
-      </header>
+  return (    
+    <main className="min-h-screen w-full">
+      <GradientBackground>
+       <PageContainer>
+
+      {/* Header */}
+            <AppHeader
+              isLoggedIn={isLoggedIn}
+              onProfileClick={() => navigate("/profile")}
+              onLoginClick={() => navigate("/login")}
+            />
+
       {/* Top Navigation */}
       <div className="flex items-center justify-between w-full mt-2">
         <Link to="/forum">
           <button className="w-12 h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center"><ArrowLeft></ArrowLeft></button>
         </Link>
+        <div className="flex-1 flex justify-center">
+          <h2 className="text-xl font-bold text-charcoal">Resource Library</h2>
+        </div>
+
         <Link to="/training">
           <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center"><ArrowRight></ArrowRight></button>
         </Link>
@@ -414,6 +421,10 @@ export default function ResourceLibrary() {
           )}
         </div>
       )}
+      </PageContainer>
+      </GradientBackground>
     </main>
+
+
   );
 }
