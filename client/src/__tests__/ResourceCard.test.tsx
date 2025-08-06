@@ -31,6 +31,18 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     vi.clearAllMocks();
   });
 
+  function fillResources(n: number) {
+    mockResources = Array.from({ length: n }).map((_, idx) => ({
+      _id: String(idx + 1),
+      title: `Resource ${idx + 1}`,
+      description: `Desc ${idx + 1}`,
+      category: "General",
+      eligibility: [`Elig ${idx + 1}`],
+      steps: [`Step ${idx + 1}`],
+      tags: [`tag${(idx % 3) + 1}`],
+    }));
+  }
+
   it("renders multiple resource cards, expands each independently", () => {
     mockResources = [
       {
@@ -100,5 +112,69 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
 
     // Should be on Chatbot tab by default if no resources are found
     expect(screen.queryByText(/No resources found/i)).not.toBeInTheDocument();
+  });
+
+  it("shows only 3 resource cards at once, moves right/left by 3", () => {
+    fillResources(7);
+
+    render(<ResourceLibrary />, { wrapper: MemoryRouter });
+
+    fireEvent.click(screen.getByText("General"));
+    const rightChevron = screen.getByLabelText("carousel-right");
+    const leftChevron = screen.getByLabelText("carousel-left");
+
+    // Page 1
+    expect(screen.getByText("Resource 1")).toBeInTheDocument();
+    expect(screen.getByText("Resource 2")).toBeInTheDocument();
+    expect(screen.getByText("Resource 3")).toBeInTheDocument();
+    expect(screen.queryByText("Resource 4")).not.toBeInTheDocument();
+
+    // Click right
+    
+    fireEvent.click(rightChevron);
+
+    // Page 2
+    expect(screen.getByText("Resource 4")).toBeInTheDocument();
+    expect(screen.getByText("Resource 5")).toBeInTheDocument();
+    expect(screen.getByText("Resource 6")).toBeInTheDocument();
+    expect(screen.queryByText("Resource 1")).not.toBeInTheDocument();
+
+    // Click right again
+    fireEvent.click(rightChevron);
+
+    // Page 3
+    expect(screen.getByText("Resource 7")).toBeInTheDocument();
+    expect(screen.queryByText("Resource 4")).not.toBeInTheDocument();
+    expect(screen.queryByText("Resource 1")).not.toBeInTheDocument();
+
+    // Click left to go back
+    fireEvent.click(leftChevron);
+
+    // Page 2 again
+    expect(screen.getByText("Resource 4")).toBeInTheDocument();
+    expect(screen.getByText("Resource 5")).toBeInTheDocument();
+    expect(screen.getByText("Resource 6")).toBeInTheDocument();
+    expect(screen.queryByText("Resource 7")).not.toBeInTheDocument();
+  });
+
+  it("progress bar updates as carousel moves", () => {
+    fillResources(7); // 3 groups: (3, 3, 1)
+    render(<ResourceLibrary />, { wrapper: MemoryRouter });
+    fireEvent.click(screen.getByText("General"));
+    const rightChevron = screen.getByLabelText("carousel-right");
+
+    // At first group: progress bar should be at 1/3 
+    let bar = screen.getByRole("progressbar");
+    expect(bar).toHaveStyle({ width: "33.33333333333333%"});
+
+    // Move to second group
+    fireEvent.click(rightChevron);
+    bar = screen.getByRole("progressbar");
+    expect(bar).toHaveStyle({width: "66.66666666666666%"});
+
+    // Move to third group
+    fireEvent.click(rightChevron);
+    bar = screen.getByRole("progressbar");
+    expect(bar).toHaveStyle({width: "100%"});
   });
 });
