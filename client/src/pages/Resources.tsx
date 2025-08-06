@@ -28,6 +28,7 @@ export default function ResourceLibrary() {
     useResourceChat();
 
   const [activeTab, setActiveTab] = useState("Chatbot");
+  const tabOrder = ["Chatbot", "General", "Financial", "Medical"];
   const [query, setQuery] = useState(
     "What financial subsidies do you recommend for seniors?"
   );
@@ -40,7 +41,7 @@ export default function ResourceLibrary() {
   Chatbot: <Bot size={22} />,
   General: <Info size={22} />,
   Medical: <HeartPulse size={22} />,
-  Finance: <DollarSign size={22} />,
+  Financial: <DollarSign size={22} />,
   };
   
   const uniqueResources = Array.from(
@@ -201,6 +202,8 @@ export default function ResourceLibrary() {
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
 
+  const orderedCategories = tabOrder.filter(tab => categories.includes(tab));
+
   // RENDER COMPONENT=======================================================
   return (
     <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
@@ -258,7 +261,7 @@ export default function ResourceLibrary() {
 
       {/* Category Tabs */}
       <div className="flex flex-wrap gap-2 w-full justify-center my-4">
-        {categories.map((tab) => (
+        {orderedCategories.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}

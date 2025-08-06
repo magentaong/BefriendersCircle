@@ -70,7 +70,7 @@ function parseAIResponse(rawReply) {
     eligibility,
     steps,
     link,
-    category: "General",
+    category: inferCategoryFromText(rawReply),
     tags: inferTags(rawReply),
   });
 }
@@ -79,16 +79,23 @@ function parseAIResponse(rawReply) {
 function sanitizeParsedResource(parsed) {
   if (!parsed || typeof parsed !== "object") return null;
 
-  let category = (parsed.category || "").toLowerCase();
-  if (category.includes("finance") || category.includes("fund") || category.includes("grant")) {
+  let origCategory = parsed.category || "";
+  let normalizedCategory = origCategory.trim().toLowerCase();
+
+  let category = null;
+
+  if (["financial", "finance", "fund", "grant"].some(k => normalizedCategory.includes(k)))  {
     category = "Financial";
   } else if (
-    category.includes("medical") ||
-    category.includes("health") ||
-    category.includes("hospital") ||
-    category.includes("clinic")
+    ["medical", "health", "hospital", "clinic"].some(k => normalizedCategory.includes(k))
   ) {
     category = "Medical";
+  } else if (
+    ["general", "misc", ""].some(k => normalizedCategory === k)
+  ) {
+    category = "General";
+  } else if (origCategory) {
+    category = origCategory;
   } else {
     category = "General";
   }
@@ -117,6 +124,17 @@ function inferTags(text) {
   if (lower.includes("training")) tags.push("training");
   if (lower.includes("support")) tags.push("support");
   return tags;
+}
+
+function inferCategoryFromText(text) {
+  const lower = text.toLowerCase();
+  if (lower.includes("finance") || lower.includes("fund") || lower.includes("grant") || lower.includes("subsidy")) {
+    return "Financial";
+  }
+  if (lower.includes("medical") || lower.includes("health") || lower.includes("hospital") || lower.includes("clinic")) {
+    return "Medical";
+  }
+  return "General";
 }
 
 // --- Cross-check with DB resources ---
@@ -156,14 +174,25 @@ async function parseChatbotReply(rawReply) {
   return { metadata: checked };
 }
 
-// --- Process a single resource ---
+// Check for odd titles
+function isLikelyTitle(str) {
+  if (!str) return false;
+  if (str.length > 80) return false;
+  if (/[.!?]$/.test(str.trim())) return false;
+  if (/wonderful|seeking|financial support|checking|ensure|deserve|help/i.test(str)) return false;
+  return true;
+}
+
+// Process resources and check with database, replace title with one in database to prevent duplicates
 async function processSingleResource(resource) {
   if (!resource) return null;
 
   const dbResource = await crossCheckResource(resource);
 
   if (dbResource) {
-    resource.title = dbResource.title;
+    if (isLikelyTitle(dbResource.title)) {
+      resource.title = dbResource.title;
+    }
     resource.link = dbResource.url || resource.link;
     resource.tags = Array.from(new Set([...(resource.tags || []), ...(dbResource.tags || [])]));
     resource.description = resource.description || dbResource.description;
