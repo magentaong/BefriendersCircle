@@ -41,6 +41,9 @@ const ChatbotPanel: React.FC<ChatbotPanelProps> = ({
       {/* Left Section */}
       <div className="flex flex-col items-center w-full md:w-1/3 gap-4 bg-[#c9e2d6] p-4 rounded-2xl shadow relative">
         <div
+          role="button"
+          aria-label="Microphone"
+          data-testid="mic-btn"
           className={`w-24 h-24 rounded-full flex items-center justify-center shadow cursor-pointer transition-transform ${
             isRecording ? "bg-red-400 animate-pulse" : "bg-[#dce8e1]"
           }`}
@@ -91,6 +94,7 @@ const ChatbotPanel: React.FC<ChatbotPanelProps> = ({
       <div className="flex-1 bg-[#c9e2d6] rounded-2xl p-4 shadow relative">
         <div className="flex justify-between items-center">
           <button
+            title = "Previous"
             onClick={() => setCarouselIndex((prev) => (prev - 1 + allSchemes.length) % allSchemes.length)}
             className="p-2 shadow rounded-full bg-[#A8C6B7] hover:scale-105 transition"
           >
@@ -100,6 +104,7 @@ const ChatbotPanel: React.FC<ChatbotPanelProps> = ({
             {currentScheme?.title || "Caregiver Advice"}
           </h2>
           <button
+            title = "Next"
             onClick={() => setCarouselIndex((prev) => (prev + 1) % allSchemes.length)}
             className="p-2 shadow rounded-full bg-white hover:scale-105 transition animate-fadeInSlow"
           >
