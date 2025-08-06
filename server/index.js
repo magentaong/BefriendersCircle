@@ -15,6 +15,14 @@ const auth = require("./middleware/auth")
 const audioRoutes = require("./routes/audio.js")
 const resourceChatRoutes = require("./routes/resourceChat");
 
+// Conditionally load langchainChat routes
+let langchainChatRoutes;
+try {
+  langchainChatRoutes = require("./routes/langchainChat");
+} catch (error) {
+  console.warn("LangChain Chat routes not available:", error.message);
+}
+
 const path = require("path");
 const testRoutes = require("./routes/test");
 
@@ -44,6 +52,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/audio", audioRoutes);
 app.use("/api/resourcechat", resourceChatRoutes);
 
+// Conditionally register langchainChat routes
+if (langchainChatRoutes) {
+  app.use("/api/langchainchat", langchainChatRoutes);
+}
 
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 const PORT = process.env.PORT || 5050;
@@ -59,5 +71,4 @@ if (process.env.NODE_ENV === "development") {
 
 
 module.exports = app; 
-
 
