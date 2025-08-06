@@ -1,20 +1,3 @@
-// set up environment variables for testing
-process.env.NODE_ENV = "test";
-process.env.OPENAI_API_KEY = "test-api-key-for-testing";
-process.env.ASSISTANT_ID = "test-assistant-id";
-process.env.JWT_SECRET = "test-jwt-secret";
-process.env.MONGO_URI = "mongodb://localhost:27017/test";
-
-// prevent server from starting on port 5050 to avoid conflicts
-const originalListen = require('http').Server.prototype.listen;
-require('http').Server.prototype.listen = function(port) {
-  if (port === 5050) {
-    return this;
-  }
-  return originalListen.call(this, port);
-};
-
-// import required modules
 require("dotenv").config();
 const request = require("supertest");
 const mongoose = require("mongoose");

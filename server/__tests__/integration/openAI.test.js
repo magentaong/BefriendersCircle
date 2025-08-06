@@ -1,81 +1,18 @@
-// Mock the entire OpenAI controller to prevent import issues
-jest.mock("../../controllers/openai", () => ({
-  handleChat: jest.fn().mockImplementation(async (req, res) => {
-    const { prompt, userId } = req.body;
-    
-    if (!prompt || !userId) {
-      return res.status(400).json({ error: "Missing prompt or userId" });
-    }
-    
-    // Mock successful response
-    const mockResponse = {
-      reply: `Mocked OpenAI response for: ${prompt}`,
-      verifiedResource: "Mocked verified resource",
-      relatedSchemes: [
-        {
-          title: "Mocked Scheme",
-          description: "This is a mocked scheme for testing",
-          eligibility: ["Mocked eligibility"],
-          steps: ["Mocked steps"],
-          link: "https://mocked-link.com",
-          category: "Mocked Category",
-          tags: ["mocked", "test"]
-        }
-      ]
-    };
-    
-    // Create Chat records to simulate database storage
-    const Chat = require("../../models/Chat");
-    await Chat.create({ userId, role: "user", content: prompt });
-    await Chat.create({ userId, role: "assistant", content: mockResponse.reply });
-    
-    // Create ResourceChat records to simulate database storage
-    const ResourceChat = require("../../models/ResourceChat");
-    await ResourceChat.create({
-      userId,
-      source: "Chatbot AI",
-      query: prompt,
-      response: mockResponse.reply,
-      verifiedResource: mockResponse.verifiedResource,
-      relatedSchemes: mockResponse.relatedSchemes
-    });
-    
-    return res.status(200).json(mockResponse);
-  })
-}));
-
-// Set required environment variables for testing
-process.env.NODE_ENV = "test"; // Prevent langchainChat routes from loading
-process.env.OPENAI_API_KEY = "sk-test-key-for-testing-only";
-process.env.ASSISTANT_ID = "test-assistant-id";
-process.env.JWT_SECRET = "test-jwt-secret";
-process.env.MONGO_URI = "mongodb://localhost:27017/test";
-process.env.PORT = "5055"; // Use different port for openAI tests
-
-// Mock the server startup to prevent port conflicts
-const originalListen = require('http').Server.prototype.listen;
-require('http').Server.prototype.listen = function(port) {
-  // Only prevent server from starting if it's the default port
-  if (port === 5050) {
-    return this;
-  }
-  // Allow the server to start for testing
-  return originalListen.call(this, port);
-};
-
 require("dotenv").config();
 const request = require("supertest");
 const mongoose = require("mongoose");
 const express = require("express");
+const cors = require("cors");
 const Chat = require("../../models/Chat");
 const ResourceChat = require("../../models/ResourceChat");
 const User = require("../../models/User");
 
-// Create a simple test app instead of importing the full app
 const app = express();
+app.use(cors());
 app.use(express.json());
 
-// Mock the OpenAI route
+const connectTestDB = require("../../db");
+
 app.post("/api/openai", async (req, res) => {
   const { prompt, userId } = req.body;
   
@@ -83,10 +20,9 @@ app.post("/api/openai", async (req, res) => {
     return res.status(400).json({ error: "Missing prompt or userId" });
   }
   
-  // Mock successful response
   const mockResponse = {
     reply: `Mocked OpenAI response for: ${prompt}`,
-    verifiedResource: "Mocked verified resource",
+    verifiedResource: null, 
     relatedSchemes: [
       {
         title: "Mocked Scheme",
@@ -100,34 +36,40 @@ app.post("/api/openai", async (req, res) => {
     ]
   };
   
-  // Create Chat records to simulate database storage
-  await Chat.create({ userId, role: "user", content: prompt });
-  await Chat.create({ userId, role: "assistant", content: mockResponse.reply });
-  
-  // Create ResourceChat records to simulate database storage
-  await ResourceChat.create({
-    userId,
-    source: "Chatbot AI",
-    query: prompt,
-    response: mockResponse.reply,
-    verifiedResource: mockResponse.verifiedResource,
-    relatedSchemes: mockResponse.relatedSchemes
-  });
-  
-  return res.status(200).json(mockResponse);
+  try {
+    await Chat.create({ userId, role: "user", content: prompt });
+    await Chat.create({ userId, role: "assistant", content: mockResponse.reply });
+    
+    const uniqueTitle = `Mocked Resource Title - ${Date.now()}`;
+    await ResourceChat.create({
+      title: uniqueTitle,
+      description: "This is a mocked resource description for testing purposes",
+      eligibility: ["Mocked eligibility"],
+      steps: ["Mocked steps"],
+      link: "https://mocked-link.com",
+      category: "Mocked Category",
+      tags: ["mocked", "test"],
+      source: "Chatbot AI"
+    });
+    
+    return res.status(200).json(mockResponse);
+  } catch (error) {
+    console.error('Error in mock OpenAI route:', error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.get("/api/openai", (req, res) => {
   res.json({ status: "OpenAI API is running!" });
 });
 
-jest.setTimeout(30000); // Increased timeout for OpenAI API calls
+jest.setTimeout(30000);
 
 let testUserId;
 
-// Setup: Create a test user
 beforeAll(async () => {
-  // Create a test user (handle potential duplicate)
+  await connectTestDB();
+  
   let testUser;
   try {
     testUser = await User.create({
@@ -136,33 +78,36 @@ beforeAll(async () => {
       name: "OpenAI Test User"
     });
   } catch (error) {
-    // If user already exists, find and use it
     testUser = await User.findOne({ email: "openaittest@example.com" });
   }
   testUserId = testUser._id;
 });
 
-// Cleanup after each test
 afterEach(async () => {
-  await Chat.deleteMany({ userId: testUserId.toString() });
-  await ResourceChat.deleteMany({ source: "Chatbot AI" });
+  if (testUserId) {
+    await Chat.deleteMany({ userId: testUserId.toString() });
+    await ResourceChat.deleteMany({ source: "Chatbot AI" });
+  }
 });
 
-// Cleanup after all tests
 afterAll(async () => {
   try {
     await User.deleteOne({ email: "openaittest@example.com" });
-    await Chat.deleteMany({ userId: testUserId.toString() });
+    if (testUserId) {
+      await Chat.deleteMany({ userId: testUserId.toString() });
+    }
     await ResourceChat.deleteMany({ source: "Chatbot AI" });
     
-    // Close mongoose connection
     if (mongoose.connection.readyState !== 0) {
       await mongoose.connection.close();
     }
     
-    // Force close any remaining handles
     await new Promise(resolve => {
-      setTimeout(resolve, 100);
+      if (mongoose.connection.readyState === 0) {
+        resolve();
+      } else {
+        mongoose.connection.once('disconnected', resolve);
+      }
     });
   } catch (error) {
     console.error('Cleanup error:', error);

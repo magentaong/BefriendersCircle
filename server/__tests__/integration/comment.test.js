@@ -1,22 +1,3 @@
-// Set required environment variables for testing
-process.env.NODE_ENV = "test";
-process.env.OPENAI_API_KEY = "sk-test-key-for-testing-only";
-process.env.ASSISTANT_ID = "test-assistant-id";
-process.env.JWT_SECRET = "test-jwt-secret";
-process.env.MONGO_URI = "mongodb://localhost:27017/test";
-process.env.PORT = "5052"; // Use different port for comment tests
-
-// Mock the server startup to prevent port conflicts
-const originalListen = require('http').Server.prototype.listen;
-require('http').Server.prototype.listen = function(port) {
-  // Only prevent server from starting if it's the default port
-  if (port === 5050) {
-    return this;
-  }
-  // Allow the server to start for testing
-  return originalListen.call(this, port);
-};
-
 require("dotenv").config();
 const request = require("supertest");
 const mongoose = require("mongoose");
