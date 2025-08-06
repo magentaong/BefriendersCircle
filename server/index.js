@@ -14,16 +14,14 @@ const authRoutes = require("./routes/auth");
 const auth = require("./middleware/auth")
 const audioRoutes = require("./routes/audio.js")
 const resourceChatRoutes = require("./routes/resourceChat");
-//========NIANN'S SCHENANIGAN, this is so that my board, like comment don't have to mock it =====================
+
+// Conditionally load langchainChat routes
 let langchainChatRoutes;
-if (process.env.NODE_ENV !== "test") {
-  try {
-    langchainChatRoutes = require("./routes/langchainChat");
-  } catch (error) {
-    console.warn("LangChain Chat routes not available:", error.message);
-  }
+try {
+  langchainChatRoutes = require("./routes/langchainChat");
+} catch (error) {
+  console.warn("LangChain Chat routes not available:", error.message);
 }
-//=========NNIann's schananigan ends here =====================
 
 const path = require("path");
 const testRoutes = require("./routes/test");
@@ -59,7 +57,6 @@ if (langchainChatRoutes) {
   app.use("/api/langchainchat", langchainChatRoutes);
 }
 
-
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, () => {
@@ -74,5 +71,4 @@ if (process.env.NODE_ENV === "development") {
 
 
 module.exports = app; 
-
 
