@@ -16,8 +16,7 @@ ___________________________________________
 6. [Running the Application](#running-the-application)
 7. [Testing](#testing)
 8. [API Documentation](#api-documentation)
-9. [Folder Structure](#folder-structure)
-10. [License](#license)
+9. [License](#license)
 
 ___________________________________________
 
@@ -308,42 +307,6 @@ ___________________________________________
 ### Audio Endpoints
 - `POST /api/audio/transcribe` - Speech-to-text conversion
 - `POST /api/audio/synthesize` - Text-to-speech conversion
-
-___________________________________________
-
-## Folder Structure
-
-```
-BefriendersCircle/
-├── client/                          # Frontend React Application
-│   ├── src/
-│   │   ├── components/              # Reusable UI components
-│   │   │   ├── common/              # Shared components
-│   │   │   ├── Forum/               # Forum-specific components
-│   │   │   ├── resources/           # Resource components
-│   │   │   └── training/            # Training components
-│   │   ├── pages/                   # Page components
-│   │   ├── hooks/                   # Custom React hooks
-│   │   ├── api/                     # API integration
-│   │   ├── routes/                  # Routing configuration
-│   │   └── content/                 # Static content data
-│   ├── public/                      # Static assets
-│   ├── cypress/                     # E2E testing
-│   └── __tests__/                   # Component tests
-├── server/                          # Backend Node.js Application
-│   ├── controllers/                 # Business logic
-│   ├── models/                      # Database models
-│   ├── routes/                      # API routes
-│   ├── middleware/                  # Express middleware
-│   ├── langchain/                   # AI integration
-│   ├── Scripts/                     # Database seeding scripts
-│   ├── uploads/                     # File uploads
-│   ├── __tests__/                   # Backend tests
-│   │   ├── unit/                    # Unit tests
-│   │   └── integration/             # Integration tests
-│   └── utils/                       # Utility functions
-└── README.md                        # Project documentation
-```
 
 ___________________________________________
 
