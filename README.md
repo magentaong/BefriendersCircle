@@ -1,5 +1,5 @@
 
-# Befrienders Circle 🧡
+# Befrienders Circle
 
 **Element of Software Construction** project by Team C3T3.
 
