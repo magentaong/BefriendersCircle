@@ -1,29 +1,22 @@
-
-process.env.NODE_ENV = "test";
-process.env.OPENAI_API_KEY = "sk-test-key-for-testing-only";
-process.env.ASSISTANT_ID = "test-assistant-id";
-process.env.JWT_SECRET = "test-jwt-secret";
-process.env.MONGO_URI = "mongodb://localhost:27017/test";
-process.env.PORT = "5053";
-
-// Mock the server startup to prevent port conflicts
-const originalListen = require('http').Server.prototype.listen;
-require('http').Server.prototype.listen = function(port) {
-  // Only prevent server from starting if it's the default port
-  if (port === 5050) {
-    return this;
-  }
-  // Allow the server to start for testing
-  return originalListen.call(this, port);
-};
-
 require("dotenv").config();
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../../index");
+const express = require("express");
+const cors = require("cors");
 const ForumLike = require("../../models/ForumLike");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
+const likeRoutes = require("../../routes/like");
+const authRoutes = require("../../routes/auth");
+
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use("/api/like", likeRoutes);
+app.use("/api/auth", authRoutes);
+
+const connectTestDB = require("../../db");
 
 jest.setTimeout(10000);
 
@@ -33,6 +26,8 @@ let testPostId;
 
 // Setup: Create a test user, post, and get auth token
 beforeAll(async () => {
+  await connectTestDB();
+  
   // Create a test user
   const testUser = await User.create({
     email: "liketest@example.com",
@@ -72,14 +67,18 @@ afterAll(async () => {
     await Post.deleteOne({ pID: testPostId });
     await ForumLike.deleteMany({ cID: testUserId.toString() });
     
-    // Close mongoose connection
+    // Close mongoose connection properly
     if (mongoose.connection.readyState !== 0) {
       await mongoose.connection.close();
     }
     
-    // Force close any remaining handles
+    // Wait for connection to close
     await new Promise(resolve => {
-      setTimeout(resolve, 100);
+      if (mongoose.connection.readyState === 0) {
+        resolve();
+      } else {
+        mongoose.connection.once('disconnected', resolve);
+      }
     });
   } catch (error) {
     console.error('Cleanup error:', error);
@@ -447,6 +446,7 @@ describe("Like API", () => {
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toHaveProperty("message");
+    expect(res.body.message).toBe("Failed to fetch like status");
   });
 
   //=====TEST 11 - ERROR HANDLING=====
