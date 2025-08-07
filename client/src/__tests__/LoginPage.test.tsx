@@ -15,8 +15,12 @@ vi.mock("react-router-dom", async () => {
 
 // Mock login and register API
 vi.mock("../api/auth", () => ({
-  login: vi.fn(() => Promise.resolve({ token: "fake-token", cID: "123", isOnboarded: true })),
-  register: vi.fn(() => Promise.resolve({ token: "fake-token", cID: "456", isOnboarded: false })),
+  login: vi.fn(() =>
+    Promise.resolve({ token: "fake-token", cID: "123", isOnboarded: true })
+  ),
+  register: vi.fn(() =>
+    Promise.resolve({ token: "fake-token", cID: "456", isOnboarded: false })
+  ),
 }));
 
 describe("<LoginPage />", () => {
@@ -25,7 +29,7 @@ describe("<LoginPage />", () => {
     mockedNavigate.mockClear();
   });
 
-  // render cause need to render yes. 
+  // render cause need to render yes.
   it("Renders login form", () => {
     render(<LoginPage />, { wrapper: MemoryRouter });
     expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
@@ -41,6 +45,9 @@ describe("<LoginPage />", () => {
     expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
     expect(screen.queryByPlaceholderText("Email")).toBeInTheDocument();
     expect(screen.queryByPlaceholderText("Password")).toBeInTheDocument();
+    expect(
+      screen.queryByPlaceholderText("Confirm Password")
+    ).toBeInTheDocument();
     expect(screen.getByText("Register")).toBeInTheDocument();
   });
 
@@ -84,18 +91,23 @@ describe("<LoginPage />", () => {
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password123" },
     });
+    fireEvent.change(screen.getByPlaceholderText("Confirm Password"), {
+      target: { value: "password123" },
+    });
     fireEvent.click(screen.getByText("Register"));
 
     await screen.findByText("Register");
     expect(localStorage.getItem("token")).toBe("fake-token");
     expect(mockedNavigate).toHaveBeenCalledWith("/onboarding");
 
-    // simulate logout by clearing local storage 
-    localStorage.clear(); 
-    mockedNavigate.mockClear(); 
+    // simulate logout by clearing local storage
+    localStorage.clear();
+    mockedNavigate.mockClear();
 
     const { login } = await import("../api/auth.ts");
-    (login as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Invalid credentials"));
+    (login as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Invalid credentials")
+    );
     // simulate logging in with wrong pass
     fireEvent.click(screen.getByText("Already have an account? Log in"));
     fireEvent.change(screen.getByPlaceholderText("Email"), {
@@ -106,11 +118,10 @@ describe("<LoginPage />", () => {
     });
     fireEvent.click(screen.getByText("Log In"));
 
-    await screen.findByText("Invalid credentials"); 
+    await screen.findByText("Invalid credentials");
     expect(mockedNavigate).not.toHaveBeenCalled();
-
   });
-  
+
   // Incorrect email
   it("shows validation error for incorrect email", async () => {
     render(<LoginPage />, { wrapper: MemoryRouter });
@@ -125,18 +136,23 @@ describe("<LoginPage />", () => {
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password123" },
     });
+    fireEvent.change(screen.getByPlaceholderText("Confirm Password"), {
+      target: { value: "password123" },
+    });
     fireEvent.click(screen.getByText("Register"));
 
     await screen.findByText("Register");
     expect(localStorage.getItem("token")).toBe("fake-token");
     expect(mockedNavigate).toHaveBeenCalledWith("/onboarding");
 
-    // simulate logout by clearing local storage 
-    localStorage.clear(); 
-    mockedNavigate.mockClear(); 
+    // simulate logout by clearing local storage
+    localStorage.clear();
+    mockedNavigate.mockClear();
 
     const { login } = await import("../api/auth.ts");
-    (login as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("Invalid credentials"));
+    (login as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
+      new Error("Invalid credentials")
+    );
     // simulate logging in with wrong email
     fireEvent.click(screen.getByText("Already have an account? Log in"));
     fireEvent.change(screen.getByPlaceholderText("Email"), {
@@ -147,12 +163,11 @@ describe("<LoginPage />", () => {
     });
     fireEvent.click(screen.getByText("Log In"));
 
-    await screen.findByText("Invalid credentials"); 
+    await screen.findByText("Invalid credentials");
     expect(mockedNavigate).not.toHaveBeenCalled();
-
   });
 
-  // Sucessful Registration 
+  // Sucessful Registration
   it("registers successfully and redirects to onboarding", async () => {
     render(<LoginPage />, { wrapper: MemoryRouter });
     fireEvent.click(screen.getByText("New here? Sign up"));
@@ -166,10 +181,13 @@ describe("<LoginPage />", () => {
     fireEvent.change(screen.getByPlaceholderText("Password"), {
       target: { value: "password123" },
     });
+    fireEvent.change(screen.getByPlaceholderText("Confirm Password"), {
+      target: { value: "password123" },
+    });
 
     fireEvent.click(screen.getByText("Register"));
 
-    await screen.findByText("Register"); 
+    await screen.findByText("Register");
     expect(localStorage.getItem("token")).toBe("fake-token");
     expect(mockedNavigate).toHaveBeenCalledWith("/onboarding");
   });
@@ -185,10 +203,9 @@ describe("<LoginPage />", () => {
     });
     fireEvent.click(screen.getByText("Log In"));
 
-    await screen.findByText("Log In"); 
+    await screen.findByText("Log In");
     expect(localStorage.getItem("token")).toBe("fake-token");
     expect(mockedNavigate).toHaveBeenCalledWith("/");
   });
-  
 });
 // TODO: Rewrite for cleaner tests if possible/ have time - mag

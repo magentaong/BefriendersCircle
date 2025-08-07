@@ -15,12 +15,20 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
 
   const [txt, setTxt] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
-
+  const [error, setError]= useState("");
   const [characterLimit] = useState(280);
+  
 
-  async function onSubmitClick() {
+  const onSubmitClick = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (txt.length > characterLimit) {
+      setError("Text exceeds character limit.");
+      return;
+    }
+
+    setError(""); // no error message if it is valid, so clear it
     clickFunction(txt, category, previewUrl);
-  }
+  };
 
   const upload = async (image: File) => {
     try {
@@ -56,17 +64,22 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
 
           <form className="flex flex-col gap-3 py-8" onSubmit={onSubmitClick}>
             {/*Upload Image only for catergory*/}
-            {(category == "Topics" || category == "Events") ?
-              (<div className="w-[70vw] sm:w-100">
-                <div className=" flex flex- gap-3 text-gray-500 items-center">
-                  <p className=" text-gray-500">{category} Name:</p>
-                  <input className="border-3 rounded-lg border-blossom p-2" placeholder="Name" id="catergory" type="text" onChange={(e) => setTxt(e.target.value)} required />
+            {(category === "Topics" || category === "Events") ? (
+              <div className="w-[70vw] sm:w-100">
+                <div className="flex gap-3 text-gray-500 items-center">
+                  <p className="text-gray-500">{category} Name:</p>
+                  <input
+                    className="border-3 rounded-lg border-blossom p-2"
+                    placeholder="Name"
+                    id="category"
+                    type="text"
+                    onChange={(e) => setTxt(e.target.value)}
+                    required
+                  />
                 </div>
 
-                <p className=" text-gray-500">{category} Image:</p>
+                <p className="text-gray-500">{category} Image:</p>
 
-
-                {/*Preview Image*/}
                 {previewUrl ? (
                   <div className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                     <img
@@ -74,27 +87,61 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
                       alt="add"
                       className="w-auto h-[19vh] sm:h-49 object-cover rounded shadow"
                     />
-                  </div>) : (
+                  </div>
+                ) : (
                   <label className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                     <img src="/Support/Add.png" alt="Add Image" className="w-8 h-8 mb-2" />
                     <span className="text-base font-medium text-gray-500">Add Image</span>
-                    <input className="border-3 hidden" data-testid="image-input" type="file" accept="image/*" name="image" onChange={handleFileChange} required />
+                    <input
+                      className="border-3 hidden"
+                      data-testid="image-input"
+                      type="file"
+                      accept="image/*"
+                      name="image"
+                      onChange={handleFileChange}
+                      required
+                    />
                   </label>
                 )}
-
-              </div>) : (<Form.Control as="textarea"
-                value={txt}
-                onChange={(e) => setTxt(e.target.value)}
-                placeholder="..."
-                className="w-[70vw] sm:w-100 h-[25vh] sm:h-50 p-2 border-3 rounded-sm border-blossom text-gray-500"
-                isInvalid={(txt.length > characterLimit)}
-                rows={5}
-              />)}
-
-              <Badge className='mt-3' bg={`${txt.length > characterLimit ? 'danger' : 'primary'}`}>{txt.length}/{characterLimit}</Badge>
-
-            <button className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center" type="submit">{buttonString}</button>
-
+              </div>
+            ) : (
+              <>
+                <Form.Control data-cy="post-textarea"
+                  as="textarea"
+                  name="message" // need this for testing..
+                  value={txt}
+                  onChange={(e) => {
+                    const newText = e.target.value;
+                    setTxt(newText);
+                    if (newText.length > characterLimit) {
+                      setError(`Text exceeds ${characterLimit} characters.`);
+                    } else {
+                      setError("");
+                    }
+                  }}
+                  placeholder="Type something to create a new post!"
+                  className="w-[70vw] sm:w-100 h-[25vh] sm:h-50 p-2 border-3 rounded-sm border-blossom text-gray-500"
+                  rows={5}
+                />
+                <div className="flex justify-between items-center mb-2"> 
+                  {error && (
+                    <Form.Text className="text-red-600 font-bold d-block mt-2 text-sm" data-cy="char-limit-error">
+                      {error}
+                    </Form.Text>
+                  )}
+                  <div className="flex justify-end w-full">
+                      <Badge className={`flex justify-end mt-2 text-charcoal px-2 py-1 rounded ${txt.length > characterLimit ? "bg-red-300" : "bg-gray-200"}`}>
+                        {txt.length}/{characterLimit}
+                      </Badge>
+                   </div>
+                </div>
+              </>
+            )}
+            <button type="submit" disabled={ txt.length > characterLimit} 
+              className={`text-charcoal rounded-sm px-4 py-2 max-w-xs self-center transition-all duration-200
+                        ${txt.length > characterLimit ? "bg-gray-200 cursor-not-allowed text-charcoal" : "bg-blossom hover:bg-blossom"}`}>
+              {buttonString}
+            </button>
           </form>
 
         </div>
