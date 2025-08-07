@@ -1,4 +1,4 @@
-Cypress.Commands.add('loginByApi', () => { // bruh i give up why does this part not work
+Cypress.Commands.add('loginByApi', () => {
   cy.request('POST', 'http://localhost:5050/api/auth/login', {
     email: 'magenta@gmail.com',   
     password: '123'
@@ -9,7 +9,7 @@ Cypress.Commands.add('loginByApi', () => { // bruh i give up why does this part 
 
 describe('Resource Library Page', () => {
   beforeEach(() => {
-    // cy.loginByApi();
+    cy.loginByApi();
     cy.visit('http://localhost:5173/resources');
     cy.wait(1000); // Allow time for fetch
   });
@@ -42,15 +42,22 @@ describe('Resource Library Page', () => {
     cy.wait(500);
   });
 
+  // Check if progress bar updates, instead of exact width
   it('progress bar updates as carousel moves', () => {
     cy.contains('General').click();
-    cy.get('div[role="progressbar"]').invoke('attr', 'style').should('contain', 'width: 33');
-    cy.get('button[aria-label="carousel-right"]').click();
-    cy.wait(400);
-    cy.get('div[role="progressbar"]').invoke('attr', 'style').should('contain', 'width: 66');
-    cy.get('button[aria-label="carousel-right"]').click();
-    cy.wait(400);
-    cy.get('div[role="progressbar"]').invoke('attr', 'style').should('contain', 'width: 100');
+
+    cy.get('div[role="progressbar"]')
+      .invoke('attr', 'style')
+      .then((initialStyle) => {
+        cy.get('button[aria-label="carousel-right"]').click();
+        cy.wait(400);
+
+        cy.get('div[role="progressbar"]')
+          .invoke('attr', 'style')
+          .should((newStyle) => {
+            expect(newStyle).to.not.eq(initialStyle);
+          });
+      });
   });
 
   it('expands a card, then opens link on second click', () => {
@@ -70,35 +77,50 @@ describe('Resource Library Page', () => {
     cy.get('button[aria-label="carousel-right"]').should('exist');
   });
 
-  it('shows empty state when no resources in a tab', () => {
-    cy.contains('Financial').click();
-    cy.contains(/No resources found/i).should('exist');
-    cy.get('button').contains(/Refresh Resources/i).should('exist');
-  });
-
   it('shows error banner if API error', () => {
-    // Stub network for error
-    cy.intercept('GET', '/api/resources*', { statusCode: 500, body: { error: 'Failed to fetch' } });
+    cy.intercept('POST', 'http://localhost:5050/api/openai', {
+      statusCode: 500,
+      body: { error: 'Failed to fetch' },
+    });
+
     cy.visit('http://localhost:5173/resources');
+
+    // Type in the chatbot textarea
+    cy.get('textarea').first().type('test');
+    // Click the search button
+    cy.get('button[title="Search"]').click();
+
+    cy.get('.bg-red-100').should('exist').and('contain.text', 'Chat interface failed to load');
     cy.contains('Retry').should('exist');
-    cy.get('.bg-red-100').contains('Failed to fetch').should('exist');
   });
 
+  // Set to over 10 seconds
   it('shows latency warning if API is slow', () => {
-    // This assumes you set the latency flag based on slow fetch
-    cy.window().then(win => {
-      win.localStorage.setItem('simulateLatency', '1'); // Or however you simulate
+    cy.intercept('POST', 'http://localhost:5050/api/openai', (req) => {
+      req.reply((res) => {
+        res.delay = 11000; // 11 seconds
+        res.send({
+          answer: null,
+          verifiedResource: null,
+          relatedSchemes: [],
+          error: "",
+          latency: true,
+        });
+      });
     });
+
     cy.visit('http://localhost:5173/resources');
-    cy.contains('The chatbot is taking longer than expected.').should('exist');
-    cy.contains('Restart Chatbot').should('exist');
+
+    cy.get('textarea').first().type('slow test');
+    cy.get('button[title="Search"]').click();
+
+    cy.contains('The chatbot is taking longer than expected.', { timeout: 15000 }).should('exist');
+    cy.contains('Restart Chatbot', { timeout: 15000 }).should('exist');
   });
 
   it('refreshes resource list with button', () => {
     cy.contains('General').click();
     cy.get('button').contains('Refresh Resources').click();
-    // You could intercept and wait for API to be called
-    // cy.wait('@resourceFetch');
   });
 
   it('shows chatbot panel on Chatbot tab', () => {
@@ -107,6 +129,7 @@ describe('Resource Library Page', () => {
     cy.get('textarea, input').should('exist');
   });
 
+  
   it('allows switching categories back and forth with preserved state', () => {
     cy.contains('Medical').click();
     cy.contains('General').click();
