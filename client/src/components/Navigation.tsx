@@ -24,7 +24,7 @@ export default function Navigation({ header }: NavigationProps) {
         <Link to="/">
           <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
         </Link>
-        <h1 className="text-lg md:text-xl font-bold text-charcoal">Training Centre</h1>
+        <h1 className="text-lg md:text-xl font-bold text-charcoal">{header}</h1>
         {isLoggedIn && (
           <Link to="/profile">
             <img src="/Avatar.png" alt="User Profile" className="h-8 w-8 md:h-10 md:w-10 rounded-full" />
