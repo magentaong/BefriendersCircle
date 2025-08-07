@@ -312,7 +312,7 @@ ___________________________________________
 
 ## License
 
-This project is developed as part of the Element of Software Construction course at the National University of Singapore.
+This project is developed as part of the Element of Software Construction course in Singapore University of Technology and Design. :)
 
 Team C3T3 - All rights reserved.
 
