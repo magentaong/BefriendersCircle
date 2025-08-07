@@ -129,43 +129,62 @@ describe("<TagsPanel />", () => {
     expect(screen.getByText("Chatbot").closest("button")).toHaveClass("bg-[#c9e2d6]");
   });
 
-  it("filters resources by tag selection (category filter)", () => {
+  it("shows tag filters when category is selected and displays resource cards when specific tag is clicked", () => {
     renderWithResourceChat({});
     // Click on a top-level tag (category) to filter resources
     fireEvent.click(screen.getByText("General"));
-    // After selecting "General", only resources from the General category should be shown
-    expect(screen.getByText("Community Support Groups")).toBeInTheDocument();
-    expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
-    // Resources from other categories should not be visible
-    expect(screen.queryByText("Healthcare Resources")).not.toBeInTheDocument();
-    expect(screen.queryByText("Financial Aid for Seniors")).not.toBeInTheDocument();
-    // The Tags panel should display tags for the General category with correct counts
+    
+    // After selecting "General", the Tags panel should display tags for the General category with correct counts
     // "support" tag is shared by two General resources, so it should show count 2
     expect(screen.getByText("support (2)")).toBeInTheDocument();
     // A tag unique to one resource (e.g., "community") should show count 1
     expect(screen.getByText("community (1)")).toBeInTheDocument();
+    expect(screen.getByText("social (1)")).toBeInTheDocument();
+    expect(screen.getByText("education (1)")).toBeInTheDocument();
+    
+    // Initially, no resource cards should be visible (only tag filters)
+    expect(screen.queryByText("Community Support Groups")).not.toBeInTheDocument();
+    expect(screen.queryByText("Senior Education Programs")).not.toBeInTheDocument();
+    
+    // Click on a specific tag to show filtered resources
+    fireEvent.click(screen.getByText("support (2)"));
+    
+    // After clicking "support" tag, both resources with "support" tag should be shown
+    expect(screen.getByText("Community Support Groups")).toBeInTheDocument();
+    expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
+    
+    // Resources from other categories should not be visible
+    expect(screen.queryByText("Healthcare Resources")).not.toBeInTheDocument();
+    expect(screen.queryByText("Financial Aid for Seniors")).not.toBeInTheDocument();
   });
 
   it("removes tag filter when clicking tag again or using Clear", () => {
     renderWithResourceChat({});
     fireEvent.click(screen.getByText("General"));
+    
     // Click on a specific tag in the Tags panel to filter within the General category
     const educationTag = screen.getByText("education (1)");
     fireEvent.click(educationTag);
+    
     // After filtering by "education", only resources with that tag should be shown
     expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
     expect(screen.queryByText("Community Support Groups")).not.toBeInTheDocument();
-    // Clicking the same tag again should remove the filter and restore all category resources
+    
+    // Clicking the same tag again should remove the filter and hide resource cards
     fireEvent.click(educationTag);
-    expect(screen.getByText("Community Support Groups")).toBeInTheDocument();
-    expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
+    expect(screen.queryByText("Community Support Groups")).not.toBeInTheDocument();
+    expect(screen.queryByText("Senior Education Programs")).not.toBeInTheDocument();
+    
     // Filter again by the same tag to test the Clear button
     fireEvent.click(screen.getByText("education (1)"));
+    expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
+    
     // Click the "Clear" button to remove the tag filter
     fireEvent.click(screen.getByText("Clear"));
-    // After clearing the filter, all resources in the category should be visible again
-    expect(screen.getByText("Community Support Groups")).toBeInTheDocument();
-    expect(screen.getByText("Senior Education Programs")).toBeInTheDocument();
+    
+    // After clearing the filter, resource cards should be hidden again
+    expect(screen.queryByText("Community Support Groups")).not.toBeInTheDocument();
+    expect(screen.queryByText("Senior Education Programs")).not.toBeInTheDocument();
   });
 
   // Not needed

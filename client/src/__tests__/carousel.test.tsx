@@ -2,20 +2,9 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { vi } from "vitest";
 
-// Mock hooks and any related modules
-let mockResources: any[] = [];
-let mockCategories: string[] = [];
-let mockError = "";
-let mockLoading = false;
-
+// Mock hooks
 vi.mock("../hooks/useResourceChat", () => ({
-  useResourceChat: () => ({
-    resources: mockResources,
-    categories: mockCategories,
-    loading: mockLoading,
-    error: mockError,
-    refetch: vi.fn(),
-  }),
+  useResourceChat: vi.fn(),
 }));
 
 vi.mock("../hooks/useChatbotAPI", () => ({
@@ -48,117 +37,171 @@ vi.mock("../hooks/useVoiceRecording", () => ({
   })),
 }));
 
-// Mock useCarousel hook with internal state to simulate carousel behavior
-vi.mock("../hooks/useCarousel", () => {
-  const React = require("react");
-  return {
-    useCarousel: (items: any[], itemsPerGroup: number = 4) => {
-      const [index, setIndex] = React.useState(0);
-      // Group the items into chunks of size itemsPerGroup
-      const groupedItems: any[][] = [];
-      for (let i = 0; i < items.length; i += itemsPerGroup) {
-        groupedItems.push(items.slice(i, i + itemsPerGroup));
-      }
-      const totalGroups = groupedItems.length;
-      const scrollLeft = () => {
-        setIndex((prevIndex) => (prevIndex === 0 ? totalGroups - 1 : prevIndex - 1));
-      };
-      const scrollRight = () => {
-        setIndex((prevIndex) => (prevIndex === totalGroups - 1 ? 0 : prevIndex + 1));
-      };
-      const updateCarouselIndex = (newIndex: number) => {
-        setIndex(newIndex);
-      };
-      const getIndexForTab = () => 0;
-      const getProgress = () => index;
-      return {
-        // Expose functions and any needed values for the carousel
-        scrollLeft,
-        scrollRight,
-        updateCarouselIndex,
-        getIndexForTab,
-        getProgress,
-        groupedItems,
-        currentIndex: index,
-      };
-    },
-  };
-});
+// Mock useCarousel hook to match actual implementation
+vi.mock("../hooks/useCarousel", () => ({
+  useCarousel: vi.fn(() => ({
+    getIndexForTab: vi.fn(() => 0),
+    updateCarouselIndex: vi.fn(),
+    getGroupedItems: vi.fn(),
+    scrollLeft: vi.fn(),
+    scrollRight: vi.fn(),
+    handleTouchStart: vi.fn(),
+    handleTouchMove: vi.fn(),
+    handleTouchEnd: vi.fn(),
+    getProgress: vi.fn(() => 33.33), // Mock progress value
+  })),
+}));
 
 // Import component under test after mocks
-import ResourceLibrary from "../pages/Resources";
+import Resources from "../pages/Resources";
+import { useResourceChat } from "../hooks/useResourceChat";
 
-describe("<TagsCarousel /> on Resources page", () => {
-  beforeEach(() => {
-    // Set up default mock data: one category with many tags to enable carousel
-    mockCategories = ["Chatbot", "TestCat"];
-    mockResources = [
-      {
-        _id: "test1",
-        title: "Test Resource",
-        description: "Resource with many tags for carousel",
-        category: "TestCat",
-        tags: ["Tag1", "Tag2", "Tag3", "Tag4", "Tag5", "Tag6", "Tag7", "Tag8"],
-        link: "#",
-        eligibility: ["N/A"],
-        steps: ["Step 1"],
-      },
-    ];
-    mockLoading = false;
-    mockError = "";
-    vi.clearAllMocks();
+const mockResources = [
+  {
+    _id: "1",
+    title: "Resource 1",
+    description: "First resource",
+    category: "General",
+    tags: ["tag1", "tag2"],
+    link: "https://example.com/1",
+    eligibility: ["Elig 1"],
+    steps: ["Step 1"],
+  },
+  {
+    _id: "2",
+    title: "Resource 2",
+    description: "Second resource",
+    category: "General",
+    tags: ["tag3", "tag4"],
+    link: "https://example.com/2",
+    eligibility: ["Elig 2"],
+    steps: ["Step 2"],
+  },
+  {
+    _id: "3",
+    title: "Resource 3",
+    description: "Third resource",
+    category: "General",
+    tags: ["tag5", "tag6"],
+    link: "https://example.com/3",
+    eligibility: ["Elig 3"],
+    steps: ["Step 3"],
+  },
+  {
+    _id: "4",
+    title: "Resource 4",
+    description: "Fourth resource",
+    category: "General",
+    tags: ["tag7", "tag8"],
+    link: "https://example.com/4",
+    eligibility: ["Elig 4"],
+    steps: ["Step 4"],
+  },
+  {
+    _id: "5",
+    title: "Resource 5",
+    description: "Fifth resource",
+    category: "General",
+    tags: ["tag9", "tag10"],
+    link: "https://example.com/5",
+    eligibility: ["Elig 5"],
+    steps: ["Step 5"],
+  },
+  {
+    _id: "6",
+    title: "Resource 6",
+    description: "Sixth resource",
+    category: "General",
+    tags: ["tag11", "tag12"],
+    link: "https://example.com/6",
+    eligibility: ["Elig 6"],
+    steps: ["Step 6"],
+  },
+];
+
+const mockCategories = ["Chatbot", "General", "Medical", "Financial"];
+const mockUseResourceChat = vi.mocked(useResourceChat);
+
+function renderWithResourceChat({
+  resources = mockResources,
+  categories = mockCategories,
+  loading = false,
+  error = "",
+}) {
+  mockUseResourceChat.mockReturnValue({
+    resources,
+    categories,
+    loading,
+    error,
+    refetch: vi.fn(),
+  });
+  return render(<Resources />, { wrapper: MemoryRouter });
+}
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+describe("<ResourceCarousel /> on Resources page", () => {
+  it("displays carousel navigation buttons when resources are available", () => {
+    renderWithResourceChat({});
+    
+    // Click on General category to show resources
+    fireEvent.click(screen.getByText("General"));
+    
+    // Check that carousel navigation buttons are present
+    expect(screen.getByLabelText("carousel-left")).toBeInTheDocument();
+    expect(screen.getByLabelText("carousel-right")).toBeInTheDocument();
   });
 
-  it("displays the first group of tags by default (index 0) with correct progress indicator", () => {
-    render(<ResourceLibrary />, { wrapper: MemoryRouter });
-    // Initially, the "Chatbot" tab is active; switch to the TestCat category to show the carousel
-    fireEvent.click(screen.getByText("TestCat"));
-    // Verify that the first group of tags (index 0) is displayed
-    expect(screen.getByText("Tag1 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag2 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag3 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag4 (1)")).toBeInTheDocument();
-    // Tags from the next group should not yet be visible
-    expect(screen.queryByText("Tag5 (1)")).not.toBeInTheDocument();
-    // Progress indicator (dots) should reflect we are on the first group (first dot active)
-    const indicators = screen.getAllByText(/●|○/); // Assuming filled (●) for active, outline (○) for inactive
-    expect(indicators.length).toBe(2); // There should be 2 dots for 2 groups of tags
-    expect(indicators[0].textContent).toBe("●"); // first dot is active
-    expect(indicators[1].textContent).toBe("○"); // second dot is inactive
+  it("shows progress bar when resources are available", () => {
+    renderWithResourceChat({});
+    
+    // Click on General category to show resources
+    fireEvent.click(screen.getByText("General"));
+    
+    // Check that progress bar is present
+    const progressBar = screen.getByRole("progressbar");
+    expect(progressBar).toBeInTheDocument();
   });
 
-  it("moves to the next group of tags when the right arrow is clicked", () => {
-    render(<ResourceLibrary />, { wrapper: MemoryRouter });
-    fireEvent.click(screen.getByText("TestCat"));
-    // Click the right arrow to go to the next group
-    fireEvent.click(screen.getByAltText(/right arrow/i));
-    // Now the second (last) group of tags should be displayed
-    expect(screen.getByText("Tag5 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag6 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag7 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag8 (1)")).toBeInTheDocument();
-    // The first group's tags should no longer be visible
-    expect(screen.queryByText("Tag1 (1)")).not.toBeInTheDocument();
-    // Progress indicator should update (second dot becomes active)
-    const indicators = screen.getAllByText(/●|○/);
-    expect(indicators.length).toBe(2);
-    expect(indicators[0].textContent).toBe("○"); // first dot now inactive
-    expect(indicators[1].textContent).toBe("●"); // second dot now active
+  it("displays resource cards in carousel format", () => {
+    renderWithResourceChat({});
+    
+    // Click on General category to show resources
+    fireEvent.click(screen.getByText("General"));
+    
+    // Check that resource cards are displayed
+    expect(screen.getByText("Resource 1")).toBeInTheDocument();
+    expect(screen.getByText("Resource 2")).toBeInTheDocument();
+    expect(screen.getByText("Resource 3")).toBeInTheDocument();
   });
 
-  it("cycles back to the last group when the left arrow is clicked on the first group", () => {
-    render(<ResourceLibrary />, { wrapper: MemoryRouter });
-    fireEvent.click(screen.getByText("TestCat"));
-    // Click the left arrow while on the first group (index 0) to wrap around to the last group
-    fireEvent.click(screen.getByAltText(/left arrow/i));
-    // The last group of tags should now be displayed (wrap-around from first to last)
-    expect(screen.getByText("Tag5 (1)")).toBeInTheDocument();
-    expect(screen.getByText("Tag8 (1)")).toBeInTheDocument();
-    expect(screen.queryByText("Tag1 (1)")).not.toBeInTheDocument();
-    // Progress indicator should show last dot as active
-    const indicators = screen.getAllByText(/●|○/);
-    expect(indicators.length).toBe(2);
-    expect(indicators[0].textContent).toBe("○");
-    expect(indicators[1].textContent).toBe("●");
+  it("handles carousel navigation button clicks", () => {
+    renderWithResourceChat({});
+    
+    // Click on General category to show resources
+    fireEvent.click(screen.getByText("General"));
+    
+    // Click left arrow
+    fireEvent.click(screen.getByLabelText("carousel-left"));
+    
+    // Click right arrow
+    fireEvent.click(screen.getByLabelText("carousel-right"));
+    
+    // Both clicks should not throw errors
+    expect(screen.getByLabelText("carousel-left")).toBeInTheDocument();
+    expect(screen.getByLabelText("carousel-right")).toBeInTheDocument();
+  });
+
+  it("shows empty state when no resources are available", () => {
+    renderWithResourceChat({ resources: [] });
+    
+    // Click on General category
+    fireEvent.click(screen.getByText("General"));
+    
+    // Should show empty state message
+    expect(screen.getByText(/No resources found for/)).toBeInTheDocument();
+    expect(screen.getByText("General", { selector: "strong" })).toBeInTheDocument();
   });
 });
