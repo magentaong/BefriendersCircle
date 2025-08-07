@@ -36,7 +36,7 @@ export default function LoginPage() {
     <main className="min-h-screen flex flex-col items-center px-6 py-30 bg-white text-center">
       <img src="/ESC.svg" alt="Logo" className="w-15 mb-6" />
     {/* Back arrow */}
-    <div className="absolute top-10 left-6">
+    <div className="absolute top-10 left-8 md:top-15 md:left-50">
         <Link to="/">
         <button className="w-12 h-12 rounded-full bg-latte shadow text-lg flex items-center justify-center">
             <ArrowLeft className="w-6 h-6" />

@@ -173,7 +173,8 @@ export default function HomeSafetyLesson() {
         {/* Start Button */}
         {stage === "start" && hasLoaded && (
           <div className="flex flex-col items-center gap-4">
-            <p className="text-center text-charcoal text-base">{welcomeMessage}</p>
+            <p className="text-center text-charcoal text-base">You are trying to ensure your home is safe for your elderly parent to live in with you. What will you check first?</p>
+            <p className="text-center text-charcoal italic text-base">{welcomeMessage}</p>
             <SceneTextButton
               title="Start Simulation"
               bg="bg-serene"

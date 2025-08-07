@@ -7,6 +7,7 @@ import topicResources from "../content/Topic.json" // for testing, remove when c
 import Add from '../components/Forum/Add.tsx';
 import {getComments} from "../api/forum.ts";
 import SearchBar from '../components/common/SearchBar.tsx'; 
+import { Plus } from "lucide-react";
 
 // Type definition for a topic card
 interface Topic {
@@ -101,7 +102,7 @@ function Forum() {
             <div className="section-container bg-blossom p-8 rounded-xl">
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
                 <div className='flex flex-row content-center gap-7 align-middle'>
-                    <button onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
+                    <button className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>
                     {/* DIfferent type of Catergory heading */}
                     <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{category}</h1>
                 </div>

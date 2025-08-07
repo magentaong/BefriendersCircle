@@ -11,12 +11,16 @@ function Forum() {
   return (
     <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
       {/* Header with Logo and Profile */}
-      <Navigation header={ "Community Forum" } />
+      <Navigation header={"Community Forum"} />
 
-      <div className="flex items-center justify-between w-full mb-4 md:mb-6">
+      <div className="flex items-center justify-between w-full gap-2 mb-4 md:mb-6">
         <Link to="/training">
           <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center hover:scale-105"><ArrowLeft></ArrowLeft></button>
         </Link>
+
+        {/* Title Card */}
+        <h1 className="w-full h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center gap-2 md:text-lg font-bold text-charcoal">Community Forum</h1>
+
         <Link to="/resources">
           <button className="w-12 h-12 rounded-full bg-pistachio shadow text-lg flex items-center justify-center hover:scale-105"><ArrowRight></ArrowRight></button>
         </Link>

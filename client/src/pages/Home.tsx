@@ -4,7 +4,7 @@ import CardBase from "../components/common/CardBase";
 import { useState } from "react";
 import { useVoiceRecording } from "../hooks/useVoiceRecording";
 
-import elderlyImg from "/Community.png";     
+import elderlyImg from "/Community.png";
 import computerImg from "/Resources.png";
 import breathingImg from "/Training.png";
 
@@ -16,24 +16,27 @@ export default function Home() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const { isRecording, startRecording, stopRecording } = useVoiceRecording(setSearchQuery);
-  
+
   return (
-    <main className="w-full max-w-6xl mx-auto px-5 py-5">
+    <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
       {/* Header */}
       <header className="flex justify-between items-center mb-12">
-        <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-20 w-20" />
-  
+        <div className="flex justify-between gap-2 items-center ">
+          <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-12 w-12 md:h-15 md:w-15" />
+          <h1 className="text-lg md:text-xl font-bold text-charcoal">Befrienders Circle</h1>
+        </div>
+
         {isLoggedIn ? (
           <img
             src="/Avatar.png"
             alt="User Avatar"
-            className="h-15 w-15 rounded-full cursor-pointer"
-            onClick={() => navigate("/profile")} 
+            className="h-8 w-8 md:h-13 md:w-13 rounded-full cursor-pointer"
+            onClick={() => navigate("/profile")}
           />
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className="bg-latte text-charcoal font-heading text-lg px-5 py-2 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
+            className="bg-latte h-10 md:h-13 text-charcoal items-center justify-center font-heading text-lg px-5 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
           >
             Login
           </button>
@@ -43,13 +46,13 @@ export default function Home() {
 
       {/* Mic */}
       <section className="flex flex-col items-center gap-8 mb-16">
-          <button
-            onClick={isRecording ? stopRecording : startRecording}
-            aria-label={isRecording ? "Stop recording" : "Start recording"}
-            className={`w-32 h-32 rounded-full flex items-center justify-center shadow cursor-pointer transition-transform bg-latte ${isRecording ? "bg-red-400 animate-pulse" : "bg-latte"}`}
-          >
-            <Mic className={`w-15 h-15 text-charcoal hover:scale-105 ${isRecording ? "text-red-500" : ""}`} />
-          </button>
+        <button
+          onClick={isRecording ? stopRecording : startRecording}
+          aria-label={isRecording ? "Stop recording" : "Start recording"}
+          className={`w-32 h-32 rounded-full flex items-center justify-center shadow cursor-pointer transition-transform bg-latte ${isRecording ? "bg-red-400 animate-pulse" : "bg-latte"}`}
+        >
+          <Mic className={`w-15 h-15 text-charcoal hover:scale-105 ${isRecording ? "text-red-500" : ""}`} />
+        </button>
 
         {/* Search Bar */}
         <div className="flex items-center w-full max-w-xl border-3 border-canary rounded-2xl px-4 py-2 bg-white shadow-md">

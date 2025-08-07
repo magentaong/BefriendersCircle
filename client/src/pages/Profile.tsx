@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LogOut, Trash2, Pencil } from "lucide-react";
 import { fetchCurrentUser } from "../api/auth";
 import { useEffect, useState } from "react";
+import Navigation from "../components/Navigation";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -32,31 +33,9 @@ export default function Profile() {
   }, []);
 
   return (
-    <main className="w-full mx-auto px-5 py-5  max-w-md">
+    <main className="bg-white text-gray-800 px-8 py-6 w-full max-w-5xl mx-auto">
       {/* Header */}
-      <header className="w-full flex items-center justify-between mb-8">
-        <div className="flex items-center gap-2">
-          <Link to="/">
-            <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-15 w-15" />
-           </Link>  
-          <h1 className="text-xl font-bold text-gray-700">Profile</h1>
-        </div>
-
-        {/* see how we wanna deal with nav :O 
-        <div className="flex gap-3">
-          <Link to="/forum">
-            <button className="bg-blossom px-4 py-1 rounded-full text-charcoal shadow">Network</button>
-          </Link>
-          <Link to="/resources"> 
-            <button className="bg-pistachio px-4 py-1 rounded-full text-charcoal shadow">Resource</button>
-          </Link>
-          <Link to="/training"> 
-            <button className="bg-serene px-4 py-1 rounded-full text-charcoal shadow">Training</button>
-          </Link>
-          <img src="/Avatar.png" alt="Avatar" className="w-10 h-10 rounded-full border border-gray-300"/>
-        </div>
-        */}
-      </header>
+      <Navigation header={"Profile"} />
 
       {/* Profile Card */}
       <div className="flex justify-center"> 

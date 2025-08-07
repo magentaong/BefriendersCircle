@@ -3,6 +3,7 @@ import CategoryCard from "../common/CardBase"
 import SearchBar from '../common/SearchBar'; 
 import { initTopics, postTopic } from "../../api/forum";
 import Add from '../Forum/Add.tsx'
+import { Plus } from 'lucide-react';
 
 //Defines a single resource object with a name and image URL from database
 interface Resources {
@@ -71,18 +72,15 @@ export default function Category({category, header}: CategroryProps) {
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
                 <div className='flex flex-row content-center gap-[2vw] sm:gap-7 align-middle'>
                     {/* DIfferent type of Catergory heading */}
-                  <button className='w-[15vw] sm:w-100' onClick={() => setCreate(true)}><img src="/Support/Add.png" alt="add" /></button>
-                  <h1 className="self-auto text-left text-xl font-bold text-black leading-none self-center">{header}</h1>
+                    <button className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>
+                  <h1 className="self-auto text-left text-lg font-bold text-black leading-none self-center">{header}</h1>
                 </div>
               
-                 
                 <div className='flex flex-row gap-7 justify-self-end'>
                   {/* Search input field */}
                   <SearchBar onSearch={(query) => setSearchTerm(query)} placeholder={`Search ${header}...`}/>
                 </div>
-
               </div>
-              
 
                 {/* Popup to create new*/}
                 {create && (<Add closeFunction={setCreate} clickFunction={submitCategory} category={category} buttonString="Post"/>)}

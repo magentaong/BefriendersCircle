@@ -1,4 +1,4 @@
-import React, { useState } from "react";import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react"; import { Link, useLocation } from "react-router-dom";
 
 
 interface NavigationProps {
@@ -21,13 +21,15 @@ export default function Navigation({ header }: NavigationProps) {
     <>
       {/* Header with Logo and Profile */}
       <header className="flex justify-between items-center w-full mb-6 md:mb-8">
-        <Link to="/">
-          <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-10 w-10 md:h-12 md:w-12" />
-        </Link>
-        <h1 className="text-lg md:text-xl font-bold text-charcoal">{header}</h1>
+        <div className="flex justify-between gap-2 items-center ">
+          <Link to="/">
+            <img src="/ESC.svg" alt="BefriendersCircle Logo" className="h-12 w-12 md:h-15 md:w-15" />
+          </Link>
+          <h1 className="text-lg md:text-xl font-bold text-charcoal">Befrienders Circle</h1>
+        </div>
         {isLoggedIn && (
           <Link to="/profile">
-            <img src="/Avatar.png" alt="User Profile" className="h-8 w-8 md:h-10 md:w-10 rounded-full" />
+            <img src="/Avatar.png" alt="User Profile" className="h-10 w-10 md:h-13 md:w-13 rounded-full" />
           </Link>
         )}
       </header>

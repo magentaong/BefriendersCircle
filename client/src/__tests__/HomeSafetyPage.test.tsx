@@ -95,7 +95,9 @@ const setup = async () => {
     });
 
     render(<HomeSafetyPage />, { wrapper: MemoryRouter });
-    fireEvent.click(screen.getByText("Start Simulation"));
+
+    const startButton = await screen.findByText(/Start Simulation/i);
+    fireEvent.click(startButton);
 
     await waitFor(() => {
         expect(screen.getByText(/Your mum uses the kitchen often/i)).toBeInTheDocument()
@@ -124,7 +126,8 @@ describe("<HomeSafety />", () => {
     it("User clicks on start simulation and sees the question and options", async () => {
         render(<HomeSafetyPage />, { wrapper: MemoryRouter });
 
-        fireEvent.click(screen.getByText("Start Simulation"));
+        const startButton = await screen.findByText(/Start Simulation/i);
+        fireEvent.click(startButton);
 
         await waitFor(() => {
             expect(api.getTraining).toHaveBeenCalledWith("test-client-id", "Home Safety Simulation");
