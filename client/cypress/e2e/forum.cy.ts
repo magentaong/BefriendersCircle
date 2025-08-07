@@ -45,25 +45,35 @@ describe('Forum Page', () => {
   // 4 test case for add new category function
 
   it('want to add new topic but decide to close it', () => {
-     // Fill in Search Bar
+     // Fill in Add Forum
     cy.get('button img[alt="add"]').eq(0).click();
     cy.get('input[placeholder="Name"]').type("Test");
     cy.get('button img[alt="Close"]').click();
   })
 
    it('unsuccessful add new topic as only added topic Name', () => {
-     // Fill in Search Bar
+     // Fill in Add Forum
     cy.get('button img[alt="add"]').eq(0).click();
     cy.get('input[placeholder="Name"]').type("Test");
     cy.get('button').contains(/^Post$/).click();
+    
+    cy.get('input[type="file"][required]').then(($input) => {
+      const el = $input[0];                    // raw DOM element
+      expect(el.validity.valueMissing).to.be.true;  // check if "valueMissing" is true
+    });
   })
 
   it('unsuccessful add new topic as only added only topic Image', () => {
-     // Fill in Search Bar
+     // Fill in Add Forum
     cy.get('button img[alt="add"]').eq(0).click();
     cy.get('[data-testid="image-input"]').attachFile('Family.png');
     cy.get('img[alt="previewUrl"]').should('be.visible');       // wait for the component  
-    cy.get('button').contains(/^Post$/).click();
+    cy.get('button').contains(/^Post$/).click()
+
+    cy.get('input[required]').then(($input) => {
+      const el = $input[0];                    // raw DOM element
+      expect(el.validity.valueMissing).to.be.true;  // check if "valueMissing" is true
+    });
   })
 
    /*it("add a new Event", () => {
