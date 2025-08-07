@@ -46,7 +46,7 @@ router.post('/upload', upload.single('image'), (req, res) => {
 
   // Generate URL to access the uploaded image
   const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-
+  console.log(req.file.filename)
   // Respond with the image URL
   return res.json(imageUrl);
 });
