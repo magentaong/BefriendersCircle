@@ -1,3 +1,5 @@
+import 'cypress-file-upload';
+
 Cypress.Commands.add('loginByApi', () => {
   cy.request('POST', 'http://localhost:5050/api/auth/login', {
     email: 'magenta@gmail.com',
@@ -13,16 +15,63 @@ describe('Forum Page', () => {
       cy.visit('http://localhost:5173/forum');
     });
 
-  it('visit the post dashboard for fatigue topic', () => {
+  it('visit the post dashboard of fatigue topic that has post', () => {
      // Submit form
     cy.get('button').contains(/^Fatigue$/).click();
-
     // Expect redirection to homepage OR onboarding after signup
     cy.url().should("include", "/Fatigue");
   })
 
+  it('visit the post dashboard of family topic that does not have any post', () => {
+     // Submit form
+    cy.get('button').contains(/^Family$/).click();
+    // Expect redirection to homepage OR onboarding after signup
+    cy.url().should("include", "/Family");
+  })
+
+  //2 test case for search function
+
   it('search for certain topic', () => {
      // Fill in Search Bar
-    cy.get('input[placeholder="Search Topics..."]').type("hi");
+    cy.get('input[placeholder="Search Topics..."]').type("Family");
   })
+
+  it('search for certain topic but cannot and return', () => {
+     // Fill in Search Bar
+    cy.get('input[placeholder="Search Topics..."]').type("Test");
+    cy.get('input[placeholder="Search Topics..."]').clear();
+  })
+
+  // 4 test case for add new category function
+
+  it('want to add new topic but decide to close it', () => {
+     // Fill in Search Bar
+    cy.get('button img[alt="add"]').eq(0).click();
+    cy.get('input[placeholder="Name"]').type("Test");
+    cy.get('button img[alt="Close"]').click();
+  })
+
+   it('unsuccessful add new topic as only added topic Name', () => {
+     // Fill in Search Bar
+    cy.get('button img[alt="add"]').eq(0).click();
+    cy.get('input[placeholder="Name"]').type("Test");
+    cy.get('button').contains(/^Post$/).click();
+  })
+
+  it('unsuccessful add new topic as only added only topic Image', () => {
+     // Fill in Search Bar
+    cy.get('button img[alt="add"]').eq(0).click();
+    cy.get('[data-testid="image-input"]').attachFile('Family.png');
+    cy.get('img[alt="previewUrl"]').should('be.visible');       // wait for the component  
+    cy.get('button').contains(/^Post$/).click();
+  })
+
+   /*it("add a new Event", () => {
+      cy.get('button img[alt="add"]').eq(1).click();
+      // Fill in add form
+      cy.get('input[placeholder="Name"]').type("Test");
+      cy.get('[data-testid="image-input"]').attachFile('Family.png');
+      cy.get('img[alt="previewUrl"]').should('be.visible');       // wait for the component    
+      cy.get('button').contains(/^Post$/).click();
+    });*/
 })
