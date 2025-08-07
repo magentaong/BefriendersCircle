@@ -28,7 +28,7 @@ router.get('/details/:postId', async (req, res) => {
     res.json(post);
   } catch (error) {
     console.error(error);
-    res.status(error.status || 500).json({ message: "Failed to fetch post details" });
+    res.status(error.status || 500).json({ message: error.message || "Failed to fetch post details" });
   }
 });
 
@@ -39,7 +39,7 @@ router.delete('/details/:postId', async (req, res) => {
     res.json(post);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to fetch post details" });
+    res.status(500).json({message: error.message || "Failed to fetch post details" });
     } 
   });
 
@@ -50,7 +50,7 @@ router.get('/:name', async (req, res) => {
     res.json(result) 
   } catch (error) {
     console.error(error);
-    res.status(error.status || 500).json({ message: "Failed to fetch board" });
+    res.status(error.status || 500).json({message: error.message  ||  "Failed to fetch board" });
   }
 
 });

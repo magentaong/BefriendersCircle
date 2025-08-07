@@ -17,11 +17,7 @@ async function getTrainingByCIDAndTitle(cID, title) {
 }
 
 async function updateTraining(tID, updateData) {
-  const updatedTraining = await Training.findOneAndUpdate(
-    { tID },
-    updateData,
-    { new: true }
-  );
+  const updatedTraining = await Training.findOneAndUpdate({ tID }, updateData, { new: true });
 
   if (!updatedTraining) {
     const error = new Error("Training not found.");
@@ -43,14 +39,7 @@ async function createTraining({ tID, cID, title, coverImg }) {
     return { exists: true, training: existing };
   }
 
-  const newTraining = new Training({
-    tID,
-    cID,
-    title,
-    coverImg: coverImg || null,
-    status: false,
-    progress: 0,
-  });
+  const newTraining = new Training({ tID, cID, title, coverImg: coverImg || null, status: false, progress: 0,});
 
   const saved = await newTraining.save();
   return { exists: false, training: saved };

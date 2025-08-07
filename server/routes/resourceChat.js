@@ -1,6 +1,5 @@
 const express = require("express");
 const { createChatbotResource, getChatbotResources, deleteAllChatbotResources } = require("../controllers/resourceChat");
-
 const router = express.Router();
 
 // GET all chatbot resources
