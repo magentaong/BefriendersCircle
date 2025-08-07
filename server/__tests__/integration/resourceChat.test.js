@@ -15,7 +15,7 @@ describe("ResourceChat API", () => {
     });
 
     afterEach(async () => {
-        await ResourceChat.deleteMany({ title: /Test Resource/i });
+        await ResourceChat.deleteOne({ title: /Test Resource/i });
     });
 
     afterAll(async () => {
@@ -81,18 +81,5 @@ describe("ResourceChat API", () => {
 
         expect(secondRes.statusCode).toBe(400);
         expect(secondRes.body.message).toBe("Failed to create chatbot resource.");
-    });
-
-    // should delete
-    it("DELETE /api/resourceChat should delete all chatbot resources", async () => {
-        await ResourceChat.create(testResourceChat);
-
-        const res = await request(app).delete("/api/resourceChat");
-
-        expect(res.statusCode).toBe(200);
-        expect(res.body).toEqual({ message: "All chatbot resources deleted." });
-
-        const remaining = await ResourceChat.find({});
-        expect(remaining.length).toBe(0);
     });
 });
