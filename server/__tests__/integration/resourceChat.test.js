@@ -7,15 +7,19 @@ const ResourceChat = require("../../models/ResourceChat");
 jest.setTimeout(20000);
 
 describe("ResourceChat API", () => {
-    const testResourceChat = { title: "Test Resource", description: "Blahblah",
-};
+    const testResourcePrefix = `TEST_RESOURCE_${Date.now()}_`;
+    const testResourceChat = { 
+        title: `${testResourcePrefix}Test Resource`, 
+        description: "Blahblah"
+    };
 
     beforeAll(async () => {
         await mongoose.connect(process.env.MONGO_URI);
     });
 
     afterEach(async () => {
-        await ResourceChat.deleteOne({ title: /Test Resource/i });
+        // Only delete test resources with unique prefix
+        await ResourceChat.deleteOne({ title: { $regex: `^${testResourcePrefix}` } });
     });
 
     afterAll(async () => {
@@ -43,7 +47,7 @@ describe("ResourceChat API", () => {
             .send(testResourceChat);
 
         expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty("title", "Test Resource");
+        expect(res.body).toHaveProperty("title", `${testResourcePrefix}Test Resource`);
     });
     
     // missing title = no go

@@ -10,9 +10,10 @@ jest.setTimeout(20000);
 describe("Resource API", () => {
     const testEmail = "test@example.com";
     const testPassword = "123";
+    const testResourcePrefix = `TEST_RESOURCE_${Date.now()}_`;
     let token;
     const testResourceData = {
-        title: "test",
+        title: `${testResourcePrefix}test`,
         category: "General",
         url: "https://example.com"
     };
@@ -36,7 +37,7 @@ describe("Resource API", () => {
     });
 
     afterEach(async () => {
-        await Resource.deleteMany({ title: "Test" });
+        await Resource.deleteMany({ title: { $regex: `^${testResourcePrefix}` } });
     });
 
     afterAll(async () => {
@@ -63,7 +64,7 @@ describe("Resource API", () => {
         .send(testResourceData);
 
         expect(res.statusCode).toBe(201);
-        expect(res.body.title).toBe("test");
+        expect(res.body.title).toBe(`${testResourcePrefix}test`);
     });
 
     it("POST /api/resources should throw an error if resource data (title) is incomplete", async () => {

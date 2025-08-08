@@ -13,6 +13,9 @@ app.use(express.json());
 
 const connectTestDB = require("../../db");
 
+// Define test identifiers at the top level
+let testResourcePrefix = `TEST_RESOURCE_${Date.now()}_`;
+
 app.post("/api/openai", async (req, res) => {
   const { prompt, userId } = req.body;
   
@@ -40,7 +43,7 @@ app.post("/api/openai", async (req, res) => {
     await Chat.create({ userId, role: "user", content: prompt });
     await Chat.create({ userId, role: "assistant", content: mockResponse.reply });
     
-    const uniqueTitle = `Mocked Resource Title - ${Date.now()}`;
+    const uniqueTitle = `${testResourcePrefix}Mocked Resource Title - ${Date.now()}`;
     await ResourceChat.create({
       title: uniqueTitle,
       description: "This is a mocked resource description for testing purposes",
@@ -65,7 +68,9 @@ app.get("/api/openai", (req, res) => {
 
 jest.setTimeout(30000);
 
+//this is the test user, will only delete his data!!!
 let testUserId;
+let testUserEmail = `openaittest_${Date.now()}@example.com`;
 
 beforeAll(async () => {
   await connectTestDB();
@@ -73,30 +78,50 @@ beforeAll(async () => {
   let testUser;
   try {
     testUser = await User.create({
-      email: "openaittest@example.com",
+      email: testUserEmail,
       password: "StrongPassword123",
       name: "OpenAI Test User"
     });
   } catch (error) {
-    testUser = await User.findOne({ email: "openaittest@example.com" });
+    testUser = await User.findOne({ email: testUserEmail });
   }
   testUserId = testUser._id;
 });
 
 afterEach(async () => {
   if (testUserId) {
-    await Chat.deleteMany({ userId: testUserId.toString() });
-    await ResourceChat.deleteMany({ source: "Chatbot AI" });
+    //only delete chat messages created by this specific test user
+    await Chat.deleteMany({ 
+      userId: testUserId.toString(),
+      content: { $regex: /Mocked OpenAI response|Test prompt|concurrent request/i }
+    });
+    
+    //only delete test resources created during this test run
+    await ResourceChat.deleteMany({ 
+      source: "Chatbot AI",
+      title: { $regex: `^${testResourcePrefix}` }
+    });
   }
 });
 
 afterAll(async () => {
   try {
-    await User.deleteOne({ email: "openaittest@example.com" });
+    //only delete the specific test user created for this test run
+    await User.deleteOne({ email: testUserEmail });
+    
     if (testUserId) {
-      await Chat.deleteMany({ userId: testUserId.toString() });
+      //only delete chat messages for this specific test user
+      await Chat.deleteMany({ 
+        userId: testUserId.toString(),
+        content: { $regex: /Mocked OpenAI response|Test prompt|concurrent request/i }
+      });
     }
-    await ResourceChat.deleteMany({ source: "Chatbot AI" });
+    
+    // Only delete test resources created during this test run
+    await ResourceChat.deleteMany({ 
+      source: "Chatbot AI",
+      title: { $regex: `^${testResourcePrefix}` }
+    });
     
     if (mongoose.connection.readyState !== 0) {
       await mongoose.connection.close();
@@ -292,7 +317,10 @@ describe("OpenAI API", () => {
 
     // Check if resources were stored (if any were found)
     if (res.body.verifiedResource) {
-      const storedResources = await ResourceChat.find({ source: "Chatbot AI" });
+      const storedResources = await ResourceChat.find({ 
+        source: "Chatbot AI",
+        title: { $regex: `^${testResourcePrefix}` }
+      });
       expect(storedResources.length).toBeGreaterThanOrEqual(0);
     }
   });
@@ -450,8 +478,6 @@ describe("OpenAI API", () => {
 
   //=====TEST 19 - EMPTY RESPONSE HANDLING=====
   it("should handle empty OpenAI response gracefully", async () => {
-    // This test might pass or fail depending on OpenAI's response
-    // It's included to ensure the system handles edge cases
     const requestData = {
       prompt: "xyz123 completely unrelated topic that shouldn't match anything",
       userId: testUserId.toString()
@@ -470,8 +496,6 @@ describe("OpenAI API", () => {
 
   //=====TEST 20 - API KEY VALIDATION=====
   it("should handle missing or invalid API key gracefully", async () => {
-    // This test checks if the system handles API key issues
-    // Note: This might not be testable without actually removing the API key
     const requestData = {
       prompt: "Test prompt for API key validation",
       userId: testUserId.toString()
@@ -484,4 +508,5 @@ describe("OpenAI API", () => {
     // Should either succeed or return an appropriate error
     expect([200, 500]).toContain(res.statusCode);
   });
+
 });

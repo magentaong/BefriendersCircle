@@ -7,10 +7,18 @@ const User = require("../../models/User");
 jest.setTimeout(10000);
 
 
+// Create unique test identifiers
+let testUserEmails = [
+  `testuser_${Date.now()}@example.com`,
+  `testuser1_${Date.now()}@example.com`,
+  `testuser2_${Date.now()}@example.com`
+];
+
 afterEach(async () => {
-  await User.deleteOne({ email: "testuser@example.com" });
-  await User.deleteOne({ email: "testuser1@example.com" }); 
-  await User.deleteOne({ email: "testuser2@example.com" });//need delete cause if not test cases would always fail :<
+  // Only delete test users with unique timestamps
+  for (const email of testUserEmails) {
+    await User.deleteOne({ email: email });
+  }
 });
 
 afterAll(async () => {
@@ -21,7 +29,7 @@ describe("Auth API", () => {
     // Successful registration 
   it("should register a new user", async () => {
     const res = await request(app).post("/api/auth/register").send({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "StrongPassword123",
       confirmPassword: "StrongPassword123",
       name: "Test User"
@@ -33,13 +41,13 @@ describe("Auth API", () => {
     // Sign up with existing email
   it("should show error registration with existing email", async () => {
     await User.create({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "StrongPassword123",
       name: "Test User"
     });
 
     const res = await request(app).post("/api/auth/register").send({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "StrongPassword123",
       confirmPassword: "StrongPassword123",
       name: "Test User"
@@ -50,14 +58,14 @@ describe("Auth API", () => {
     // Login successfully
   it("should login successfully", async () => {
     await request(app).post("/api/auth/register").send({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "StrongPassword123",
       confirmPassword: "StrongPassword123",
       name: "Test User"
     });
 
     const res = await request(app).post("/api/auth/login").send({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "StrongPassword123"
     });
 
@@ -67,14 +75,14 @@ describe("Auth API", () => {
     // Incorrect password
   it("should fail login with wrong password", async () => {
     await request(app).post("/api/auth/register").send({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "WeakPassword123",
       confirmPassword: "WeakPassword123",
       name: "Test User"
     });
 
     const res = await request(app).post("/api/auth/login").send({
-      email: "testuser@example.com",
+      email: testUserEmails[0],
       password: "WrongPassword"
     });
 

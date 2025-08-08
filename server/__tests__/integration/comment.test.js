@@ -11,20 +11,22 @@ jest.setTimeout(10000);
 let authToken;
 let testUserId;
 let testPostId;
+let testUserEmail;
 
 // Setup: Create a test user, post, and get auth token
 beforeAll(async () => {
-  // Create a test user
+  // Create a test user with unique email
   const testUser = await User.create({
-    email: "commenttest@example.com",
+    email: `commenttest_${Date.now()}@example.com`,
     password: "StrongPassword123",
     name: "Comment Test User"
   });
   testUserId = testUser._id;
+  testUserEmail = testUser.email;
 
   // Login to get auth token
   const loginRes = await request(app).post("/api/auth/login").send({
-    email: "commenttest@example.com",
+    email: testUserEmail,
     password: "StrongPassword123"
   });
   authToken = loginRes.body.token;
@@ -46,7 +48,7 @@ afterEach(async () => {
 // Cleanup after all tests
 afterAll(async () => {
   try {
-    await User.deleteOne({ email: "commenttest@example.com" });
+    await User.deleteOne({ email: testUserEmail });
     await Post.deleteOne({ pID: testPostId });
     await Comment.deleteMany({ cID: testUserId.toString() });
     

@@ -58,11 +58,14 @@ if (langchainChatRoutes) {
 }
 
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
-const PORT = process.env.PORT || 5050;
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
 
-});
+// this makes the server run only if this file is run directly, and not imported for testing
+if (require.main === module) {
+  const PORT = process.env.PORT || 5050;
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+}
 
 
 if (process.env.NODE_ENV === "development") {
