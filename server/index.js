@@ -67,8 +67,12 @@ app.listen(PORT, () => {
 
 if (process.env.NODE_ENV === "development") {
   app.use("/api/test", testRoutes);
+  app.use("/api/boards", boardRoutes);
+  app.use("/api/training", trainingRoutes);
+  app.use("/api/post", postRoutes);
+  app.use("/api/comment", commentRoutes);
 }
 
 
-module.exports = app; 
+module.exports = app;
 

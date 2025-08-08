@@ -99,7 +99,7 @@ function Forum() {
     <Layout header="Community Forum"> 
         <section >
           <div id="stuorgs" className="section-container flex justify-center">
-            <div className="section-container bg-blossom p-8 rounded-xl">
+            <div className="section-container bg-blossom p-8 rounded-xl mt-8">
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
                 <div className='flex flex-row content-center gap-7 align-middle'>
                     <button className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>

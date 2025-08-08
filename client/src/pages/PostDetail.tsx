@@ -132,7 +132,7 @@ function PostDetail() {
 
 return (
     <Layout header="Community Forum">
-      <section className="w-full max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6">
+      <section className="w-full max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6 mt-4">
         <div className="bg-blossom rounded-2xl p-4 md:p-6 shadow-md">
           <PostCard
           topic={currentCategory}

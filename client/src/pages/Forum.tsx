@@ -26,7 +26,7 @@ function Forum() {
         </Link>
       </div>
 
-      <div className='flex flex-col content-center gap-7 md:gap-8'>
+      <div className='flex flex-col content-center gap-7 md:gap-8 mb-4'>
         {/* Category section for discussion topics */}
         <Category category="Topics" header="Topics"></Category>
         {/* Category section for discussion topics */}

@@ -10,12 +10,16 @@
   --color-serene: #B4DDE3;
   --color-pistachio: #BBDCCB;
   --color-latte: #D9CBC2;
-  --color-charcoal: #333333; /* for text */
-  --color-white: #FFFAFA; 
+  --color-charcoal: #333333;
+  /* for text */
+  --color-white: #FFFAFA;
 
-  --color-support: var(--color-blossom);     /* Community Support */
-  --color-resources: var(--color-pistachio); /* Caregiving Resources */
-  --color-training: var(--color-serene);     /* Specialised Training */
+  --color-support: var(--color-blossom);
+  /* Community Support */
+  --color-resources: var(--color-pistachio);
+  /* Caregiving Resources */
+  --color-training: var(--color-serene);
+  /* Specialised Training */
 
   --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.1);
 
@@ -25,7 +29,9 @@
   --radius-xl: 1.5rem;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -47,6 +53,7 @@ html, body, #root {
     opacity: 0;
     transform: translateY(5px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -60,18 +67,19 @@ html, body, #root {
 .speech-bubble::before {
   content: "";
   position: absolute;
-  bottom: 10px;    
-  left: -10px;       
+  bottom: 10px;
+  left: -10px;
   width: 0;
   height: 0;
   border-top: 10px solid transparent;
   border-bottom: 10px solid transparent;
-  border-right: 10px solid white; 
+  border-right: 10px solid white;
 }
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

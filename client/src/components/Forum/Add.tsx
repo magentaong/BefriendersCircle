@@ -21,8 +21,12 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
 
   const onSubmitClick = (e: React.FormEvent) => {
     e.preventDefault();
+    txt.replace(/\s+$/, "");
     if (txt.length > characterLimit) {
       setError("Text exceeds character limit.");
+    if ( txt.trim().length === 0) {
+      setError("Text cannot be empty")
+    }
       return;
     }
 
@@ -115,19 +119,20 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
                     setTxt(newText);
                     if (newText.length > characterLimit) {
                       setError(`Text exceeds ${characterLimit} characters.`);
-                    } else {
+                    } 
+                     else {
                       setError("");
                     }
                   }}
                   placeholder="Type something to create a new post!"
                   className="w-[70vw] sm:w-100 h-[25vh] sm:h-50 p-2 border-3 rounded-sm border-blossom text-gray-500"
                   rows={5}
-                />
+                /> 
                 <div className="flex justify-between items-center mb-2"> 
                   {error && (
-                    <Form.Text className="text-red-600 font-bold d-block mt-2 text-sm" data-cy="char-limit-error">
-                      {error}
-                    </Form.Text>
+                    <Form.Text className="text-red-600 font-bold d-block mt-2 text-sm" data-cy="error">
+                      {error} 
+                    </Form.Text> // HAIS
                   )}
                   <div className="flex justify-end w-full">
                       <Badge className={`flex justify-end mt-2 text-charcoal px-2 py-1 rounded ${txt.length > characterLimit ? "bg-red-300" : "bg-gray-200"}`}>
@@ -137,9 +142,9 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
                 </div>
               </>
             )}
-            <button type="submit" disabled={ txt.length > characterLimit} 
+            <button type="submit" data-cy="submit-post" disabled={ txt.length > characterLimit || txt.trim().length === 0} 
               className={`text-charcoal rounded-sm px-4 py-2 max-w-xs self-center transition-all duration-200
-                        ${txt.length > characterLimit ? "bg-gray-200 cursor-not-allowed text-charcoal" : "bg-blossom hover:bg-blossom"}`}>
+                        ${(txt.length > characterLimit|| txt.trim().length === 0)? "bg-gray-200 cursor-not-allowed text-charcoal" : "bg-blossom hover:bg-blossom"}`}>
               {buttonString}
             </button>
           </form>
