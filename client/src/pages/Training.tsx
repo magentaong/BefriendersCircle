@@ -69,7 +69,7 @@ export default function Training() {
         </Link>
 
         {/* Title Card */}
-        <h1 className="w-full h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center gap-2 md:text-lg font-bold text-charcoal">Training Centre</h1>
+        <h1 className="w-full h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center gap-2 text-sm sm:text-md md:text-lg font-bold text-charcoal">Training Centre</h1>
 
         {/* Right Arrow */}
         <Link to="/forum">
@@ -94,13 +94,13 @@ export default function Training() {
 
       {/* Module Card Grid - Mobile Responsive */}
       <section className="w-full flex-1 flex flex-col items-center">
-        <div className="bg-serene rounded-2xl p-4 md:p-6 w-full shadow">
+        <div className="bg-serene rounded-2xl p-5 md:p-8 w-full shadow">
           <h2 className="text-base md:text-lg font-bold mb-3 md:mb-4 text-center">
             {activeTab} Modules:
           </h2>
 
           {activeTab === "Home-Care" ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+            <div className="w-full grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] mt-5">
               {modules.map((mod) => {
                 const rawProgress = moduleProgress[mod.title] ?? 0;
                 const percent = Math.min((rawProgress / 12) * 100, 100); // cap at 100%
@@ -117,11 +117,11 @@ export default function Training() {
                       className="w-20 h-20 md:w-24 md:h-24 object-contain mb-2"
                       loading="lazy"
                     />
-                    <span className="font-heading text-xl md:text-base text-charcoal text-center mb-2">
+                    <span className="h-[20px] w-full text-center text-charcoal font-base text-base flex items-center justify-center text-lg md:text-md">
                       {mod.title}
                     </span>
 
-                    <div className="w-full max-w-[160px] h-2 bg-gray-200 rounded-full overflow-hidden relative mt-2">
+                    <div className="w-full max-w-[160px] h-2 bg-gray-200 rounded-full overflow-hidden relative mt-5">
                       <div
                         role="progressbar"
                         className="h-full bg-serene transition-all duration-300"

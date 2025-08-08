@@ -68,12 +68,12 @@ export default function Category({category, header}: CategroryProps) {
     return (
         <>
         <section>
-            <div className="section-container bg-blossom p-8 rounded-xl mt-4">
+            <div className="section-container bg-blossom p-5 md:p-8 rounded-xl">
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
                 <div className='flex flex-row content-center gap-[2vw] sm:gap-7 align-middle'>
                     {/* DIfferent type of Catergory heading */}
                     <button data-cy="open-add-modal" className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>
-                  <h1 className="self-auto text-left text-lg font-bold text-black leading-none self-center">{header}</h1>
+                  <h1 className="self-auto text-left text-base md:text-xl font-bold leading-none self-center">{header}</h1>
                 </div>
               
                 <div className='flex flex-row gap-7 justify-self-end'>
@@ -86,9 +86,9 @@ export default function Category({category, header}: CategroryProps) {
                 {create && (<Add closeFunction={setCreate} clickFunction={submitCategory} category={category} buttonString="Post"/>)}
 
                 {/* Grid of all/filtered resource cards */}
-                <div className="mt-5 grid grid-cols-2 gap-5">
+                <div className="w-full grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] mt-5">
                     {filteredResources.map(resource => (
-                        <div className="col-span-2 lg:col-span-1" key={resource.name}>
+                        <div key={resource.name}>
                             <CategoryCard title={resource.name} icon={resource.coverImg} bg="bg-white" path={`./${resource.name}`}/>
                         </div>
                     ))}

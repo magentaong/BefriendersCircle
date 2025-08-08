@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, FlagTriangleRight, Heart, MessageSquareMore } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { div } from "three/tsl";
@@ -25,11 +25,11 @@ interface PostCardProps {
 }
 
 const negativeWords = ["bad", "wrong", "ugly", "awful", "terrible", "horrible", "nasty", "poor", "lousy", "disgusting",
-    "hate", "rage", "furious", "annoying", "bitter", "resentful", "hostile", "spiteful", "vicious", "vindictive",
-    "sad", "depressed", "miserable", "hopeless", "heartbroken", "gloomy", "lonely", "despairing", "downcast", "melancholy",
-    "scared", "anxious", "nervous", "frightened", "panicked", "terrified", "paranoid", "uncertain", "worried", "apprehensive",
-    "incompetent", "ineffective", "untrustworthy", "dishonest", "lazy", "irresponsible", "rude", "arrogant", "ignorant", "selfish",
-    "fuck", "shit", "damn", "bastard", "bitch", "crap", "asshole", "jerk", "moron", "idiot"]
+  "hate", "rage", "furious", "annoying", "bitter", "resentful", "hostile", "spiteful", "vicious", "vindictive",
+  "sad", "depressed", "miserable", "hopeless", "heartbroken", "gloomy", "lonely", "despairing", "downcast", "melancholy",
+  "scared", "anxious", "nervous", "frightened", "panicked", "terrified", "paranoid", "uncertain", "worried", "apprehensive",
+  "incompetent", "ineffective", "untrustworthy", "dishonest", "lazy", "irresponsible", "rude", "arrogant", "ignorant", "selfish",
+  "fuck", "shit", "damn", "bastard", "bitch", "crap", "asshole", "jerk", "moron", "idiot"]
 
 const PostCard: React.FC<PostCardProps> = ({ topic, post, comments, liked, likesCount, handleToggleLike }) => {
 
@@ -41,84 +41,74 @@ const PostCard: React.FC<PostCardProps> = ({ topic, post, comments, liked, likes
 
   //Function for create new catergory
   const check = async () => {
-     try {
-       // Replace with actual createCategory function when available
-       console.log("Checking post...");
+    try {
+      // Replace with actual createCategory function when available
+      console.log("Checking post...");
       const wordList = post.message.toLowerCase().split(/\s+/);;
-      
+
       for (let checkword of wordList) {
-      if (negativeWords.includes(checkword)) {
+        if (negativeWords.includes(checkword)) {
           console.log("Report successfully");
           navigate(-1);
           const data = await deletePostDetail(post.pID);
-          
+
         }
-        else{
+        else {
           console.log("Report unsuccessful");
           setStatus(true)
         }
       }
-     } catch (error) {
-       console.error("Failed to report post:");
-     }
-        finally{
-          setTimeout(() => {
-            setReport(false);
-            setStatus(false)
-          }, 1000); // Delay for 1 second (1000 ms)
-        }
-       };
+    } catch (error) {
+      console.error("Failed to report post:");
+    }
+    finally {
+      setTimeout(() => {
+        setReport(false);
+        setStatus(false)
+      }, 1000); // Delay for 1 second (1000 ms)
+    }
+  };
 
   return (
-    <div className="p-6 bg-white max-w-full rounded-2xl shadow-md text-left">
+    <div className="p-4 md:p-6 bg-white max-w-full rounded-2xl shadow-md text-left">
       <div className="flex flex-row content-center gap-7 justify-between">
-        <h1 className="self-auto text-center text-2xl font-bold text-gray-600 leading-none self-center">{topic}</h1>
-        <button className="p-2" onClick={() => setReport(true)}><img src="/Support/Report.png" alt="add" /></button>
+        <h1 className="self-auto text-center text-2xl font-bold text-charcoal leading-none self-center">{topic}</h1>
+        <button className="w-10 h-10 rounded-full bg-blossom/50 shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setReport(true)}><FlagTriangleRight></FlagTriangleRight></button>
       </div>
       <div className="max-w-full rounded-2xl text-left">
         <div className="mb-4">
-          <p className="text-gray-700">{post.message}</p>
+          <p className="text-charcoal wrap-anywhere pt-2">{post.message}</p>
         </div>
-        <div className="flex justify-between text-gray-600 text-sm mb-4">
-          <Time time={post.createdAt}/>
-        </div>
-        <div className="flex space-x-8 text-gray-700 text-lg">
-          <div className="flex items-center space-x-2 cursor-pointer select-none">
-            <img src="/Support/Comment.png" alt="comments" className="w-6 h-6" />
-            <span>{comments}</span>
+        <div className="flex items-center justify-between w-full gap-2">
+          <div className="flex justify-between text-charcoal/75 text-sm mb-4">
+            <Time time={post.createdAt} />
           </div>
-        <div className="flex items-center space-x-2 cursor-pointer select-none" onClick={handleToggleLike}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className={`h-6 w-6 ${liked ? "fill-red-500 stroke-red-600" : "fill-none stroke-gray-500"}`}
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 21l-7.682-7.682a4.5 4.5 0 010-6.364z" />
-          </svg>
-          <span className="text-gray-700 font-semibold">{likesCount}</span>
+          <div className="h-[20px] text-charcoal font-base text-base flex items-center justify-end text-md gap-1 hover:scale-105" onClick={handleToggleLike}>
+            <p>{likesCount}</p>
+            <Heart></Heart>
+          </div>
         </div>
 
+        <div className="flex space-x-8 text-charcoal text-md">
           {/* Popup to create new*/}
-                {report && (
-                  <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-500/50 gap-5 overflow-hidden">
-                    <div className="bg-white p-8 rounded-xl">
-                      {!status ? (
-                        <div>
-                          <h2>Confirm to report this post?</h2>
-                          <div className="flex flex-row content-center gap-7 justify-between px-5 mt-2">
-                            <button onClick={check} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">Yes</button>
-                            <button onClick={() => setReport(false)} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center">No</button>
-                          </div>
-                        </div>
-                      ) : (
-                        <h2>Report unsuccessful</h2>
-                      )}
-                      
+          {report && (
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-500/50 gap-5 overflow-hidden">
+              <div className="bg-white p-8 rounded-xl">
+                {!status ? (
+                  <div>
+                    <h2>Are you sure you want to report this post?</h2>
+                    <div className="flex flex-row content-center gap-7 justify-between px-5 pt-5">
+                      <button onClick={check} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center hover:scale-105">Yes</button>
+                      <button onClick={() => setReport(false)} className="text-gray-500 rounded-sm bg-blossom px-4 py-2 whitespace-normal break-words max-w-xs self-center hover:scale-105">No</button>
                     </div>
                   </div>
+                ) : (
+                  <h2>Report unsuccessful.</h2>
                 )}
+
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

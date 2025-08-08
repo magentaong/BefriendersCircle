@@ -147,20 +147,18 @@ export default function HomeSafetyLesson() {
       <Navigation header={"Training Center"} />
 
       {/* Simulation Title */}
-      <div className="flex items-center w-full sticky top-0 bg-white z-10 py-4 px-2 md:px-4 mb-2">
+      <div className="flex items-center justify-between w-full gap-2 mb-4 md:mb-6">
         <Link to="/training">
-          <button className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-serene flex items-center justify-center mr-3 md:mr-4">
-            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
-          </button>
+          <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center hover:scale-105"><ArrowLeft></ArrowLeft></button>
         </Link>
-        <h1 className="text-sm md:text-base font-bold bg-serene px-3 md:px-4 py-2 rounded-xl text-center flex-grow">
+        <h1 className="w-full h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center gap-2 md:text-lg font-bold text-charcoal">
           Home Safety Simulation
         </h1>
       </div>
 
       {/* Simulation */}
       <div className="flex-1 flex flex-col items-center w-full px-2 pb-4">
-        <div className="relative w-full bg-serene rounded-xl overflow-hidden shadow-md flex items-center justify-center min-h-[400px] h-[50vh] my-4 p-4 md:p-8 max-w-4xl aspect-video">
+        <div className="relative w-full bg-serene rounded-xl overflow-hidden shadow-md flex items-center justify-center min-h-[400px] h-[50vh] md:h-[75vh] my-4 p-4 md:p-8 aspect-video">
           <div className="w-full h-full">
             <HomeSafetyScene
               activeAnimation={selectedAnimation}
@@ -188,7 +186,7 @@ export default function HomeSafetyLesson() {
         {stage === "question" && selectedAnimation === null && (
           <div className="w-full text-center">
             <p className="text-charcoal text-sm md:text-base mb-4">Q{currentIndex + 1}: {currentItem.question}</p>
-            <div className="flex justify-center gap-4 flex-wrap">
+            <div className="flex justify-center gap-2 flex-wrap">
               {currentItem.options.map((option, idx) => (
                 <SceneTextButton
                   key={idx}

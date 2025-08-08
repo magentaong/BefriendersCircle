@@ -39,7 +39,7 @@ const ChatbotPanel: React.FC<ChatbotPanelProps> = ({
   return (
     <div className="flex flex-col md:flex-row mt-6 gap-6">
       {/* Left Section */}
-      <div className="flex flex-col items-center w-full md:w-1/3 gap-4 bg-[#c9e2d6] p-4 rounded-2xl shadow relative">
+      <div className="flex flex-col items-center w-full md:w-1/3 gap-4 bg-[#c9e2d6] p-5 md:p-8 rounded-2xl shadow relative">
         <div
           role="button"
           aria-label="Microphone"
@@ -91,7 +91,7 @@ const ChatbotPanel: React.FC<ChatbotPanelProps> = ({
       </div>
 
       {/* Right Section */}
-      <div className="flex-1 bg-[#c9e2d6] rounded-2xl p-4 shadow relative">
+      <div className="flex-1 bg-[#c9e2d6] rounded-2xl p-5 md:p-8 shadow relative">
         <div className="flex justify-between items-center">
           <button
             title = "Previous"

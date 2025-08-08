@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout.tsx";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import PostCard from "../components/Forum/PostCard.tsx";
-import { initPostDetail, postComment, getComments,checkUserLiked, toggleLike } from "../api/forum.ts";
+import { initPostDetail, postComment, getComments, checkUserLiked, toggleLike } from "../api/forum.ts";
 import Time from "../components/Forum/Time.tsx";
+import { ArrowLeft } from "lucide-react";
+import Badge from "react-bootstrap/Badge";
 
 interface Comment {
   _id: string;
@@ -33,11 +35,12 @@ function PostDetail() {
   const [numComment, setNumComment] = useState(0);
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const cID = localStorage.getItem("cID") || "anonymous";
-
+  const [characterLimit] = useState(280);
 
   useEffect(() => {
     if (!postId) return;
@@ -52,11 +55,11 @@ function PostDetail() {
           setComments(data.comments || []);
           setLikesCount(data.post.likes);
         } else {
-          setError("Post not found.");
+          setLoadError("Post not found.");
         }
       })
       .catch(() => {
-        setError("Failed to load post details.");
+        setLoadError("Failed to load post details.");
       })
       .finally(() => setLoading(false));
 
@@ -66,29 +69,42 @@ function PostDetail() {
         console.log(data.length)
         setNumComment(data.length);
       } else {
-        setError("Comment Count not found.");
+        setLoadError("Comment Count not found.");
       }
     })
-    .catch(() => {
-      setError("Failed to load comment count.");
-    })
-    .finally(() => setLoading(false));
-    checkUserLiked(cID, postId).then(data => {setLiked(data.liked);});
-}, [postId]);
+      .catch(() => {
+        setLoadError("Failed to load comment count.");
+      })
+      .finally(() => setLoading(false));
+    checkUserLiked(cID, postId).then(data => { setLiked(data.liked); });
+  }, [postId]);
 
 
   const handleAddComment = async () => {
-    if (!postId || !newComment.trim()) return;
+    // Validate input first
+    if (newComment.length > characterLimit) {
+      setError(`Comment exceeds ${characterLimit} characters.`);
+      return;
+    }
+    if (newComment.trim().length === 0) {
+      setError("Comment cannot be empty.");
+      return;
+    }
 
+    setError("");
     setPosting(true);
+
     try {
-      const cID = localStorage.getItem("cID") || "anonymous";
-      const createdComment = await postComment(cID, postId, newComment.trim());
+      const userCID = localStorage.getItem("cID") || "anonymous";
+      if (!postId) throw new Error("Invalid post ID");
+
+      const createdComment = await postComment(userCID, postId, newComment.trim());
       setComments(prev => [...prev, createdComment]);
       setNewComment("");
-      setNumComment(prev => prev + 1); // Increment the comment count
+      setNumComment(prev => prev + 1);
     } catch (err) {
       console.error("Failed to post comment", err);
+      setError("Failed to post comment. Please try again.");
     } finally {
       setPosting(false);
     }
@@ -107,7 +123,6 @@ function PostDetail() {
     }
   };
 
-
   if (loading) {
     return (
       <Layout header="Loading...">
@@ -119,7 +134,7 @@ function PostDetail() {
     );
   }
 
-  if (error || !post) {
+  if (loadError || !post) {
     return (
       <Layout header="Error">
 
@@ -130,54 +145,104 @@ function PostDetail() {
   }
 
 
-return (
+  return (
     <Layout header="Community Forum">
-      <section className="w-full max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6 mt-4">
-        <div className="bg-blossom rounded-2xl p-4 md:p-6 shadow-md">
+      {/* Back Function */}
+      <div className="flex items-center justify-between w-full gap-2 mb-4 md:mb-6">
+        <Link to={"/forum/" + currentCategory}>
+          <button className="w-12 h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center hover:scale-105"><ArrowLeft></ArrowLeft></button>
+        </Link>
+
+        {/* Title Card */}
+        <h1 className="w-full h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center gap-2 text-sm sm:text-md md:text-lg font-bold text-charcoal">Community Forum</h1>
+
+      </div>
+
+      <section className="section-container flex w-full justify-center">
+        <div className="section-container w-full bg-blossom p-5 md:p-8 rounded-xl">
           <PostCard
-          topic={currentCategory}
-          comments={numComment}
-          post={post}
-          liked={liked}
-          likesCount={likesCount}
-          handleToggleLike={handleToggleLike}
+            topic={currentCategory}
+            comments={numComment}
+            post={post}
+            liked={liked}
+            likesCount={likesCount}
+            handleToggleLike={handleToggleLike}
           />
 
-            {comments.length > 0 ? (
-              <div className="mt-8 bg-gray-50 p-6 rounded-xl shadow overflow-y-auto max-h-[400px] w-full max-w-[600px]">
+          {/* View Comments */}
+          <div className="mt-5 md:mt-8 bg-white p-4 md:p-5 rounded-xl shadow w-full">
+            <h2 className="text-left text-xl font-bold text-charcoal leading-none self-center pb-5">Comments</h2>
 
-                <h2 className="self-auto text-left text-2xl font-bold text-gray-600 leading-none self-center pb-4">Comments</h2>
+            {comments.length > 0 ? (
+              <div className="pb-5 overflow-y-auto max-h-[400px]">
                 <ul className="space-y-4">
                   {comments.map((c) => (
-                    <li key={c._id} className="bg-white p-4 rounded-md shadow-sm">
-                      <p className="text-sm text-gray-500"> <Time time={c.createdAt}/></p>
+                    <li key={c._id} className="bg-blossom/50 p-4 rounded-md shadow-sm">
+                      <p className="text-sm text-gray-500"> <Time time={c.createdAt} /></p>
                       <p className="mt-2 text-gray-800">{c.message}</p>
                     </li>
                   ))}
                 </ul>
               </div>
             ) : (
-              <p className="mt-8 text-center text-gray-500">No comments yet.</p>
+              <p className="text-center text-charcoal">No comments yet.</p>
             )}
+          </div>
 
-          <div className="mt-6 md:mt-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
-            <h3 className="text-base md:text-lg font-bold text-charcoal mb-3 md:mb-4">Add a Comment</h3>
+          <div className="mt-5 md:mt-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
+            <h3 className="text-base md:text-lg font-bold text-charcoal mb-3 md:mb-4">
+              Add a Comment
+            </h3>
+
             <textarea
               value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
+              onChange={(e) => {
+                const text = e.target.value;
+                setNewComment(text);
+
+                if (text.length > characterLimit) {
+                  setError(`Comment exceeds ${characterLimit} characters.`);
+                } else {
+                  setError("");
+                }
+              }}
               placeholder="Share your thoughts..."
-              className="w-full p-3 md:p-4 border-2 border-canary rounded-xl bg-white text-charcoal placeholder:text-gray-500 focus:outline-none resize-none"
+              className="w-full p-3 md:p-4 border-2 border-blossom rounded-xl bg-white text-charcoal placeholder:text-gray-500 focus:outline-none resize-none break-words"
               rows={3}
               disabled={posting}
             />
+
+            <div className="flex items-center justify-between mt-6">
+              {/* Error message */}
+              <div className="min-w-[100px]">
+                {error && (
+                  <p className="text-red-600 font-bold text-sm m-0 text-overflow">
+                    {error}
+                  </p>
+                )}
+              </div>
+
+              {/* Right Counter */}
+              <Badge
+                className={`px-2 py-1 rounded ${newComment.length > characterLimit ? "bg-red-300" : "bg-gray-200"}`}
+              >
+                {newComment.length}/{characterLimit}
+              </Badge>
+            </div>
+
             <button
               onClick={handleAddComment}
-              disabled={!newComment.trim() || posting}
-              className={`mt-3 md:mt-4 px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold transition-all ${
-                newComment.trim() && !posting
-                  ? "bg-latte text-charcoal hover:brightness-90"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              disabled={
+                !newComment.trim() ||
+                posting ||
+                newComment.length > characterLimit
+              }
+              className={`mt-3 md:mt-4 px-4 md:px-6 py-2 md:py-3 rounded-xl font-semibold transition-all ${newComment.trim() &&
+                !posting &&
+                newComment.length <= characterLimit
+                ? "bg-latte text-charcoal hover:brightness-90"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
             >
               {posting ? "Posting..." : "Post Comment"}
             </button>

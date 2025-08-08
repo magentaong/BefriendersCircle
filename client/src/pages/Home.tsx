@@ -36,7 +36,7 @@ export default function Home() {
         ) : (
           <button
             onClick={() => navigate("/login")}
-            className="bg-latte h-10 md:h-13 text-charcoal items-center justify-center font-heading text-lg px-5 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
+            className="bg-latte h-10 md:h-13 text-charcoal items-center justify-center font-base font-bold text-lg px-5 rounded-2xl shadow-md transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-90"
           >
             Login
           </button>

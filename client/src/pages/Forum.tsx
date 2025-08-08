@@ -19,14 +19,14 @@ function Forum() {
         </Link>
 
         {/* Title Card */}
-        <h1 className="w-full h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center gap-2 md:text-lg font-bold text-charcoal">Community Forum</h1>
+        <h1 className="w-full h-12 rounded-full bg-blossom shadow text-lg flex items-center justify-center gap-2 text-sm sm:text-md md:text-lg font-bold text-charcoal">Community Forum</h1>
 
         <Link to="/resources">
           <button className="w-12 h-12 rounded-full bg-pistachio shadow text-lg flex items-center justify-center hover:scale-105"><ArrowRight></ArrowRight></button>
         </Link>
       </div>
 
-      <div className='flex flex-col content-center gap-7 md:gap-8 mb-4'>
+      <div className='w-full flex flex-col content-center gap-7 md:gap-8 mb-4'>
         {/* Category section for discussion topics */}
         <Category category="Topics" header="Topics"></Category>
         {/* Category section for discussion topics */}

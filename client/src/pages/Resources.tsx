@@ -219,7 +219,7 @@ export default function ResourceLibrary() {
         </Link>
 
         {/* Title Card */}
-        <h1 className="w-full h-12 rounded-full bg-pistachio shadow text-lg flex items-center justify-center gap-2 md:text-lg font-bold text-charcoal">Resource Library</h1>
+        <h1 className="w-full h-12 rounded-full bg-pistachio shadow text-lg flex items-center justify-center gap-2 text-sm sm:text-md md:text-lg font-bold text-charcoal">Resource Library</h1>
 
         <Link to="/training">
           <button className="w-12 h-12 rounded-full bg-serene shadow text-lg flex items-center justify-center hover:scale-105"><ArrowRight></ArrowRight></button>
