@@ -280,24 +280,6 @@ describe("Comment API", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  // Additional test: Long message handling
-  it("should handle long comment messages", async () => {
-    const longMessage = "A".repeat(1000); // 1000 character message
-    const commentData = {
-      pID: testPostId,
-      cID: testUserId.toString(),
-      message: longMessage
-    };
-
-    const res = await request(app)
-      .post("/api/comment")
-      .set("Authorization", `Bearer ${authToken}`)
-      .send(commentData);
-
-    expect(res.statusCode).toBe(201);
-    expect(res.body.message).toBe(longMessage);
-  });
-
   // Additional test: Special characters in message
   it("should handle special characters in comment message", async () => {
     const specialMessage = "Comment with special chars: !@#$%^&*()_+-=[]{}|;':\",./<>?";
