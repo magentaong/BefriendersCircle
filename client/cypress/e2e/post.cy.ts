@@ -37,14 +37,14 @@ describe('Forum Page', () => {
   // Test Case for Add function
   it('want to add new topic but decide to close it', () => {
      // Fill in Add Forum
-    cy.get('button img[alt="add"]').eq(0).click();
-    cy.get('textarea[placeholder="..."]').type("Test");
+    cy.get('[data-testid="add"]').click();
+    cy.get('textarea[placeholder="Type something to create a new post!"]').type("Test");
     cy.get('button img[alt="Close"]').click();
   })
 
   /*it("add a new Post", () => {
-      cy.get('button img[alt="add"]').eq(0).click();
-      cy.get('textarea[placeholder="..."]').type("Testing");
+      cy.get('[data-testid="add"]').eq(0).click();
+      cy.get('textarea[placeholder="Type something to create a new post!"]').type("Testing");
       cy.get('button').contains(/^Create$/).click();
     });*/
   

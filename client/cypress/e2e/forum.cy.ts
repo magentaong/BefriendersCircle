@@ -46,14 +46,14 @@ describe('Forum Page', () => {
 
   it('want to add new topic but decide to close it', () => {
      // Fill in Add Forum
-    cy.get('button img[alt="add"]').eq(0).click();
+    cy.get('[data-testid="add"]').eq(0).click();
     cy.get('input[placeholder="Name"]').type("Test");
     cy.get('button img[alt="Close"]').click();
   })
 
    it('unsuccessful add new topic as only added topic Name', () => {
      // Fill in Add Forum
-    cy.get('button img[alt="add"]').eq(0).click();
+    cy.get('[data-testid="add"]').eq(0).click();
     cy.get('input[placeholder="Name"]').type("Test");
     cy.get('button').contains(/^Post$/).click();
     
@@ -65,19 +65,14 @@ describe('Forum Page', () => {
 
   it('unsuccessful add new topic as only added only topic Image', () => {
      // Fill in Add Forum
-    cy.get('button img[alt="add"]').eq(0).click();
+    cy.get('[data-testid="add"]').eq(0).click();
     cy.get('[data-testid="image-input"]').attachFile('Family.png');
     cy.get('img[alt="previewUrl"]').should('be.visible');       // wait for the component  
-    cy.get('button').contains(/^Post$/).click()
-
-    cy.get('input[required]').then(($input) => {
-      const el = $input[0];                    // raw DOM element
-      expect(el.validity.valueMissing).to.be.true;  // check if "valueMissing" is true
-    });
+    cy.get('[data-cy="submit-post"]').should('be.disabled').click({ force: true });
   })
 
    /*it("add a new Event", () => {
-      cy.get('button img[alt="add"]').eq(1).click();
+      cy.get('[data-testid="add"]').eq(1).click();
       // Fill in add form
       cy.get('input[placeholder="Name"]').type("Test");
       cy.get('[data-testid="image-input"]').attachFile('Family.png');

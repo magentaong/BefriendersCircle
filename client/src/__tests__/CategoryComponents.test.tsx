@@ -43,7 +43,7 @@ describe("<CategoryPage />", async() => {
   it("Renders Events dashboard", async () => {
     render(<CategoryPage category="Events" header="Events" />, { wrapper: MemoryRouter });
     // Check Add Button
-    expect(screen.getAllByAltText("add"));
+    expect(screen.getByTestId("add"));
     // Check Search Bar
     expect(screen.getByPlaceholderText("Search Events...")).toBeInTheDocument();
     // Check Board Title
@@ -59,7 +59,7 @@ describe("<CategoryPage />", async() => {
   // render cause need to render yes. 
   it("Has been click and goes to the post dashboard", async () => {
     render(<CategoryPage category="Events" header="Events" />, { wrapper: MemoryRouter });
-    expect(screen.getAllByAltText("add"));
+    expect(screen.getByTestId("add"));
     expect(screen.getByPlaceholderText("Search Events...")).toBeInTheDocument();
     expect(screen.getByText("Events")).toBeInTheDocument();
     expect(await screen.findByText("Family")).toBeInTheDocument();
@@ -76,7 +76,7 @@ describe("<CategoryPage />", async() => {
   // Toggle to add popup when user clicks "Add"
     it("toggles to add Event Page", () => {
       render(<CategoryPage category="Events" header="Events"/>, { wrapper: MemoryRouter });
-      fireEvent.click(screen.getByAltText("add")); // click on add button
+      fireEvent.click(screen.getByTestId("add")); // click on add button
       // Add Page Close button
       expect(screen.getByAltText("Close")).toBeInTheDocument();
       // Add Page Title
@@ -95,7 +95,7 @@ describe("<CategoryPage />", async() => {
     // Toggle back to forum when user clicks "close"
       it("toggles back to Category Page", async() => {
         render(<CategoryPage category="Events" header="Events"/>, { wrapper: MemoryRouter });
-        fireEvent.click(screen.getByAltText("add")); // click on add button
+        fireEvent.click(screen.getByTestId("add")); // click on add button
         
         // Check render Add Page (Same as the toggle to add Event Page)
         expect(screen.getByAltText("Close")).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe("<CategoryPage />", async() => {
         fireEvent.click(screen.getByAltText("Close")); // click on close button
         
         // Check return to Event Borad (Same as test case Render Event dashboard)
-        expect(screen.getAllByAltText("add"));
+        expect(screen.getByTestId("add"));
         expect(screen.getByPlaceholderText("Search Events...")).toBeInTheDocument();
         expect(screen.getByText("Events")).toBeInTheDocument();
         expect(await screen.findByText("Family")).toBeInTheDocument();
@@ -120,7 +120,7 @@ describe("<CategoryPage />", async() => {
       it("creates a new Event post", async () => {
         render(<CategoryPage category="Events" header="Events" />, {wrapper: MemoryRouter,});
 
-        fireEvent.click(screen.getByAltText("add"));
+        fireEvent.click(screen.getByTestId("add"));
         // Fill in the name input
         fireEvent.change(screen.getByPlaceholderText("Name"), { 
           target: { value: "Testing" } });

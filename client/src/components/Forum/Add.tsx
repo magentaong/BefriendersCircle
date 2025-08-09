@@ -88,7 +88,7 @@ const Add = ({ closeFunction, clickFunction, category, buttonString }: AddProps)
                   <div className="border-3 rounded-lg border-blossom p-2 flex flex-col items-center justify-center h-[20vh] sm:h-50">
                     <img
                       src={previewUrl}
-                      alt="add"
+                      alt="previewUrl"
                       className="w-auto h-[19vh] sm:h-49 object-cover rounded shadow"
                     />
                   </div>
