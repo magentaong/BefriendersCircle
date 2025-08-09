@@ -15,7 +15,7 @@ describe('Resource Library Page', () => {
   });
 
   it('shows header, logo, profile, and navigation links', () => {
-    cy.get('header').contains('Resource Library');
+    cy.get('h1').should('contain', 'Resource Library')
     cy.get('img[alt="BefriendersCircle Logo"]').should('be.visible');
     cy.get('a[href="/profile"] img[alt="User Profile"]').should('exist');
     cy.get('a[href="/forum"]').should('exist');
