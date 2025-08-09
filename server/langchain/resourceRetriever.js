@@ -1,10 +1,13 @@
+// Retrieve resources from database, primary is vector embeddings using Langchain, fallback is MongoDB regex
 const Resource = require("../models/Resource");
+
+// Vector store functionality for semantic serach
 const { getResourceVectorStore } = require("./resourceVectorstore");
 
-//  Get a LangChain retriever for Resource documents.
+//  Get a LangChain retriever for Resource documents, k = number of documents to retrieve
 async function getResourceRetriever(k = 5) {
   try {
-    // Try vector store
+    // Try vector store, use embeddings to find similar document
     const vectorStore = await getResourceVectorStore();
     return vectorStore.asRetriever(k);
   } catch (err) {
@@ -12,9 +15,9 @@ async function getResourceRetriever(k = 5) {
     return {
     // Fallback function mimicking retriever.getRelevantDocuments(query)
       getRelevantDocuments: async (query) => {
-        const regex = new RegExp(query, "i");
+        const regex = new RegExp(query, "i"); // Case-sensitive regex pattern from user query
         const results = await Resource.find({
-          $or: [
+          $or: [ // MongoDB keyword matching, matches if any condition is true
             { title: regex },
             { description: regex },
             { category: regex },

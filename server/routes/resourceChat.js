@@ -1,10 +1,12 @@
 const express = require("express");
+// Import OpenAI chat controller with RAG functionality
 const { createChatbotResource, getChatbotResources, deleteAllChatbotResources } = require("../controllers/resourceChat");
 const router = express.Router();
 
 // GET all chatbot resources
 router.get("/", async (req, res) => {
   try {
+    // Obtain filtered resources and categories
     const data = await getChatbotResources();
     res.json(data);
   } catch (error) {
@@ -28,7 +30,7 @@ router.post("/", async (req, res) => {
 // DELETE all chatbot resources 
 router.delete("/", async (req, res) => {
   try {
-    const result = await deleteAllChatbotResources();
+    const result = await deleteAllChatbotResources(); // WIPES ALL RESOURCES
     res.json(result);
   } catch (error) {
     console.error("[Error] Failed to delete chatbot resources:", error);

@@ -1,5 +1,6 @@
 const express = require("express");
 const OpenAI = require("openai");
+// Import OpenAI chat controller with RAG functionality
 const {handleChat} = require("../controllers/openai")
 require("dotenv").config();
 
@@ -12,6 +13,6 @@ router.get("/", (req, res) => {
 });
 
 // Main POST route for chatbot
-router.post("/", handleChat);
+router.post("/", handleChat); // Vector search to prompt building and response processing
 
 module.exports = router;

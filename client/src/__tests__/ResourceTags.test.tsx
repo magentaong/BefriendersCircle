@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import TagFilterGrid from "../components/resources/TagFilterGrid";
 import type { ResourceChat } from "../hooks/useResourceChat";
 
+// 4 mock resources with different tags
 const mockResources: ResourceChat[] = [
   {
     _id: "1",
@@ -35,9 +36,12 @@ const mockResources: ResourceChat[] = [
 
 const mockRenderContent = () => <div>content</div>;
 
+// Testing for TagFilterGrid component
 describe("<TagFilterGrid />", () => {
+  // Checked for tags appearing in resource cards
   it("renders all unique tags with correct counts", () => {
     render(
+      // Render with no selected tag 
       <TagFilterGrid
         resources={mockResources}
         renderContent={mockRenderContent}
@@ -67,6 +71,7 @@ describe("<TagFilterGrid />", () => {
     expect(screen.getByText(/social\s*\(\s*1\s*\)/i)).toBeInTheDocument();
   });
 
+  // Tested specifically for support tag when selected
   it("shows selected tag as highlighted", () => {
     render(
       <TagFilterGrid
@@ -78,11 +83,12 @@ describe("<TagFilterGrid />", () => {
         setExpandedCardId={() => {}}
       />
     );
-    // Only "support" tag should have the selected background color
+    // Only "support" tag should have the selected background color (green)
     const supportTag = screen.getByText(/support\s*\(\s*2\s*\)/i);
     expect(supportTag).toHaveClass("bg-[#b8d8c8]");
   });
 
+  // Tested for clear button and no clear button when no tag is selected
   it("renders 'Clear' button when a tag is selected", () => {
     render(
       <TagFilterGrid
@@ -111,6 +117,7 @@ describe("<TagFilterGrid />", () => {
     expect(screen.queryByText("Clear")).toBeNull();
   });
 
+  // Checked for tag support again, but can also be modified to check for other tags
   it("filters and displays only resources with the selected tag", () => {
     // Filter by the tag 'support'
     render(

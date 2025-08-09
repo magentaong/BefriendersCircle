@@ -3,9 +3,10 @@ const router = express.Router();
 const { handleLangChainChat } = require("../controllers/langchainChat");
 
 router.post("/", async (req, res) => {
-  const { userId, prompt } = req.body;
+  const { userId, prompt } = req.body; 
 
   try {
+    // Call LangChain controller to process conversation
     const reply = await handleLangChainChat(userId, prompt);
     res.json({ reply });
   } catch (err) {

@@ -54,6 +54,9 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
+// Indirect tests within Resource Library, most of the below has been tested for components
+
+// Checked for user input functionality
 describe("<ResourceLibrary /> behavior", () => {
   it("updates the chatbot input as user types", () => {
     render(<Resources />, { wrapper: MemoryRouter });
@@ -62,6 +65,7 @@ describe("<ResourceLibrary /> behavior", () => {
     expect(input).toHaveValue("test message");
   });
 
+  // Checked for whether fetchResponse is triggered when search button is clicked
   it("triggers fetchResponse when the search button is clicked", () => {
     render(<Resources />, { wrapper: MemoryRouter });
     const searchButton = screen.getByTitle("Search");
@@ -69,12 +73,14 @@ describe("<ResourceLibrary /> behavior", () => {
     expect(fetchResponseMock).toHaveBeenCalled();
   });
 
+  // Checked for error displayed when API fails
   it("displays an error message when error prop is set", () => {
     mockError = "Failed to fetch resources";
     render(<Resources />, { wrapper: MemoryRouter });
     expect(screen.getByText(/failed to fetch resources/i)).toBeInTheDocument();
   });
 
+  // Checked nvaigation links
   it("navigates to /forum and /training when arrow buttons are clicked", async () => {
     render(
       <MemoryRouter initialEntries={["/"]}>

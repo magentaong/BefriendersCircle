@@ -13,16 +13,17 @@ const collectionName = "resources";
     await client.connect();
     const collection = client.db(dbName).collection(collectionName);
 
-    // STEP 1: Generate an embedding for a test query
+    // Testing specifically for caregivers tips
     const query = "caregiver tips";
     console.log(`[Test] Generating embedding for query: "${query}"`);
     const embeddings = new OpenAIEmbeddings({
       model: "text-embedding-3-small",
       openAIApiKey: process.env.OPENAI_API_KEY,
     });
+    // Convert query text into vector embeddings
     const [queryVector] = await embeddings.embedDocuments([query]);
 
-    // STEP 2: Run vector search
+    // Find similar documents using MongoDB Atlas Vector
     console.log("[Test] Running $vectorSearch with query vector...");
     const results = await collection.aggregate([
       {
@@ -36,10 +37,11 @@ const collectionName = "resources";
       }
     ]).toArray();
 
-    // STEP 3: Print results
+    // Display results
     console.log("[Test] Vector search results:");
+    // Print formatted JSON results
     console.log(JSON.stringify(results, null, 2));
-
+    
     await client.close();
   } catch (err) {
     console.error("[Test] Error testing vector search:", err);

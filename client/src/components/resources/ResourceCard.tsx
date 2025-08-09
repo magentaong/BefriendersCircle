@@ -1,3 +1,5 @@
+// Unused code
+
 interface ResourceCardProps {
   title: string;
   description: string;
