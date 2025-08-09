@@ -72,7 +72,7 @@ export default function Category({category, header}: CategroryProps) {
               <div className='flex flex-row content-center gap-7 align-middle justify-between'> 
                 <div className='flex flex-row content-center gap-[2vw] sm:gap-7 align-middle'>
                     {/* DIfferent type of Catergory heading */}
-                    <button data-cy="open-add-modal" className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>
+                    <button data-cy="open-add-modal" data-testid="add" className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>
                   <h1 className="self-auto text-left text-base md:text-xl font-bold leading-none self-center">{header}</h1>
                 </div>
               

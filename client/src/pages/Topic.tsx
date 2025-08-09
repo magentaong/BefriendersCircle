@@ -114,7 +114,7 @@ function Forum() {
 
             <div className='flex flex-row content-center gap-7 align-middle justify-between'>
               <div className='flex flex-row content-center gap-7 align-middle'>
-                <button className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" onClick={() => setCreate(true)}><Plus></Plus></button>
+                <button className="w-10 h-10 rounded-full bg-white shadow text-lg flex items-center justify-center hover:scale-105" data-testid="add" onClick={() => setCreate(true)}><Plus></Plus></button>
                 {/* DIfferent type of Catergory heading */}
                 <h1 className="self-auto text-center text-base md:text-xl text-charcoal font-bold leading-none self-center">{category}</h1>
               </div>

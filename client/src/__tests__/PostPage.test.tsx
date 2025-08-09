@@ -51,7 +51,7 @@ describe("<PostsPage />", async() => {
   it("Renders empty Post dashboard", async () => {
     render(<PostsPage />, { wrapper: MemoryRouter });
     // Check Add Button
-    expect(screen.getByAltText("add"));
+    expect(screen.getByTestId("add"));
 
     // Check Board Title
     expect(await screen.getByText("default")).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe("<PostsPage />", async() => {
         </Routes>
       </MemoryRouter>
     );
-    expect(screen.getByAltText("add"));
+    expect(screen.getByTestId("add"));
     await waitFor(() => {
       expect(screen.getByText("Family")).toBeInTheDocument();
     });
@@ -88,17 +88,17 @@ describe("<PostsPage />", async() => {
     render(<PostsPage/>, { wrapper: MemoryRouter });
 
     //Check render Post Page (Same as render empty Post dashboard)
-    expect(screen.getByAltText("add"));
+    expect(screen.getByTestId("add"));
     expect(await screen.getByText("default")).toBeInTheDocument();
     expect(await screen.findByText("No post yet.")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByAltText("add")); // click on add button
+    fireEvent.click(screen.getByTestId("add")); // click on add button
     // Add Page close button
     expect(screen.getByAltText("Close")).toBeInTheDocument();
     // Add Page Title
     expect(screen.getByText("Create new Post")).toBeInTheDocument();
     // Add Page query for Post message
-    expect(screen.getByPlaceholderText("...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Type something to create a new post!")).toBeInTheDocument();
     // Add Page button
     expect(screen.getByText("Create")).toBeInTheDocument();
   });
@@ -108,20 +108,20 @@ describe("<PostsPage />", async() => {
     render(<PostsPage/>, { wrapper: MemoryRouter });
     
     //Check render Post Page (Same as render empty Post dashboard)
-    expect(screen.getByAltText("add"));
+    expect(screen.getByTestId("add"));
     expect(await screen.getByText("default")).toBeInTheDocument();
     expect(await screen.findByText("No post yet.")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByAltText("add")); // click on add button
+    fireEvent.click(screen.getByTestId("add")); // click on add button
 
     expect(screen.getByText("Create new Post")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Type something to create a new post!")).toBeInTheDocument();
     expect(screen.getByText("Create")).toBeInTheDocument();
     
     fireEvent.click(screen.getByAltText("Close")); // click on close button
     
     // Check return to Post Borad (Same as test case Render Post dashboard)
-    expect(screen.getByAltText("add"));
+    expect(screen.getByTestId("add"));
     expect(await screen.getByText("default")).toBeInTheDocument();
     expect(await screen.findByText("No post yet.")).toBeInTheDocument();
   });
@@ -135,7 +135,7 @@ describe("<PostsPage />", async() => {
         </Routes>
       </MemoryRouter>
     );
-    expect(screen.getByAltText("add"));
+    expect(screen.getByTestId("add"));
     await waitFor(() => {
       expect(screen.getByText("Family")).toBeInTheDocument();
     });
@@ -145,16 +145,16 @@ describe("<PostsPage />", async() => {
     expect(await screen.queryByText("I love my family!")).not.toBeInTheDocument();
     expect(await screen.queryByText("How to mangae money?")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByAltText("add")); // click on add button
+    fireEvent.click(screen.getByTestId("add")); // click on add button
 
     // Check render Add Page (Same as the toggle to add Event Page)
     expect(screen.getByAltText("Close")).toBeInTheDocument();
     expect(screen.getByText("Create new Post")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Type something to create a new post!")).toBeInTheDocument();
     expect(screen.getByText("Create")).toBeInTheDocument();
     
     // Fill in the text input
-    fireEvent.change(screen.getByPlaceholderText("..."), { 
+    fireEvent.change(screen.getByPlaceholderText("Type something to create a new post!"), { 
       target: { value: "Testing Post...." } });
 
     // Click Post button
