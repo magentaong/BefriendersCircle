@@ -2,13 +2,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { vi } from "vitest";
 
-// Mutable values referenced by the mock:
+// Mutable values referenced by the mock setup
 let mockResources:any = [];
 let mockCategories = ["Chatbot", "General"];
 let mockError = "";
 let mockLoading = false;
 
-// Mock useResourceChat to always reference these variables:
+// Mock for useResourceChat hook to return the mutable values above
 vi.mock("../hooks/useResourceChat", () => ({
   useResourceChat: () => ({
     resources: mockResources,
@@ -19,6 +19,7 @@ vi.mock("../hooks/useResourceChat", () => ({
   }),
 }));
 
+// Import component being tested 
 import ResourceLibrary from "../pages/Resources";
 
 describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () => {
@@ -31,6 +32,8 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     vi.clearAllMocks();
   });
 
+  // Helper function to generate n mock resources with sequential numbering
+  // Cycles through 3 variations
   function fillResources(n: number) {
     mockResources = Array.from({ length: n }).map((_, idx) => ({
       _id: String(idx + 1),
@@ -43,6 +46,7 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     }));
   }
 
+  // Set up mock data
   it("renders multiple resource cards, expands each independently", () => {
     mockResources = [
       {
@@ -86,13 +90,14 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     expect(screen.getByText("Elig 2")).toBeInTheDocument();
     expect(screen.getByText("Step 2")).toBeInTheDocument();
 
-    // Second click on cardTwo opens its link
+    // Second click on already-expanded card to open link
     const windowOpen2 = vi.spyOn(window, "open").mockImplementation(() => null);
     fireEvent.click(cardTwo!);
     expect(windowOpen2).toHaveBeenCalledWith("https://example.com/two", "_blank");
     windowOpen2.mockRestore();
   });
 
+  // Checked for empty state when no resources are available (specifically for General)
   it("shows empty state when no resources are available for a category", () => {
     mockResources = [];
     mockCategories = ["Chatbot", "General"];
@@ -105,6 +110,7 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     expect(screen.getByRole("button", { name: /Refresh Resources/i })).toBeInTheDocument();
   });
 
+  // Checked for non-empty state on Chatbot tab, as it does not exist even 
   it("does not show empty state on Chatbot tab, even if resources are empty", () => {
     mockResources = [];
     mockCategories = ["Chatbot", "General"];
@@ -114,10 +120,13 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     expect(screen.queryByText(/No resources found/i)).not.toBeInTheDocument();
   });
 
+  // Set up for 7 resources, checked for carousel pagination (specifically on General tab)
   it("shows only 3 resource cards at once, moves right/left by 3", () => {
     fillResources(7);
 
     render(<ResourceLibrary />, { wrapper: MemoryRouter });
+
+    // Checks for whether resource cards are present or not based on the page visited
 
     fireEvent.click(screen.getByText("General"));
     const rightChevron = screen.getByLabelText("carousel-right");
@@ -157,6 +166,7 @@ describe("<ResourceLibrary /> Resource Cards - Multiple & Empty (vi.mock)", () =
     expect(screen.queryByText("Resource 7")).not.toBeInTheDocument();
   });
 
+  // Checked for progress bar update, tests for specific width as there are 7 resources 
   it("progress bar updates as carousel moves", () => {
     fillResources(7); // 3 groups: (3, 3, 1)
     render(<ResourceLibrary />, { wrapper: MemoryRouter });

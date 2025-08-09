@@ -56,6 +56,7 @@ vi.mock("../hooks/useCarousel", () => ({
 import Resources from "../pages/Resources";
 import { useResourceChat } from "../hooks/useResourceChat";
 
+// 6 mock resource objects 
 const mockResources = [
   {
     _id: "1",
@@ -120,8 +121,9 @@ const mockResources = [
 ];
 
 const mockCategories = ["Chatbot", "General", "Medical", "Financial"];
-const mockUseResourceChat = vi.mocked(useResourceChat);
+const mockUseResourceChat = vi.mocked(useResourceChat); // Typed mock reference to useResrouceChat hook for easier testing
 
+// Helper functions for configuration options of mock hook
 function renderWithResourceChat({
   resources = mockResources,
   categories = mockCategories,
@@ -135,14 +137,15 @@ function renderWithResourceChat({
     error,
     refetch: vi.fn(),
   });
-  return render(<Resources />, { wrapper: MemoryRouter });
+  return render(<Resources />, { wrapper: MemoryRouter }); // Routing context
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.clearAllMocks(); // Clear before each test to ensure clean state
 });
 
 describe("<ResourceCarousel /> on Resources page", () => {
+  // Checked for navigation buttons when resources exist
   it("displays carousel navigation buttons when resources are available", () => {
     renderWithResourceChat({});
     
@@ -154,6 +157,7 @@ describe("<ResourceCarousel /> on Resources page", () => {
     expect(screen.getByLabelText("carousel-right")).toBeInTheDocument();
   });
 
+  // Checked for carousel progress bar when resources are available
   it("shows progress bar when resources are available", () => {
     renderWithResourceChat({});
     
@@ -165,6 +169,7 @@ describe("<ResourceCarousel /> on Resources page", () => {
     expect(progressBar).toBeInTheDocument();
   });
 
+  // Checked that individual resource cards are rendered and titles are displayed
   it("displays resource cards in carousel format", () => {
     renderWithResourceChat({});
     
@@ -177,6 +182,7 @@ describe("<ResourceCarousel /> on Resources page", () => {
     expect(screen.getByText("Resource 3")).toBeInTheDocument();
   });
 
+  // Checked for button click andling
   it("handles carousel navigation button clicks", () => {
     renderWithResourceChat({});
     
@@ -194,6 +200,7 @@ describe("<ResourceCarousel /> on Resources page", () => {
     expect(screen.getByLabelText("carousel-right")).toBeInTheDocument();
   });
 
+  // Checked for empty resources
   it("shows empty state when no resources are available", () => {
     renderWithResourceChat({ resources: [] });
     

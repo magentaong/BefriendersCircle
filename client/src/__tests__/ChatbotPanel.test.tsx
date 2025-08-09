@@ -27,6 +27,7 @@ vi.mock("../hooks/useCarousel", () => ({
 import ChatbotPanel from "../components/resources/ChatbotPanel";
 
 describe("<ChatbotPanel />", () => {
+  // Set up sample query, mock setter function and sample answer
   const defaultProps = {
     query: "What financial subsidies do you recommend for seniors?",
     setQuery: vi.fn(),
@@ -36,6 +37,7 @@ describe("<ChatbotPanel />", () => {
       { title: "Healthcare Support", content: "Medical care programs..." },
       { title: "Community Programs", content: "Local community support..." },
     ],
+    // Define array of three mock schemes for testing carousel 
     currentScheme: { title: "Financial Aid", content: "Government financial assistance..." },
     carouselIndex: 0,
     setCarouselIndex: vi.fn(),
@@ -53,7 +55,7 @@ describe("<ChatbotPanel />", () => {
     vi.clearAllMocks();
   });
 
-  // Text input and search button interactions
+  // Checked for text input and search button interactions
   it("handles text input and search button interactions", () => {
     render(<ChatbotPanel {...defaultProps} />, { wrapper: MemoryRouter });
 
@@ -67,14 +69,14 @@ describe("<ChatbotPanel />", () => {
 
     // Test text input
     fireEvent.change(textarea, { target: { value: "New question about healthcare" } });
-    expect(defaultProps.setQuery).toHaveBeenCalledWith("New question about healthcare");
+    expect(defaultProps.setQuery).toHaveBeenCalledWith("New question about healthcare"); // Verify setQuery function is called with new value
 
     // Test search button click
     fireEvent.click(searchButton);
     expect(defaultProps.fetchResponse).toHaveBeenCalledTimes(1);
   });
 
-  // Suggested prompt clicks
+  // Checked for suggested prompt clicks
   it("handles suggested prompt clicks", () => {
     render(<ChatbotPanel {...defaultProps} />, { wrapper: MemoryRouter });
 
@@ -88,6 +90,7 @@ describe("<ChatbotPanel />", () => {
     fireEvent.click(ctgPrompt);
     expect(defaultProps.setQuery).toHaveBeenCalledWith("What is CTG?");
 
+    // Tests remaining two suggested prompts
     const grantsPrompt = screen.getByText("Government Grants");
     fireEvent.click(grantsPrompt);
     expect(defaultProps.setQuery).toHaveBeenCalledWith("Government Grants");
@@ -97,7 +100,7 @@ describe("<ChatbotPanel />", () => {
     expect(defaultProps.setQuery).toHaveBeenCalledWith("Dementia Resources");
   });
 
-  // Loading state display
+  // Checked for loading state display
   it("displays loading state correctly", () => {
     render(<ChatbotPanel {...defaultProps} loading={true} />, { wrapper: MemoryRouter });
 
@@ -107,6 +110,7 @@ describe("<ChatbotPanel />", () => {
     expect(screen.getByText("Loading...")).toBeInTheDocument();
   });
 
+  // Verified for hidden loading indicators when not loading
   it("does not show loading state when not loading", () => {
     render(<ChatbotPanel {...defaultProps} loading={false} />, { wrapper: MemoryRouter });
 
@@ -115,14 +119,15 @@ describe("<ChatbotPanel />", () => {
     expect(screen.queryByRole("button", { name: /refresh/i })).not.toBeInTheDocument();
   });
 
-  // Speaking animation states
+  // Speaking animation states, play button has pulsing animation
   it("shows speaking animation when isSpeaking is true", () => {
     render(<ChatbotPanel {...defaultProps} isSpeaking={true} />, { wrapper: MemoryRouter });
 
     const playButton = screen.getByRole("button", { name: /play answer/i });
-    expect(playButton).toHaveClass("animate-pulse");
+    expect(playButton).toHaveClass("animate-pulse"); // Verified here
   });
 
+  // Verified for opposite animation when not speaking
   it("does not show speaking animation when isSpeaking is false", () => {
     render(<ChatbotPanel {...defaultProps} isSpeaking={false} />, { wrapper: MemoryRouter });
 
@@ -138,6 +143,7 @@ describe("<ChatbotPanel />", () => {
     expect(screen.getByText("1/3")).toBeInTheDocument();
   });
 
+  // Checked if there is only one scheme outputted from chatbot
   it("does not display carousel counter when only one scheme", () => {
     const singleSchemeProps = {
       ...defaultProps,
@@ -150,6 +156,7 @@ describe("<ChatbotPanel />", () => {
     expect(screen.queryByText("1/1")).not.toBeInTheDocument();
   });
 
+  // otherwise, checked for correct carousel counter for multiple resource card outputs
   it("displays correct carousel counter for different carousel indices", () => {
     const { rerender } = render(<ChatbotPanel {...defaultProps} carouselIndex={0} />, { wrapper: MemoryRouter });
     expect(screen.getByText("1/3")).toBeInTheDocument();
@@ -161,6 +168,7 @@ describe("<ChatbotPanel />", () => {
     expect(screen.getByText("3/3")).toBeInTheDocument();
   });
 
+  // checked for complex queries with multiple matching schemes
   it("outputs multiple schemes for a query with multiple intents", () => {
     // Simulate a prompt with multiple intents and carousel navigation
     const allSchemes = [
@@ -171,6 +179,7 @@ describe("<ChatbotPanel />", () => {
     const renderChatbotContent = (scheme:any) => <div>{scheme.content}</div>;
     const setCarouselIndexMock = vi.fn();
 
+    // Local mocks for this specific test
     render(
       <ChatbotPanel
         {...defaultProps}
@@ -183,6 +192,8 @@ describe("<ChatbotPanel />", () => {
       />,
       { wrapper: MemoryRouter }
     );
+    
+    // Verify content display, counter and carousel navigtaion functionality
     expect(screen.getByText("Caregiver Training Grant")).toBeInTheDocument();
     expect(screen.getByText("1/3")).toBeInTheDocument();
     // Simulate carousel next
@@ -192,6 +203,7 @@ describe("<ChatbotPanel />", () => {
     expect(setCarouselIndexMock).toHaveBeenCalled();
   });
 
+  // Checked for voice recording functionality
   it("populates the query with transcribed audio after microphone click", () => {
     const setQueryMock = vi.fn();
     const startRecordingMock = vi.fn();
@@ -206,6 +218,7 @@ describe("<ChatbotPanel />", () => {
       />,
       { wrapper: MemoryRouter }
     );
+    // Tests microphone button click and simulate transcription process
     const micButton = screen.getByTestId("mic-btn");
     fireEvent.click(micButton);
     expect(startRecordingMock).toHaveBeenCalled();
@@ -213,6 +226,7 @@ describe("<ChatbotPanel />", () => {
     expect(setQueryMock).toHaveBeenCalledWith("Transcribed voice input");
   });
 
+  // Checked for audio playback functionality
   it("plays audio and displays answer text for a given query", () => {
     const playAnswerMock = vi.fn();
     const answer = {
@@ -234,6 +248,7 @@ describe("<ChatbotPanel />", () => {
       />,
       { wrapper: MemoryRouter }
     );
+    // Verifies answer text is displayed and audio playback is triggered when play button is clicked
     expect(screen.getByText(/Here is some information for seniors/i)).toBeInTheDocument();
     const playBtn = screen.getByRole("button", { name: /play answer/i });
     fireEvent.click(playBtn);
